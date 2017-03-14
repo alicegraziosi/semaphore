@@ -3,10 +3,12 @@
 #graph_box{
   background-color: rgb(251, 251, 251);
   opacity: 1;
+  padding: 20px;
 }
 
 /* top menu */
 div.ui.top.fixed.menu{
+  font-family: sans-serif;
   border-top: 2px solid #b92b27;
   box-shadow: none;
 }
@@ -65,10 +67,6 @@ div.pusher{
   stroke-width: 1.5px;
 }
 
-.node .selected {
-  stroke: black;
-}
-
 .markers{
   viewBox: 0 -5 10 10;
   refX: 16;
@@ -87,6 +85,12 @@ div.pusher{
   fill-opacity: 0.9;
 }
 
+.rect{
+  width: 30;
+  height: 12;
+  fill: "#9c6";
+}
+
 /* info laterali nodo selezionato */
 #node_info p{
   font-size: 12px;
@@ -102,4 +106,15 @@ div.pusher{
   font-family: sans-serif;
   color: grey;
   word-break: break-all;
+}
+
+/* pagina about */
+.about, .about a, .about a:hover {
+  font-family: sans-serif;
+  color: grey;
+}
+
+/* footer */
+.footer {
+  flex: 1;
 }

@@ -1,13 +1,13 @@
 'use strict';
 
-angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule'])
+angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
 
-/* .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/d3view', {
-    templateUrl: 'd3view/d3view.html',
+.config(['$routeProvider', function($routeProvider) {
+  $routeProvider.when('/graph', {
+    templateUrl: 'd3Visualization/d3view.html',
     controller: 'D3viewCtrl'
   });
-}]) */
+}])
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService) {
     $http.get('../alicegraph.json').success(function (data) {
@@ -19,6 +19,11 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule'])
       });
     */
     $scope.selected = " ";
+
+    $scope.exportJSON = function () {
+      console.log('"Export as JSON" button clicked');
+    }
+
 })
 
 .directive('d3Visualization', ['d3Service', '$window', '$parse', 'queryDatasetService',
@@ -77,7 +82,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule'])
 
             /* directed force layout */
             var simulation = d3.forceSimulation()
-              .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(50))
+              .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(70))
               .force("charge", d3.forceManyBody())
               .force("center", d3.forceCenter(width / 2, height / 2));
 
@@ -94,29 +99,15 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule'])
 
             });
 
-            /* frecce dei links - markers to indicate that this is a directed graph */
-            gzoom.append("defs")
-              .selectAll("marker")
-              .data(graph.links)
-              .enter().append("marker")
-              .attr("id", function(d) { return d.source.id; })
-              .attr("viewBox", "0 -5 10 10")
-              .attr("refX", 16)
-              .attr("refY", 0)
-              .attr("markerWidth", 6)
-              .attr("markerHeight", 6)
-              .attr("orient", "auto")
-              .attr("fill", "#999")
-              .attr("fill-opacity", "0.6")
-              .append("path")
-              .attr("d", "M0,-5L10,0L0,5");
+
 
             /* links (path)*/
             var link = gzoom.append("g")
               .attr("class", "links")
               .selectAll("line")
               .data(graph.links)
-              .enter().append("path") // .enter().append("line") --> no path
+              //.enter().append("path")
+               .enter().append("line") //--> no path
               .attr("id",function(d,i) { return "linkId_" + i; })
               .on("mouseover", function(d){
                 d3.select(this).style('stroke-width', 1.3);
@@ -209,9 +200,14 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule'])
                 link.style('stroke-width', 1);
               });
 
+            /*
+            var linktext = gzoom.append("g")
+            .selectAll("g.linklabelholder")
+            .data(graph.links);
 
-            var linktext = gzoom.append("g").selectAll("g.linklabelholder").data(graph.links);
-            linktext.enter().append("g").attr("class", "linklabelholder")
+            linktext.enter()
+            .append("g")
+            .attr("class", "linklabelholder")
             .append("text")
             .attr("class", "linklabel")
             .attr("x", "10")
@@ -221,19 +217,64 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule'])
             .attr("xlink:href",function(d,i) { return "#linkId_" + i;})
             .text(function(d) {
       	      return d.label;
-      	    });
+      	    });*/
+
+            var rect = gzoom
+            .attr("class", "rect")
+            .selectAll("rect")
+            .data(graph.links)
+            .enter().append("g")
+            .attr("width", "100")
+      	    .attr("height", "100")
+            .append("rect")
+            .attr("id",function(d,i){
+              return "linkId_" + i;
+            })
+            .attr("x", "-13")
+      	    .attr("y", "-5")
+            .attr("width", "25")
+      	    .attr("height", "8")
+            .attr("fill", "#9c6")
+
+            rect
+            .append("text")
+            .text(function(d) {
+      	      return d.label;
+      	    })
+            .style("font-family", "Arial")
+            .style("font-size", 8)
+            .attr("x", "-8")
+            .attr("y", "-10")
+            .attr("text-anchor", "middle");
+
+
+            /* frecce dei links - markers to indicate that this is a directed graph */
+            gzoom.append("defs")
+              .selectAll("marker")
+              .data(graph.links)
+              .enter().append("marker")
+              .attr("id", function(d) { return d.source.id; })
+              .attr("viewBox", "0 -5 10 10")
+              .attr("refX", 16)
+              .attr("refY", 0)
+              .attr("markerWidth", 6)
+              .attr("markerHeight", 6)
+              .attr("orient", "auto")
+              .attr("fill", "#999")
+              .attr("fill-opacity", "1")
+              .append("path")
+              .attr("d", "M0,-5L10,0L0,5");
 
             /* tooltip di nodi e link*/
             node.append("title").text(function(d) { return d.id; });
             link.append("title").text(function(d) { return d.label; });
 
             function ticked() {
-              /*
               link.attr("x1", function(d) { return d.source.x; })
                   .attr("y1", function(d) { return d.source.y; })
                   .attr("x2", function(d) { return d.target.x; })
-                  .attr("y2", function(d) { return d.target.y; });*/
-
+                  .attr("y2", function(d) { return d.target.y; });
+              /*
               link.attr("d", function(d) {
                  var dx = d.target.x - d.source.x,
                        dy = d.target.y - d.source.y,
@@ -244,16 +285,16 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule'])
                         + dr + " 0 0,1 "
                         + d.target.x + ","
                         + d.target.y;
-              });
+              });*/
               node.attr("cx", function(d) { return d.x; })
                   .attr("cy", function(d) { return d.y; });
               label.attr("x", function(d){ return d.x + 6; })
         			     .attr("y", function (d) {return d.y + 2; });
               image.attr("x", function(d){ return d.x + 3; })
      			         .attr("y", function (d) {return d.y + 3;});
-
+              rect.attr("transform", function (d) {return "translate(" + (d.source.x + d.target.x)/2
+                                                                + "," + ((d.source.y + d.target.y)/2)+ ")"});
             }
-
 
             function dragstarted(d) {
               if (!d3.event.active) simulation.alphaTarget(0.3).restart();
@@ -271,7 +312,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule'])
               d.fx = null;
               d.fy = null;
             }
-
           }); //scope.$watch('graph', function (graph) {
         }); // d3Service.then(function(d3) {
       } // link
