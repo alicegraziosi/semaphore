@@ -1,0 +1,1036 @@
+{
+  "_comment" : "Created with OWL2VOWL (version 0.2.0), http://vowl.visualdataweb.org",
+  "namespace" : [ ],
+  "header" : {
+    "languages" : [ "IRI-based", "undefined" ],
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#",
+    "rdfsLabel" : [ "NML Schema" ]
+  },
+  "metrics" : {
+    "classCount" : 20,
+    "datatypeCount" : 13,
+    "objectPropertyCount" : 25,
+    "datatypePropertyCount" : 13,
+    "propertyCount" : 38,
+    "nodeCount" : 33,
+    "axiomCount" : 143,
+    "individualCount" : 0
+  },
+  "class" : [ {
+    "id" : "class9",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class6",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class10",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class13",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class3",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class12",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class2",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class15",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class16",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class4",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class7",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class17",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class14",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class18",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class19",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class1",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class11",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class5",
+    "type" : "owl:Class"
+  }, {
+    "id" : "class8",
+    "type" : "owl:Class"
+  }, {
+    "id" : "thing6",
+    "type" : "owl:Thing"
+  }, {
+    "id" : "thing1",
+    "type" : "owl:Thing"
+  }, {
+    "id" : "thing4",
+    "type" : "owl:Thing"
+  }, {
+    "id" : "thing5",
+    "type" : "owl:Thing"
+  }, {
+    "id" : "thing2",
+    "type" : "owl:Thing"
+  }, {
+    "id" : "thing3",
+    "type" : "owl:Thing"
+  }, {
+    "id" : "class26",
+    "type" : "owl:unionOf"
+  }, {
+    "id" : "class27",
+    "type" : "owl:unionOf"
+  }, {
+    "id" : "class22",
+    "type" : "owl:unionOf"
+  }, {
+    "id" : "class23",
+    "type" : "owl:unionOf"
+  }, {
+    "id" : "class25",
+    "type" : "owl:unionOf"
+  }, {
+    "id" : "class20",
+    "type" : "owl:unionOf"
+  }, {
+    "id" : "class31",
+    "type" : "owl:unionOf"
+  }, {
+    "id" : "class32",
+    "type" : "owl:unionOf"
+  } ],
+  "classAttribute" : [ {
+    "id" : "class9",
+    "label" : {
+      "IRI-based" : "LabelGroup"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#LabelGroup",
+    "instances" : 0
+  }, {
+    "id" : "class6",
+    "label" : {
+      "IRI-based" : "DeadaptationService"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#DeadaptationService",
+    "superClasses" : [ "class1" ],
+    "instances" : 0
+  }, {
+    "id" : "class10",
+    "label" : {
+      "IRI-based" : "Location"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Location",
+    "instances" : 0
+  }, {
+    "id" : "class13",
+    "label" : {
+      "IRI-based" : "AdaptationService"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#AdaptationService",
+    "superClasses" : [ "class1" ],
+    "instances" : 0
+  }, {
+    "id" : "class3",
+    "label" : {
+      "IRI-based" : "Group"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Group",
+    "subClasses" : [ "class19", "class18", "class5", "class12", "class11" ],
+    "superClasses" : [ "class8" ],
+    "instances" : 0
+  }, {
+    "id" : "class12",
+    "label" : {
+      "IRI-based" : "PortGroup"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#PortGroup",
+    "superClasses" : [ "class3" ],
+    "instances" : 0
+  }, {
+    "id" : "class2",
+    "label" : {
+      "IRI-based" : "Label"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Label",
+    "instances" : 0
+  }, {
+    "id" : "class15",
+    "label" : {
+      "IRI-based" : "Lifetime"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Lifetime",
+    "instances" : 0
+  }, {
+    "id" : "class16",
+    "label" : {
+      "IRI-based" : "Port"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Port",
+    "superClasses" : [ "class8" ],
+    "instances" : 0
+  }, {
+    "id" : "class4",
+    "label" : {
+      "IRI-based" : "Link"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Link",
+    "superClasses" : [ "class8" ],
+    "instances" : 0
+  }, {
+    "id" : "class7",
+    "label" : {
+      "IRI-based" : "SwitchingService"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#SwitchingService",
+    "superClasses" : [ "class1" ],
+    "instances" : 0
+  }, {
+    "id" : "class17",
+    "label" : {
+      "IRI-based" : "ListItem"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#ListItem",
+    "instances" : 0
+  }, {
+    "id" : "class14",
+    "label" : {
+      "IRI-based" : "Node"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Node",
+    "superClasses" : [ "class8" ],
+    "instances" : 0
+  }, {
+    "id" : "class18",
+    "label" : {
+      "IRI-based" : "BidirectionalPort"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#BidirectionalPort",
+    "superClasses" : [ "class3" ],
+    "instances" : 0
+  }, {
+    "id" : "class19",
+    "label" : {
+      "IRI-based" : "BidirectionalLink"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#BidirectionalLink",
+    "superClasses" : [ "class3" ],
+    "instances" : 0
+  }, {
+    "id" : "class1",
+    "label" : {
+      "IRI-based" : "Service"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Service",
+    "subClasses" : [ "class13", "class6", "class7" ],
+    "superClasses" : [ "class8" ],
+    "instances" : 0
+  }, {
+    "id" : "class11",
+    "label" : {
+      "IRI-based" : "Topology"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#Topology",
+    "superClasses" : [ "class3" ],
+    "instances" : 0
+  }, {
+    "id" : "class5",
+    "label" : {
+      "IRI-based" : "LinkGroup"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#LinkGroup",
+    "superClasses" : [ "class3" ],
+    "instances" : 0
+  }, {
+    "id" : "class8",
+    "label" : {
+      "IRI-based" : "NetworkObject"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#NetworkObject",
+    "subClasses" : [ "class3", "class4", "class14", "class16", "class1" ],
+    "instances" : 0
+  }, {
+    "id" : "thing6",
+    "label" : {
+      "undefined" : "Thing"
+    },
+    "iri" : "http://www.w3.org/2002/07/owl#Thing",
+    "instances" : 0
+  }, {
+    "id" : "thing1",
+    "label" : {
+      "undefined" : "Thing"
+    },
+    "iri" : "http://www.w3.org/2002/07/owl#Thing",
+    "instances" : 0
+  }, {
+    "id" : "thing4",
+    "label" : {
+      "undefined" : "Thing"
+    },
+    "iri" : "http://www.w3.org/2002/07/owl#Thing",
+    "instances" : 0
+  }, {
+    "id" : "thing5",
+    "label" : {
+      "undefined" : "Thing"
+    },
+    "iri" : "http://www.w3.org/2002/07/owl#Thing",
+    "instances" : 0
+  }, {
+    "id" : "thing2",
+    "label" : {
+      "undefined" : "Thing"
+    },
+    "iri" : "http://www.w3.org/2002/07/owl#Thing",
+    "instances" : 0
+  }, {
+    "id" : "thing3",
+    "label" : {
+      "undefined" : "Thing"
+    },
+    "iri" : "http://www.w3.org/2002/07/owl#Thing",
+    "instances" : 0
+  }, {
+    "id" : "class26",
+    "label" : {
+      "IRI-based" : "anonymous"
+    },
+    "instances" : 0,
+    "union" : [ "class12", "class16" ]
+  }, {
+    "id" : "class27",
+    "label" : {
+      "IRI-based" : "anonymous"
+    },
+    "instances" : 0,
+    "union" : [ "class13", "class6" ]
+  }, {
+    "id" : "class22",
+    "label" : {
+      "IRI-based" : "anonymous"
+    },
+    "instances" : 0,
+    "union" : [ "class4", "class5" ]
+  }, {
+    "id" : "class23",
+    "label" : {
+      "IRI-based" : "anonymous"
+    },
+    "instances" : 0,
+    "union" : [ "class2", "class9" ]
+  }, {
+    "id" : "class25",
+    "label" : {
+      "IRI-based" : "anonymous"
+    },
+    "instances" : 0,
+    "union" : [ "class12", "class5" ]
+  }, {
+    "id" : "class20",
+    "label" : {
+      "IRI-based" : "anonymous"
+    },
+    "instances" : 0,
+    "union" : [ "class12", "class16", "class4", "class5", "class7" ]
+  }, {
+    "id" : "class31",
+    "label" : {
+      "IRI-based" : "anonymous"
+    },
+    "instances" : 0,
+    "union" : [ "class16", "class4" ]
+  }, {
+    "id" : "class32",
+    "label" : {
+      "IRI-based" : "anonymous"
+    },
+    "instances" : 0,
+    "union" : [ "class10", "class8" ]
+  } ],
+  "datatype" : [ {
+    "id" : "datatype1",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype2",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype3",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype13",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype11",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype12",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype10",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype9",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype8",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype5",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype4",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype7",
+    "type" : "rdfs:Datatype"
+  }, {
+    "id" : "datatype6",
+    "type" : "rdfs:Datatype"
+  } ],
+  "datatypeAttribute" : [ {
+    "id" : "datatype1",
+    "label" : {
+      "IRI-based" : "string"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#string"
+  }, {
+    "id" : "datatype2",
+    "label" : {
+      "IRI-based" : "string"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#string"
+  }, {
+    "id" : "datatype3",
+    "label" : {
+      "IRI-based" : "float"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#float"
+  }, {
+    "id" : "datatype13",
+    "label" : {
+      "IRI-based" : "dateTime"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#dateTime"
+  }, {
+    "id" : "datatype11",
+    "label" : {
+      "IRI-based" : "float"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#float"
+  }, {
+    "id" : "datatype12",
+    "label" : {
+      "IRI-based" : "dateTime"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#dateTime"
+  }, {
+    "id" : "datatype10",
+    "label" : {
+      "IRI-based" : "boolean"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#boolean"
+  }, {
+    "id" : "datatype9",
+    "label" : {
+      "IRI-based" : "string"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#string"
+  }, {
+    "id" : "datatype8",
+    "label" : {
+      "IRI-based" : "string"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#string"
+  }, {
+    "id" : "datatype5",
+    "label" : {
+      "IRI-based" : "float"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#float"
+  }, {
+    "id" : "datatype4",
+    "label" : {
+      "IRI-based" : "string"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#string"
+  }, {
+    "id" : "datatype7",
+    "label" : {
+      "IRI-based" : "dateTime"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#dateTime"
+  }, {
+    "id" : "datatype6",
+    "label" : {
+      "IRI-based" : "boolean"
+    },
+    "iri" : "http://www.w3.org/2001/XMLSchema#boolean"
+  } ],
+  "property" : [ {
+    "id" : "property45",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property38",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property22",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property40",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property51",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property36",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property37",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property23",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property39",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property44",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property31",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property35",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property4",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property3",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property2",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property1",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property29",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property16",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property41",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property21",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property30",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property14",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property34",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property49",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property50",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property9",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property8",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property7",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property6",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property5",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property24",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property25",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property28",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property13",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property12",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property11",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property10",
+    "type" : "rdfs:SubClassOf"
+  }, {
+    "id" : "property47",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property15",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property43",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property48",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property33",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property17",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property42",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property19",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property18",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property26",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property46",
+    "type" : "owl:datatypeProperty"
+  }, {
+    "id" : "property20",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property27",
+    "type" : "owl:objectProperty"
+  }, {
+    "id" : "property32",
+    "type" : "owl:objectProperty"
+  } ],
+  "propertyAttribute" : [ {
+    "id" : "property45",
+    "label" : {
+      "IRI-based" : "start"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#start",
+    "domain" : "class15",
+    "range" : "datatype7"
+  }, {
+    "id" : "property38",
+    "label" : {
+      "IRI-based" : "providesLink"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#providesLink",
+    "domain" : "class1",
+    "range" : "class22"
+  }, {
+    "id" : "property22",
+    "label" : {
+      "IRI-based" : "isAlias"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#isAlias",
+    "domain" : "class8",
+    "range" : "class8"
+  }, {
+    "id" : "property40",
+    "label" : {
+      "IRI-based" : "parameter"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#parameter",
+    "domain" : "thing6",
+    "range" : "datatype2"
+  }, {
+    "id" : "property51",
+    "label" : {
+      "IRI-based" : "version"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#version",
+    "domain" : "class8",
+    "range" : "datatype13"
+  }, {
+    "id" : "property36",
+    "label" : {
+      "IRI-based" : "next"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#next",
+    "domain" : "class17",
+    "range" : "class17"
+  }, {
+    "id" : "property37",
+    "label" : {
+      "IRI-based" : "hasOutboundPort"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort",
+    "domain" : "class8",
+    "range" : "class26"
+  }, {
+    "id" : "property23",
+    "label" : {
+      "IRI-based" : "hasLabelGroup"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasLabelGroup",
+    "domain" : "class25",
+    "range" : "class9"
+  }, {
+    "id" : "property39",
+    "label" : {
+      "IRI-based" : "name"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#name",
+    "domain" : "class32",
+    "range" : "datatype1"
+  }, {
+    "id" : "property44",
+    "label" : {
+      "IRI-based" : "labelSwapping"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#labelSwapping",
+    "domain" : "class7",
+    "range" : "datatype6"
+  }, {
+    "id" : "property31",
+    "label" : {
+      "IRI-based" : "implementedBy"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#implementedBy",
+    "domain" : "class8",
+    "range" : "class8"
+  }, {
+    "id" : "property35",
+    "label" : {
+      "IRI-based" : "hasLabel"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasLabel",
+    "domain" : "class31",
+    "range" : "class2"
+  }, {
+    "id" : "property4",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class12",
+    "range" : "class3"
+  }, {
+    "id" : "property3",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class5",
+    "range" : "class3"
+  }, {
+    "id" : "property2",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class18",
+    "range" : "class3"
+  }, {
+    "id" : "property1",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class19",
+    "range" : "class3"
+  }, {
+    "id" : "property29",
+    "label" : {
+      "IRI-based" : "hasInboundPort"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasInboundPort",
+    "domain" : "class8",
+    "range" : "class26"
+  }, {
+    "id" : "property16",
+    "label" : {
+      "IRI-based" : "hasService"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasService",
+    "domain" : "class8",
+    "range" : "class1"
+  }, {
+    "id" : "property41",
+    "label" : {
+      "IRI-based" : "long"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#long",
+    "domain" : "class10",
+    "range" : "datatype3"
+  }, {
+    "id" : "property21",
+    "label" : {
+      "IRI-based" : "labeltype"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#labeltype",
+    "domain" : "class23",
+    "range" : "thing2"
+  }, {
+    "id" : "property30",
+    "label" : {
+      "IRI-based" : "providesPort"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#providesPort",
+    "domain" : "class1",
+    "range" : "class26"
+  }, {
+    "id" : "property14",
+    "label" : {
+      "IRI-based" : "encoding"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#encoding",
+    "domain" : "class20",
+    "range" : "thing1"
+  }, {
+    "id" : "property34",
+    "label" : {
+      "IRI-based" : "locatedAt"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#locatedAt",
+    "domain" : "class8",
+    "range" : "class10"
+  }, {
+    "id" : "property49",
+    "label" : {
+      "IRI-based" : "alt"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#alt",
+    "domain" : "class10",
+    "range" : "datatype11"
+  }, {
+    "id" : "property50",
+    "label" : {
+      "IRI-based" : "end"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#end",
+    "domain" : "class15",
+    "range" : "datatype12"
+  }, {
+    "id" : "property9",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class3",
+    "range" : "class8"
+  }, {
+    "id" : "property8",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class7",
+    "range" : "class1"
+  }, {
+    "id" : "property7",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class6",
+    "range" : "class1"
+  }, {
+    "id" : "property6",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class13",
+    "range" : "class1"
+  }, {
+    "id" : "property5",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class11",
+    "range" : "class3"
+  }, {
+    "id" : "property24",
+    "label" : {
+      "IRI-based" : "canProvidePort"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#canProvidePort",
+    "domain" : "class1",
+    "range" : "class26"
+  }, {
+    "id" : "property25",
+    "label" : {
+      "IRI-based" : "adaptationFunction"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#adaptationFunction",
+    "domain" : "class27",
+    "range" : "thing3"
+  }, {
+    "id" : "property28",
+    "label" : {
+      "IRI-based" : "isSink"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#isSink",
+    "domain" : "class8",
+    "range" : "class22"
+  }, {
+    "id" : "property13",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class1",
+    "range" : "class8"
+  }, {
+    "id" : "property12",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class16",
+    "range" : "class8"
+  }, {
+    "id" : "property11",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class14",
+    "range" : "class8"
+  }, {
+    "id" : "property10",
+    "label" : {
+      "IRI-based" : "Subclass Of"
+    },
+    "domain" : "class4",
+    "range" : "class8"
+  }, {
+    "id" : "property47",
+    "label" : {
+      "IRI-based" : "unlocode"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#unlocode",
+    "domain" : "class10",
+    "range" : "datatype9"
+  }, {
+    "id" : "property15",
+    "label" : {
+      "IRI-based" : "hasNode"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasNode",
+    "domain" : "class8",
+    "range" : "class14"
+  }, {
+    "id" : "property43",
+    "label" : {
+      "IRI-based" : "lat"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#lat",
+    "domain" : "class10",
+    "range" : "datatype5"
+  }, {
+    "id" : "property48",
+    "label" : {
+      "IRI-based" : "noReturnTraffic"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#noReturnTraffic",
+    "domain" : "class4",
+    "range" : "datatype10"
+  }, {
+    "id" : "property33",
+    "label" : {
+      "IRI-based" : "isSource"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#isSource",
+    "domain" : "class8",
+    "range" : "class22"
+  }, {
+    "id" : "property17",
+    "label" : {
+      "IRI-based" : "hasTopology"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasTopology",
+    "domain" : "class8",
+    "range" : "class11"
+  }, {
+    "id" : "property42",
+    "label" : {
+      "IRI-based" : "values"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#values",
+    "domain" : "class9",
+    "range" : "datatype4"
+  }, {
+    "id" : "property19",
+    "label" : {
+      "IRI-based" : "hasLink"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasLink",
+    "domain" : "class3",
+    "range" : "class22"
+  }, {
+    "id" : "property18",
+    "label" : {
+      "IRI-based" : "existsDuring"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#existsDuring",
+    "domain" : "class8",
+    "range" : "class15"
+  }, {
+    "id" : "property26",
+    "label" : {
+      "IRI-based" : "item"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#item",
+    "domain" : "class17",
+    "range" : "thing4"
+  }, {
+    "id" : "property46",
+    "label" : {
+      "IRI-based" : "value"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#value",
+    "domain" : "class2",
+    "range" : "datatype8"
+  }, {
+    "id" : "property20",
+    "label" : {
+      "IRI-based" : "isSerialCompoundLink"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#isSerialCompoundLink",
+    "domain" : "class22",
+    "range" : "class17"
+  }, {
+    "id" : "property27",
+    "label" : {
+      "IRI-based" : "address"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#address",
+    "domain" : "class10",
+    "range" : "thing5"
+  }, {
+    "id" : "property32",
+    "label" : {
+      "IRI-based" : "hasPort"
+    },
+    "iri" : "http://schemas.ogf.org/nml/2013/05/base#hasPort",
+    "domain" : "class3",
+    "range" : "class16"
+  } ]
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <meta name="keywords" content="semantic web technologies computer network ontologies">
+  <meta name="description" content="semantic web technologies project">
+  <meta name="author" content="Alice Graziosi">
+
+  <!-- nome app web e icona -->
+  <title>{{appName}}</title>
+  <link rel="shortcut icon" href="favicon.ico"/>
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+
+  <!-- semantic-ui -->
+  <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+  <script src="semantic/dist/semantic.min.js"></script>
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+  <!-- d3.js
+  <script src="https://d3js.org/d3.v4.min.js"></script>.
+  -->
+  <link rel="stylesheet" type="text/css" href="app.css">
+</head>
+<body>
+  <!-- Top Fixed Menu -->
+  <div class="ui top fixed menu" ng-app="myApp">
+    <a class="item" id="left-sidebar-toggle">
+      <i class="large content grey icon" style="margin: 0px;"></i>
+    </a>
+    <div class="ui container">
+      <div style="margin-top: 10px; margin-left: 50px;" ng-controller="myAppCtrl">
+        <i class="big darkRed share alternate icon"></i>
+        <a href="#" class="header darkGrey logo">{{appName}}</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="ui wide left sidebar vertical menu">
+    <!-- Accordion -->
+    <div class="ui styled fluid accordion">
+      <div class="title">
+        <i class="dropdown icon"></i>
+        Select a SPARQL endpoint
+      </div>
+      <div class="content" ng-controller="contactEndpointCtrl">
+        <div class="ui fluid action input">
+          <input type="text"
+            ng-init="selectedEndpoint='http://localhost:3030/semanticLancet/query'"
+            ng-model="selectedEndpoint"></input>
+          <button class="ui icon button" ng-click="contactSelectedEndpoint()">
+            <i class="search icon"></i>
+          </button>
+        </div>
+      </div>
+      <div class="title">
+        <i class="dropdown icon"></i>
+        ABox or TBox
+      </div>
+      <div class="content">
+        <div class="ui buttons">
+          <button class="ui button">ABox</button>
+          <div class="or"></div>
+          <button class="ui button">TBox</button>
+        </div>
+      </div>
+      <div class="title">
+        <i class="dropdown icon"></i>
+        Select a JSON file
+      </div>
+      <div class="content" ng-controller="JsonCtrl">
+        <div class="ui fluid action input">
+          <input type="text"
+            ng-init="filename='../nml-base.json'"
+            ng-model="filename"></input>
+          <button class="ui icon button"
+            ng-click="getJSONfile()">
+            <i class="search icon"></i>
+          </button>
+        </div>
+      </div>
+      <div class="title">
+        <i class="dropdown icon"></i>
+        Query dataset
+      </div>
+      <div class="content" ng-controller="queryDatasetCtrl">
+        <div class="ui fluid action input">
+          <input type="text"></input>
+          <button class="ui icon button" ng-click="queryDataset()">Query
+            <i class="search icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site content -->
+  <div class="pusher">
+      <!--
+      <ul>
+        <li><a href="#!/view1">view1</a></li>
+        <li><a href="#!/view2">view2</a></li>
+      </ul>
+      -->
+      <div ng-include="'d3Visualization/d3view.html'"></div>
+    </div>
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="app.js"></script>
+  <script src="view1/view1.js"></script>
+  <script src="view2/view2.js"></script>
+  <script src="version/version.js"></script>
+  <script src="version/version-directive.js"></script>
+  <script src="version/interpolate-filter.js"></script>
+  <script src="contactEndpoint/contactEndpointService.js"></script>
+  <script src="contactEndpoint/contactEndpointCtrl.js"></script>
+  <script src="d3Visualization/d3Service.js"></script>
+  <script src="d3Visualization/d3Ctrl.js"></script>
+  <script src="jsonFile/getJSONfileModule.js"></script>
+  <script src="queryDataset/queryDatasetModule.js"></script>
+  <script src="queryDataset/queryDatasetCtrl.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.accordion')
+        .accordion({
+          selector: {
+            trigger: '.title'
+          },
+          exclusive: false  // Disable exclusivity to allow multiple sections to be open at once.
+        })
+      ;
+
+      $('.ui.left.sidebar').sidebar({
+        dimPage: false,
+        transition: 'push',
+        exclusive: false,
+        closable: false
+      });
+
+      $('.ui.left.sidebar').sidebar('attach events', '#left-sidebar-toggle');
+    });
+  </script>
+  <script id="prefixes" type="text/template">
+      PREFIX fabio:   <http://purl.org/spar/fabio/>
+      PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX frbr:    <http://purl.org/vocab/frbr/core#>
+      PREFIX co:      <http://purl.org/co/>
+      PREFIX foaf:    <http://xmlns.com/foaf/0.1/>
+      PREFIX pro:     <http://purl.org/spar/pro/>
+      PREFIX dcterms: <http://purl.org/dc/terms/>
+      PREFIX c4o:     <http://purl.org/spar/c4o/>
+      PREFIX cito:    <http://purl.org/spar/cito/>
+      PREFIX prism:   <http://prismstandard.org/namespaces/basic/2.0/>
+      PREFIX sro:     <http://salt.semanticauthoring.org/ontologies/sro#>
+      PREFIX biro:    <http://purl.org/spar/biro/>
+      PREFIX oa:      <http://www.w3.org/ns/oa#>
+      PREFIX doco:    <http://purl.org/spar/doco/>
+      PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX dbo:     <http://dbpedia.org/ontology/>
+   </script>
+</body>
+</html>
