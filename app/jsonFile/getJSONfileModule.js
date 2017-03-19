@@ -10,17 +10,17 @@ angular.module('getJSONfileModule', [])
 
     createJsonFile(results){
 
-      //sogg: target
+      //sogg: target (BAND)
       //oo: source
       //p: etichetta della relazione
       //s: istanze di una certa css_classes
       //o itanze di un altra classe
       var len = results["results"]["bindings"].length;
+      var nodiAttributo = '"nodiAttributo":[';
+      var linkAttributo = '"linkAttributo":[';
+      /*links*/
       var jsonNuovo = '{"links":[';
-
-
       for(var i=0; i<results["results"]["bindings"].length; i++){
-
         jsonNuovo += '{"source": "' +results["results"]["bindings"][i]['oo']['value']+
                      '", "target": "' +results["results"]["bindings"][i]['sogg']['value']+
                      '", "label": "' +results["results"]["bindings"][i]['p']['value']+
@@ -38,8 +38,8 @@ angular.module('getJSONfileModule', [])
       }
       jsonNuovo += '{"id": "' +results["results"]["bindings"][0]['sogg']['value']+
                    '", "label": "' +results["results"]["bindings"][0]['s']['value']+
-                   '", "photoUrl": "' +photoUrl+
-                   '"},\n';
+                   '", "photoUrl": "' +photoUrl+ '", "group": "1"'+
+                   '},\n';
       for(var i=0; i<results["results"]["bindings"].length; i++){
         var bool = false;
         for(var j=0; j<subj.length; j++){
@@ -57,8 +57,8 @@ angular.module('getJSONfileModule', [])
           }
           jsonNuovo += '{"id": "' +results["results"]["bindings"][i]['sogg']['value']+
                        '", "label": "' +results["results"]["bindings"][i]['s']['value']+
-                       '", "photoUrl": "' +photoUrl+
-                       '"},\n';
+                       '", "photoUrl": "' +photoUrl+'", "group": "1"'+
+                       '},\n';
             subj.push(results["results"]["bindings"][i]["s"]['value']);
         }
       }
@@ -71,8 +71,11 @@ angular.module('getJSONfileModule', [])
       }
       jsonNuovo += '{"id": "' +results["results"]["bindings"][0]['oo']['value']+
                    '", "label": "' +results["results"]["bindings"][0]['o']['value']+
-                   '", "photoUrl": "' +photoUrl+
-                   '"},\n';
+                   '", "year": "' +results["results"]["bindings"][0]['year']['value']+
+                   '", "photoUrl": "' +photoUrl+ '", "group": "2"'+
+                   '},\n';
+      nodiAttributo += '{"id": "0", "value":"' + results["results"]["bindings"][0]['year']['value'] + '", "group": "3"},\n';
+      linkAttributo += '{"target": "0", "source":"' + results["results"]["bindings"][0]['oo']['value'] + '"},\n';
       for(var i=0; i<results["results"]["bindings"].length; i++){
         var bool = false;
         for(var j=0; j<subj2.length; j++){
@@ -86,6 +89,8 @@ angular.module('getJSONfileModule', [])
         if (bool==true){
           if (i>1){
             jsonNuovo += ",\n";
+            nodiAttributo += ",\n";
+            linkAttributo += ",\n";
           }
           var photoUrl = "";
           if(results["results"]["bindings"][i]['photoOO']!=undefined){
@@ -93,12 +98,23 @@ angular.module('getJSONfileModule', [])
           }
           jsonNuovo += '{"id": "' +results["results"]["bindings"][i]['oo']['value']+
                        '", "label": "' +results["results"]["bindings"][i]['o']['value']+
-                       '", "photoUrl": "' +photoUrl+
-                       '"}\n';
+                       '", "year": "' +results["results"]["bindings"][i]['year']['value']+
+                       '", "photoUrl": "' +photoUrl+  '", "group": "2"'+
+                       '}\n';
+          nodiAttributo += '{"id": "' + i + '", "value":"' + results["results"]["bindings"][i]['year']['value'] + '", "group": "3"}\n';
+          linkAttributo += '{"target": "' + i +'", "source":"' + results["results"]["bindings"][i]['oo']['value'] + '"}\n';
           subj2.push(results["results"]["bindings"][i]["o"]['value']);
         }
       }
-      jsonNuovo += "]}";
+      jsonNuovo += "],";
+
+      linkAttributo += "],";
+
+      nodiAttributo += "]}";
+
+      jsonNuovo += linkAttributo;
+
+      jsonNuovo += nodiAttributo;
 
       //localStorage.setItem('jsonGraph', JSON.stringify(jsonNuovo));
       //return JSON.parse(localStorage.getItem('jsonGraph'));

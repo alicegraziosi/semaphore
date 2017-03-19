@@ -15,7 +15,8 @@ angular.module('myApp', [
 
 .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
-  $routeProvider.otherwise({redirectTo: '/graph'});
+  //$routeProvider.otherwise({redirectTo: '/graph'});
+  $routeProvider.otherwise({redirectTo: '/cluster'});
 }])
 
 .controller('myAppCtrl', function($rootScope){

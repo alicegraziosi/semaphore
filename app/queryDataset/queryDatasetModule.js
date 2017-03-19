@@ -3,18 +3,22 @@
 angular.module('queryDatasetModule', [])
 
 .factory('queryDatasetService', ['$http', '$q', function($http, $q){
-  return{
-    queryDataset: function(){
+  var queryDataset = function(){
         var endpoint = "http://dbpedia.org/sparql";
         var prefixes = $();
-        var query = `SELECT DISTINCT ?sogg ?s ?p ?o ?oo ?photoSogg ?photoOO WHERE{
-          {?sogg a dbo:Band;
+        //to do
+        //aggiungere anno o un altra proprietà del cantante
+        //aggiungere classe a cui appartiene
+        // stile in base alla classe
+        var query = `SELECT DISTINCT ?sogg ?s ?p ?o ?oo ?photoSogg ?photoOO ?year WHERE{
+        { ?sogg a dbo:Band;
           rdfs:label ?s;
           rdfs:label "The Beatles"@en;
               ?pred ?oo.
          ?pred rdfs:label ?p;
             rdfs:label "former band member"@en.
-         ?oo rdfs:label ?o.
+            ?oo rdfs:label ?o;
+                dbp:yearsActive ?year.
 
          OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
          OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
@@ -28,7 +32,8 @@ angular.module('queryDatasetModule', [])
                 ?pred ?oo.
            ?pred rdfs:label ?p;
               rdfs:label "former band member"@en.
-           ?oo rdfs:label ?o.
+              ?oo rdfs:label ?o;
+                dbp:yearsActive ?year.
            OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
            OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
           FILTER (lang(?s) = "en")
@@ -41,7 +46,8 @@ angular.module('queryDatasetModule', [])
                 ?pred ?oo.
            ?pred rdfs:label ?p;
               rdfs:label "band member"@en.
-           ?oo rdfs:label ?o.
+              ?oo rdfs:label ?o;
+                dbp:yearsActive ?year.
            OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
            OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
             FILTER (lang(?s) = "en")
@@ -54,23 +60,56 @@ angular.module('queryDatasetModule', [])
                 ?pred ?oo.
            ?pred rdfs:label ?p;
               rdfs:label "band member"@en.
-           ?oo rdfs:label ?o.
+              ?oo rdfs:label ?o;
+                dbp:yearsActive ?year.
            OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
            OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
             FILTER (lang(?s) = "en")
             FILTER (lang(?p) = "en")
-            FILTER (lang(?o) = "en")}
+            FILTER (lang(?o) = "en")
+        } UNION {
+          ?sogg a dbo:Band;
+                rdfs:label ?s;
+                rdfs:label "Pink Floyd"@en;
+                ?pred ?oo.
+           ?pred rdfs:label ?p;
+              rdfs:label "band member"@en.
+              ?oo rdfs:label ?o;
+                dbp:yearsActive ?year.
+           OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
+           OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
+            FILTER (lang(?s) = "en")
+            FILTER (lang(?p) = "en")
+            FILTER (lang(?o) = "en")
+          } UNION {
+            ?sogg a dbo:Band;
+                  rdfs:label ?s;
+                  rdfs:label "The Bleeding Heart Band"@en;
+                  ?pred ?oo.
+             ?pred rdfs:label ?p;
+                rdfs:label "band member"@en.
+                ?oo rdfs:label ?o;
+                  dbp:yearsActive ?year.
+             OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
+             OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
+              FILTER (lang(?s) = "en")
+              FILTER (lang(?p) = "en")
+              FILTER (lang(?o) = "en")
+            }
         } limit 1000`;
         var encodedquery = encodeURIComponent(query);
-        var defer = $q.defer();
-				$http.get(endpoint
-          + "?format=json&query="
-          + encodedquery).then(function(response) {
-            defer.resolve(response.data);
+        var deferred = $q.defer();
+				$http.get(endpoint + "?format=json&query=" + encodedquery)
+          .success(function(data) {
+            deferred.resolve(data);
+          })
+          .error(function() {
+            deferred.reject("Failed to get data");
           });
-          return defer.promise;
-    },
-    getDbPediaPhoto: function(entity, callbackFn){
+          return deferred.promise;
+    }
+
+    var getDbPediaPhoto = function(entity, callbackFn){
       var endpoint = "http://dbpedia.org/sparql";
       var prefixes = $();
       var query = 'SELECT ?photo WHERE{<'+entity+'> <http://dbpedia.org/ontology/thumbnail> ?photo.}';
@@ -78,10 +117,14 @@ angular.module('queryDatasetModule', [])
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       $http.get(endpoint+"?format=json&query="+encodedquery)
-      .then(function(response) {
-        defer.resolve(response.data);
-      });
-      return defer.promise;
+        .then(function(response) {
+          defer.resolve(response.data);
+        });
+        return defer.promise;
     }
-  }
+
+    return{
+      queryDataset: queryDataset,
+      getDbPediaPhoto: getDbPediaPhoto
+    };
 }]);

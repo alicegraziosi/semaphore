@@ -15,14 +15,38 @@
   values (or exceptions) when they are done processing.
 */
 
-angular.module('d3Module', [])
+var d3Module = angular.module('d3Module', [])
 
-.provider('d3Service', function() {
+d3Module.provider('d3Service', function() {
   function createScript($document, callback, success) {
     var scriptTag = $document.createElement('script');
     scriptTag.type = "text/javascript";
     scriptTag.async = true;
     scriptTag.src = 'https://d3js.org/d3.v4.min.js';
+    scriptTag.onreadystatechange = function() {
+      if (this.readyState == 'complete') {
+        callback();
+      }
+    }
+    scriptTag.onload = callback;
+    $document.getElementsByTagName('body')[0].appendChild(scriptTag);
+  }
+
+  this.$get = ['$document','$q', '$window', '$rootScope',
+    function($document, $q, $window, $rootScope) {
+      var deferred = $q.defer();
+      createScript($document[0], function(callback) {
+        $rootScope.$apply(function(){ deferred.resolve($window.d3) });;
+      })
+      return deferred.promise;
+    }];
+})
+.provider('d3ServiceVersion3', function() {
+  function createScript($document, callback, success) {
+    var scriptTag = $document.createElement('script');
+    scriptTag.type = "text/javascript";
+    scriptTag.async = true;
+    scriptTag.src = 'https://d3js.org/d3.v3.min.js';
     scriptTag.onreadystatechange = function() {
       if (this.readyState == 'complete') {
         callback();

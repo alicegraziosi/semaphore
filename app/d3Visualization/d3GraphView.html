@@ -1,0 +1,44 @@
+
+<div class="container">
+  <!--
+    <div ng-controller="D3viewCtrl">
+    attenzione!! se il controller è specificatp nel config della route allora non bisogna
+    scriverlo anche nel html altrimenti viene richiamato due volte!!
+  -->
+  <div>{{foo}}</div>
+  <div class="ui internally celled grid">
+    <div class="row" id="graph_box">
+      <div class="twelve wide column">
+        <div ng-include="'d3Visualization/menuVisualization.html'"></div>
+        <!-- d3-visualization = directive -->
+        <d3-graphvisualization graph="graph"
+                          selected-item="selected"
+                          model="$parent"></d3-graphvisualization>
+      </div>
+      <div class="ui top aligned four wide column">
+        <button class="ui button" ng-click="exportJSON()">
+          <i class="download icon"></i>Export as JSON
+        </button>
+        <button class="ui button" ng-click="newVisualization()">
+          Filter per Year
+        </button>
+        <button class="ui button" ng-click="ripristina()">
+          Ripristina default view
+        </button>
+        <div id="node_info">
+          <p ng-show="selected == ' '">Hover over node for node information<p>
+
+            <a ng-href="{{selected.id}}" target=”_blank”>{{selected.id}}
+            <i ng-show="selected != ' '" class="external link icon"></i>
+            </a>
+
+          <p>{{selected.label}}</p>
+          <p>{{selected.photoUrl}}</p>
+          <p>{{selected.year}}</p>
+          <img src="{{selected.photoUrl}}"
+            style="width:300;height:300;">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

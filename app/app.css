@@ -1,11 +1,5 @@
 /* app css stylesheet */
 
-#graph_box{
-  background-color: rgb(251, 251, 251);
-  opacity: 1;
-  padding: 20px;
-}
-
 /* top menu */
 div.ui.top.fixed.menu{
   font-family: sans-serif;
@@ -54,12 +48,17 @@ div.pusher{
   box-shadow: none;
 }
 
-
 /* d3 visualization styles */
-.links {
-  fill: none;
+#graph_box{
+  background-color: rgb(251, 251, 251);
+  opacity: 1;
+  padding: 20px;
+}
+
+.links line{
   stroke: #999;
-  stroke-opacity: 0.6;
+  stroke-opacity: 0.7;
+  stroke-width: 1px;
 }
 
 .nodes circle {
@@ -69,26 +68,12 @@ div.pusher{
 
 .markers{
   viewBox: 0 -5 10 10;
-  refX: 16;
-  refY: 0;
+  refX: 15;
+  refY: -1.5;
   marker-width: 6;
   marker-height: 6;
   orient: auto;
   fill: #999;
-  fill-opacity: 0.9;
-}
-
-.linklabelholder text {
-  font-size: 3px;
-  pointer-events: none;
-  fill: #999;
-  fill-opacity: 0.9;
-}
-
-.rect{
-  width: 30;
-  height: 12;
-  fill: "#9c6";
 }
 
 /* info laterali nodo selezionato */
@@ -114,7 +99,6 @@ div.pusher{
   color: grey;
 }
 
-/* footer */
-.footer {
-  flex: 1;
+footer{
+  bottom:0;
 }
