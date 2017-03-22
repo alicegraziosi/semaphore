@@ -23,10 +23,11 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
 
           var width = 960,
-              height = 500,
+              height = 600,
               padding = 1.5, // separation between same-color nodes
-              clusterPadding = 25, // separation between different-color nodes
-              maxRadius = 25;
+              clusterPadding = 80, // separation between different-color nodes
+              maxRadius = 25, //radius nodo cluster
+              radius = 10;
 
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
@@ -54,6 +55,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 nodi.push({
                   value: elem,
                   cluster: index,
+                  total: 1,
                   type: "cluster"
                 });
               });
@@ -70,16 +72,23 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                   cluster: cluster,
                   type: "node"
                 });
+
+                nodi.forEach(function(elem){
+                  if(elem.cluster==cluster && elem.type=="cluster"){
+                    elem.total = elem.total+1;
+                  }
+                });
               });
 
               var nodes = nodi.map(function(n) {
                 var i = n.cluster,
-                    r = n.type=="node" ? 10 : 30,
+                    r = n.type=="cluster" ? maxRadius : radius,
                     d = {
                       value: n.value,
                       type: n.type,
                       cluster: i,
                       radius: r,
+                      total: n.total,
                       x: Math.cos(i / m * 2 * Math.PI) * 200 + width / 2 + Math.random(),
                       y: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random()
                     };
@@ -99,9 +108,24 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                   .attr("width", width)
                   .attr("height", height);
 
+              /*un rettangolo contenitore per ogni nodo cluster*/
+              var nodirect = nodes.filter(function(elem, index, self) {
+                  return elem.type=="cluster";
+              });
+
+              var rect = svg.selectAll("rect")
+                .data(nodirect)
+                .enter()
+                .append("rect")
+                .style("fill", function(d) { return color(d.cluster); })
+                  .attr("opacity", "0.6")
+                  .attr("width", function(d) { return 2*maxRadius + d.total*2*radius + d.total*2*padding; })
+                  .attr("height", function(d) { return 2*maxRadius + d.total*2*radius + d.total*2*padding; });
+
               var node = svg.selectAll("circle")
                   .data(nodes)
-                .enter().append("circle")
+                .enter()
+                .append("circle")
                   .style("fill", function(d) { return color(d.cluster); })
                   .call(force.drag);
 
@@ -130,7 +154,9 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                     .attr("cx", function(d) { return d.x; })
                     .attr("cy", function(d) { return d.y; });
                 label.attr("x", function(d){ return d.x; })
-                     .attr("y", function (d) {return d.y + 4; });
+                     .attr("y", function (d) {return d.y; });
+                rect.attr("x", function(d){ return d.x - maxRadius - d.total*radius - d.total*padding; })
+                    .attr("y", function (d) {return d.y - maxRadius - d.total*radius - d.total*padding;; });
               }
 
               // Move d to be adjacent to the cluster node.

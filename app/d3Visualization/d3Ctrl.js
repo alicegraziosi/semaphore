@@ -25,12 +25,19 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
 
     $http.get('../alicegraph.json').success(function (data) {
       $scope.graph = data;
+      $scope.nodeLabels = [];
+      for (var i = 0; i < $scope.graph.nodes.length - 1; i++) {
+          $scope.nodeLabels.push($scope.graph.nodes[i].label);
+      }
+      $scope.nodeLabels = $scope.nodeLabels.sort();
     });
 
+    /*
     var promise = queryDatasetService.queryDataset();
     promise.then(function(response) {
-      //$scope.graph = GetJSONfileService.createJsonFile(response);
+      $scope.graph = GetJSONfileService.createJsonFile(response);
     });
+    */
 
     $scope.selected = " ";
 
@@ -46,6 +53,22 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
     $scope.ripristina = function () {
       console.log('"ripristina" button clicked');
       $scope.clearAll();
+    }
+
+    $scope.selectNodeLabel = function(label) {
+        $scope.selectedNodeLabel = label;
+    };
+
+    $scope.dropdown = function(){
+      $('.ui.dropdown').dropdown();
+    }
+
+    $scope.searchNode = function(){
+      console.log('"searchNode" button clicked');
+    }
+
+    $scope.menuItemClick = function(){
+      console.log('"menuItemClick" button clicked');
     }
 
     $scope.clearAll = function () { //deve essere funzione di scope

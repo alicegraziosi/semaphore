@@ -12,8 +12,9 @@
         <div ng-include="'d3Visualization/menuVisualization.html'"></div>
         <!-- d3-visualization = directive -->
         <d3-graphvisualization graph="graph"
-                          selected-item="selected"
-                          model="$parent"></d3-graphvisualization>
+                               selected-item="selected"
+                               selected-node-label="selectedNodeLabel"
+                               model="$parent"></d3-graphvisualization>
       </div>
       <div class="ui top aligned four wide column">
         <button class="ui button" ng-click="exportJSON()">
@@ -27,16 +28,13 @@
         </button>
         <div id="node_info">
           <p ng-show="selected == ' '">Hover over node for node information<p>
-
             <a ng-href="{{selected.id}}" target=”_blank”>{{selected.id}}
-            <i ng-show="selected != ' '" class="external link icon"></i>
+              <i ng-show="selected != ' '" class="external link icon"></i>
             </a>
-
           <p>{{selected.label}}</p>
           <p>{{selected.photoUrl}}</p>
           <p>{{selected.year}}</p>
-          <img src="{{selected.photoUrl}}"
-            style="width:300;height:300;">
+          <img src="{{selected.photoUrl}}" style="width:300;height:300;">
         </div>
       </div>
     </div>

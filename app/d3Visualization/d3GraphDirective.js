@@ -14,7 +14,8 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
       //<d3-visualization graph="graph"></d3-visualization> --> $scope.graph
       scope: {
           graph: "=",
-          model: "="
+          model: "=",
+          selectedNodeLabel: "="  // nella view: selected-node-label
       },
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
@@ -22,15 +23,15 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
           // now you can use d3 as usual!
           var d3 = $window.d3;
           var width = "900";
-          var height = "600";
+          var height = "500";
 
           /* svg */
           var svg = d3.select(elem[0]).append("svg")
-            .attr("height", "600")
+            .attr("height", "500")
             .attr("width", '100%');
 
           svg.append("rect")
-            .attr("height", "600")
+            .attr("height", "500")
             .attr("width", '100%')
             .attr("fill", "rgb(251, 251, 251)")
             .attr("fill-opacity", "1")
@@ -63,6 +64,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
 
                   var links = [];
                   var nodes = [];
+                  var radius = 16;
 
                   graph.links.forEach(function(l) {
                     links.push({
@@ -86,7 +88,8 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                       label: n.label,
                       group: n.group,
                       photoUrl: n.photoUrl,
-                      shape: "circle"
+                      shape: "circle",
+                      radius: radius
                     });
                   });
 
@@ -102,8 +105,8 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
 
                   /* directed force layout */
                   var simulation = d3.forceSimulation()
-                    .force("link", d3.forceLink().id(function (d) { return d.id; }))
-                    .force("charge", d3.forceManyBody())
+                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(60)) // replace force.linkStrength
+                    .force("charge", d3.forceManyBody()) // replace force.charge
                     .force("center", d3.forceCenter(width / 2, height / 2));
 
                   //simulation.nodes(graph.nodes).on("tick", ticked);
@@ -114,7 +117,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                   /* links (path)*/
                   var link = gzoom.append("g")
                     .attr("class", "links")
-                    .selectAll("line")
+                    .selectAll("path")
                     .data(links) //.data(graph.links)
                     .enter().append("line") //.enter().append("path")
                       .attr("id",function(d,i) { return "linkId_" + i; })
@@ -139,11 +142,17 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                   /* nodes */
                   var node = gzoom.append("g")
                     .attr("class", "nodes")
-                    .selectAll("circle")
+                    .selectAll("g")
                     .data(nodes) //.data(graph.nodes)
                     .enter().append("g")
-                      .append("circle")
-                        .attr("r", "5")
+                    .append(function(d){
+                      if(d.shape=="circle")
+                        {return document.createElementNS('http://www.w3.org/2000/svg', 'circle')}
+                      if(d.shape=="rectangle")
+                        {return document.createElementNS('http://www.w3.org/2000/svg', 'rect')}})
+                        .attr("width", 30) // if rect
+                        .attr("height", 8)  //if rect
+                        .attr("r", function(d) { return d.radius; }) // i circle
                         .attr("fill", function(d) { return color(d.group); })
                         .call(d3.drag()
                             .on("start", dragstarted)
@@ -155,21 +164,19 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                           scope.$apply(function () {
                             $parse(attrs.selectedItem).assign(scope.$parent, d);
                           });
-                          link.style('stroke-width', function(l) {
-                            if (d === l.source || d === l.target)
-                              return 1.2;
-                            });
                         })
                         .on("mouseout", function(d){
-                          //d3.select(this).style("stroke", '#ffffff');
-                          link.style('stroke-width', 1);
-                        });
-                        //.on('click', click);
+                          d3.selectAll("circle").style("stroke", '#ffffff')
+                        })
+                        .on('dblclick', connectedNodes);
 
                   /* label dei nodi */
-                  var label = gzoom.selectAll("text")
+                  var label = gzoom.append("g")
+                    .attr("class", "nodes")
+                    .selectAll("g")
                     .data(nodes) //.data(graph.nodes)
-                    .enter().append("text")
+                    .enter().append("g")
+                      .append("text")
                       .text(function (d) { return d.label; })
                       .style("font-family", "Arial")
                       .style("font-size", 5);
@@ -191,19 +198,14 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                         scope.$apply(function () {
                           $parse(attrs.selectedItem).assign(scope.$parent, d);
                         });
-                        link.style('stroke-width', function(l) {
-                          if (d === l.source || d === l.target)
-                            return 1.3;
-                          });
                       })
                       .on("mouseout", function(d){
-                        //d3.select(this).style("stroke", '#ffffff');
-                        link.style('stroke-width', 1);
+                        d3.selectAll("circle").style("stroke", '#ffffff')
                       });
 
-                  var rect = gzoom
+                  var rect = gzoom.append("g")
                     .attr("class", "rectLable")
-                    .selectAll("rectLable")
+                    .selectAll("g")
                     .data(links) //.data(graph.links)
                     .enter().append("g");
 
@@ -237,7 +239,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                     .enter().append("marker")
                       .attr("id", function(d){return d.source.id;})
                       .attr("viewBox", "0 -5 10 10")
-                      .attr("refX", 20)
+                      .attr("refX", 2*5+2*radius) // 2*markerHeight+2*radius (vale per i circle)
                       .attr("refY", 0)
                       .attr("markerWidth", 5)
                       .attr("markerHeight", 5)
@@ -256,8 +258,10 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                       .attr("x2", function(d) { return d.target.x; })
                       .attr("y2", function(d) { return d.target.y; });
                   node.attr("cx", function(d) { return d.x; })
-                      .attr("cy", function(d) { return d.y; });
-                  label.attr("x", function(d){ return d.x + 6; })
+                      .attr("cy", function(d) { return d.y; }); // if circle
+                  node.attr("x",  function(d) { return d.x - 30/2; })
+                      .attr("y",  function(d) { return d.y - 5; }); // if rect
+                  label.attr("x", function(d){ return d.x - 15; })
             			     .attr("y", function (d) {return d.y + 2; });
                   image.attr("x", function(d){ return d.x + 3; })
          			         .attr("y", function (d) {return d.y + 3;});
@@ -268,24 +272,99 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                 }
 
                 function dragstarted(d) {
-                  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                  // desired alpha (temperature) of the simulation: 1.5 in modo
+                  // che non sia troppo lento . alpha puo' essere tra 0 e 1
+                  if (!d3.event.active) simulation.alphaTarget(0.2).restart();
                   d.fx = d.x;
                   d.fy = d.y;
                 }
 
-                function dragged(d) {
+                function dragged(d){
                   d.fx = d3.event.x;
                   d.fy = d3.event.y;
                 }
 
                 function dragended(d) {
+                  // alla fine dell'interazione alpha a 0
+                  // altrimenti il grafico continua a muoversi
                   if (!d3.event.active) simulation.alphaTarget(0);
                   d.fx = null;
                   d.fy = null;
                 }
-              } //update()
-            } //if(graph)
-          }); //scope.$watch('graph', function (graph) {
+
+                //Toggle stores whether the highlighting is on
+                var toggle = 0;
+                //Create an array logging what is connected to what
+                var linkedByIndex = {};
+                for (var i = 0; i < nodes.length; i++) {
+                    linkedByIndex[i + "," + i] = 1;
+                };
+                links.forEach(function (d) {
+                    linkedByIndex[d.source.index + "," + d.target.index] = 1;
+                });
+                //This function looks up whether a pair are neighbours
+                function neighboring(a, b) {
+                    return linkedByIndex[a.index + "," + b.index];
+                }
+                function connectedNodes() {
+                    if (toggle == 0) {
+                        //Reduce the opacity of all but the neighbouring nodes
+                        var d = d3.select(this).node().__data__;
+                        node.style("opacity", function (o) {
+                            return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+                        });
+                        image.style("opacity", function (o) {
+                            return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+                        });
+                        label.style("opacity", function (o) {
+                            return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+                        });
+                        link.style("opacity", function (o) {
+                            return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+                        });
+                        rect.style("opacity", function (o) {
+                            return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+                        });
+                        //Reduce the op
+                        toggle = 1;
+                    } else {
+                        //Put them back to opacity=1
+                        node.style("opacity", 1);
+                        image.style("opacity", 1);
+                        label.style("opacity", 1);
+                        link.style("opacity", 1);
+                        rect.style("opacity", 1);
+                        toggle = 0;
+                    }
+                }
+
+                scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
+                  if(selectedNodeLabel){
+                    //var node = svg.selectAll(".node");
+                    if (selectedNodeLabel == "none") {
+                        node.style("stroke", "white").style("stroke-width", "1");
+                    } else {
+                        var selected = node.filter(function (d, i) {
+                            return d.label != selectedNodeLabel;
+                        });
+                        selected.style("opacity", "0");
+                        link.style("opacity", "0");
+                        image.style("opacity", "0");
+                        label.style("opacity", "0");
+                        rect.style("opacity", "0");
+
+                        //Put them back to opacity=1
+                        node.transition().duration(5000).style("opacity", 1);
+                        link.transition().duration(5000).style("opacity", 1);
+                        image.transition().duration(5000).style("opacity", 1);
+                        label.transition().duration(5000).style("opacity", 1);
+                        rect.transition().duration(5000).style("opacity", 1);
+                    }
+                  } // if (selectedNodeLabel)
+                }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
+              } // update()
+            } // if(graph)
+          }); // scope.$watch('graph', function (graph) {
         }); // d3Service.then(function(d3) {
       } // link
     } // return
