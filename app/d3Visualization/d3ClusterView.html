@@ -9,12 +9,31 @@
       <div class="twelve wide column">
         <!-- d3-visualization = directive -->
         <div ng-include="'d3Visualization/menuVisualization.html'"></div>
-        <d3-clustervisualization
-          graph="graph"></d3-clustervisualization>
+        <d3-clustervisualization graph="graph"
+                                 selected-node-label="selectedNodeLabel"
+                                 selected-cluster-option="selectedClusterOption">
+        </d3-clustervisualization>
       </div>
       <div class="ui top aligned four wide column">
-
-        
+        <div class="ui form">
+          <div class="grouped fields">
+            <label>Cluster by</label>
+            <h5 class="ui dividing header">Object Property<h5>
+            <div class="field" data-value="{{clusterByOptionsClass}}" ng-repeat="clusterOption in clusterByOptionsClass">
+              <div class="ui radio checkbox">
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
+                <label>{{clusterOption}}</label>
+              </div>
+            </div>
+            <h5 class="ui dividing header">Datatype Property<h5>
+            <div class="field" data-value="{{clusterByOptionsProperty}}" ng-repeat="clusterOption in clusterByOptionsProperty">
+              <div class="ui radio checkbox">
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
+                <label>{{clusterOption}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 </div>

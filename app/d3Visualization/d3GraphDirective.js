@@ -78,7 +78,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                     links.push({
                       source: l.source,
                       target: l.target,
-                      label: " "
+                      label: l.label
                     });
                   });
 
@@ -203,6 +203,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                         d3.selectAll("circle").style("stroke", '#ffffff')
                       });
 
+                  /*rect e label */
                   var rect = gzoom.append("g")
                     .attr("class", "rectLable")
                     .selectAll("g")
@@ -362,7 +363,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                     }
                   } // if (selectedNodeLabel)
                 }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
-              } // update()
+              } //update()
             } // if(graph)
           }); // scope.$watch('graph', function (graph) {
         }); // d3Service.then(function(d3) {

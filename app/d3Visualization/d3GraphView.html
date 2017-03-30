@@ -14,18 +14,14 @@
         <d3-graphvisualization graph="graph"
                                selected-item="selected"
                                selected-node-label="selectedNodeLabel"
-                               model="$parent"></d3-graphvisualization>
+                               model="$parent">
+        </d3-graphvisualization>
       </div>
       <div class="ui top aligned four wide column">
         <button class="ui button" ng-click="exportJSON()">
           <i class="download icon"></i>Export as JSON
         </button>
-        <button class="ui button" ng-click="newVisualization()">
-          Filter per Year
-        </button>
-        <button class="ui button" ng-click="ripristina()">
-          Ripristina default view
-        </button>
+
         <div id="node_info">
           <p ng-show="selected == ' '">Hover over node for node information<p>
             <a ng-href="{{selected.id}}" target=”_blank”>{{selected.id}}

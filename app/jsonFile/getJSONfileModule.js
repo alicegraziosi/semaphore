@@ -24,7 +24,7 @@ angular.module('getJSONfileModule', [])
         jsonNuovo += '{"source": "' +results["results"]["bindings"][i]['oo']['value']+
                      '", "target": "' +results["results"]["bindings"][i]['sogg']['value']+
                      '", "label": "' +results["results"]["bindings"][i]['p']['value']+
-                     '"}';
+                     '", "type": "band"}';
         if(i != len-1){
           jsonNuovo += ", \n"
         }
@@ -38,7 +38,7 @@ angular.module('getJSONfileModule', [])
       }
       jsonNuovo += '{"id": "' +results["results"]["bindings"][0]['sogg']['value']+
                    '", "label": "' +results["results"]["bindings"][0]['s']['value']+
-                   '", "photoUrl": "' +photoUrl+ '", "group": "1"'+
+                   '", "photoUrl": "' +photoUrl+ '", "group": "1", "class": "band"'+
                    '},\n';
       for(var i=0; i<results["results"]["bindings"].length; i++){
         var bool = false;
@@ -57,7 +57,7 @@ angular.module('getJSONfileModule', [])
           }
           jsonNuovo += '{"id": "' +results["results"]["bindings"][i]['sogg']['value']+
                        '", "label": "' +results["results"]["bindings"][i]['s']['value']+
-                       '", "photoUrl": "' +photoUrl+'", "group": "1"'+
+                       '", "photoUrl": "' +photoUrl+'", "group": "1", "class": "band"'+
                        '},\n';
             subj.push(results["results"]["bindings"][i]["s"]['value']);
         }
@@ -74,8 +74,14 @@ angular.module('getJSONfileModule', [])
                    '", "year": "' +results["results"]["bindings"][0]['year']['value']+
                    '", "photoUrl": "' +photoUrl+ '", "group": "2"'+
                    '},\n';
-      nodiAttributo += '{"id": "0", "value":"' + results["results"]["bindings"][0]['year']['value'] + '", "group": "3"},\n';
-      linkAttributo += '{"target": "0", "source":"' + results["results"]["bindings"][0]['oo']['value'] + '"},\n';
+      nodiAttributo += '{"id": "0", "value":"' + results["results"]["bindings"][0]['year']['value'] + '", "group": "3", "label": "year"},\n';
+      linkAttributo += '{"target": "0", "source":"' + results["results"]["bindings"][0]['oo']['value'] + '", "label": "year"},\n';
+
+      var leng = results["results"]["bindings"].length;
+
+      nodiAttributo += '{"id": "'+ leng+1 +'", "value":"' + results["results"]["bindings"][0]['birthLabel']['value'] + '", "group": "4", "label": "birth place"},\n';
+      linkAttributo += '{"target": "'+ leng+1 +'", "source":"' + results["results"]["bindings"][0]['oo']['value'] + '", "label": "birth place"},\n';
+
       for(var i=0; i<results["results"]["bindings"].length; i++){
         var bool = false;
         for(var j=0; j<subj2.length; j++){
@@ -101,23 +107,24 @@ angular.module('getJSONfileModule', [])
                        '", "year": "' +results["results"]["bindings"][i]['year']['value']+
                        '", "photoUrl": "' +photoUrl+  '", "group": "2"'+
                        '}\n';
-          nodiAttributo += '{"id": "' + i + '", "value":"' + results["results"]["bindings"][i]['year']['value'] + '", "group": "3"}\n';
-          linkAttributo += '{"target": "' + i +'", "source":"' + results["results"]["bindings"][i]['oo']['value'] + '"}\n';
+          nodiAttributo += '{"id": "' + i + '", "value":"' + results["results"]["bindings"][i]['year']['value'] + '", "group": "3", "label": "year"},\n';
+          linkAttributo += '{"target": "' + i +'", "source":"' + results["results"]["bindings"][i]['oo']['value'] + '", "label": "year"},\n';
+
+          var index = 0+leng+1+i;
+
+          nodiAttributo += '{"id": "' + index + '", "value":"' + results["results"]["bindings"][i]['birthLabel']['value'] + '", "group": "4", "label": "birth place"}\n';
+          linkAttributo += '{"target": "'+ index +'", "source":"' + results["results"]["bindings"][i]['oo']['value'] + '", "label": "birth place"}\n';
+
           subj2.push(results["results"]["bindings"][i]["o"]['value']);
         }
       }
       jsonNuovo += "],";
-
       linkAttributo += "],";
-
       nodiAttributo += "]}";
-
       jsonNuovo += linkAttributo;
-
       jsonNuovo += nodiAttributo;
 
-      //localStorage.setItem('jsonGraph', JSON.stringify(jsonNuovo));
-      //return JSON.parse(localStorage.getItem('jsonGraph'));
+      console.log(JSON.parse(jsonNuovo));
       return JSON.parse(jsonNuovo);
     }
   };
