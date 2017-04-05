@@ -15,7 +15,10 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
       scope: {
           graph: "=",
           model: "=",
-          selectedNodeLabel: "="  // nella view: selected-node-label
+          selectedNodeLabel: "=",  // nella view: selected-node-label
+          objectShape: "=",  // nella view: object-shape
+          datatypeShape: "="  // nella view: datatype-shape
+
       },
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
@@ -70,14 +73,16 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                     links.push({
                       source: l.source,
                       target: l.target,
+                      type: l.type,
                       label: l.label
                     });
                   });
 
-                  graph.linkAttributo.forEach(function(l) {
+                  graph.linksToLiterals.forEach(function(l) {
                     links.push({
                       source: l.source,
                       target: l.target,
+                      type: l.type,
                       label: l.label
                     });
                   });
@@ -86,17 +91,19 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                     nodes.push({
                       id: n.id,
                       label: n.label,
+                      type: n.type,
                       group: n.group,
-                      photoUrl: n.photoUrl,
+                      photoUrl: n.customProperties[0].value,
                       shape: "circle",
                       radius: radius
                     });
                   });
 
-                  graph.nodiAttributo.forEach(function(n) {
+                  graph.nodeLiteral.forEach(function(n) {
                     nodes.push({
                       id: n.id,
-                      label: n.value,
+                      label: n.label,
+                      type: n.type,
                       group: n.group,
                       photoUrl: " ",
                       shape: "rectangle"
@@ -205,7 +212,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
 
                   /*rect e label */
                   var rect = gzoom.append("g")
-                    .attr("class", "rectLable")
+                    .attr("class", "rectLabel")
                     .selectAll("g")
                     .data(links) //.data(graph.links)
                     .enter().append("g");
@@ -364,6 +371,26 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                   } // if (selectedNodeLabel)
                 }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
               } //update()
+              scope.$watch('objectShape', function (objectShape) {
+                if(objectShape){
+                  clearAll();
+                  update();
+                }
+              });
+              scope.$watch('datatypeShape', function (datatypeShape) {
+                if(datatypeShape){
+                  clearAll();
+                  update();
+                }
+              });
+
+              function clearAll() {
+                d3.selectAll(".links").remove();
+                d3.selectAll(".nodes").remove();
+                d3.selectAll(".label").remove();
+                d3.selectAll(".image").remove();
+                d3.selectAll(".rectLabel").remove();
+              }
             } // if(graph)
           }); // scope.$watch('graph', function (graph) {
         }); // d3Service.then(function(d3) {

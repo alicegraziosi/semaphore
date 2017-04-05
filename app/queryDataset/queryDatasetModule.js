@@ -90,6 +90,31 @@ angular.module('queryDatasetModule', [])
             FILTER (lang(?yearLabel) = "en")
         }
         } limit 1000`;
+
+
+        var queryPinkFloyd = `
+        SELECT ?sogg ?s ?p ?o ?oo ?photoSogg ?photoOO ?year ?yearLabel ?birth ?birthLabel WHERE{
+        {
+                ?sogg a dbo:Band;
+                  rdfs:label ?s;
+                  rdfs:label "Pink Floyd"@en;
+                      ?pred ?oo.
+                 ?pred rdfs:label ?p;
+                    rdfs:label "former band member"@en.
+                    ?oo rdfs:label ?o;
+                        dbp:yearsActive ?year;
+                        dbo:birthPlace ?birth.
+
+                 ?birth rdfs:label ?birthLabel.
+                 dbp:yearsActive rdfs:label ?yearLabel.
+                 OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
+                 OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
+                FILTER (lang(?s) = "en")
+                FILTER (lang(?p) = "en")
+                FILTER (lang(?o) = "en")
+                FILTER (lang(?birthLabel) = "en")
+                FILTER (lang(?yearLabel) = "en")
+        } }`;
         var encodedquery = encodeURIComponent(query);
         var deferred = $q.defer();
 				$http.get(endpoint + "?format=json&query=" + encodedquery)
@@ -117,8 +142,52 @@ angular.module('queryDatasetModule', [])
         return defer.promise;
     }
 
+    var queryDBpediaClass = function(endpoint){
+      var endpoint = "http://dbpedia.org/sparql";
+      var defaultGraph = "http://dbpedia.org";
+      var query = 'SELECT * FROM <' + defaultGraph + '>' +
+                    `{ ?classUri a owl:Class;
+                                 rdfs:label ?classLabel
+                      FILTER (lang(?classLabel) = "en")
+                    }`;
+      var encodedquery = encodeURIComponent(query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
+    var queryDBpediaClassProperty = function(endpoint, dbpediaClass){
+      var endpoint = "http://dbpedia.org/sparql";
+      var defaultGraph = "http://dbpedia.org";
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + defaultGraph + '> ' +
+                    '{ ?propertyUri <http://www.w3.org/2000/01/rdf-schema#domain> <'+ dbpediaClass +'>; '+
+                  'rdfs:label ?propertyLabel '+
+                  'FILTER (lang(?propertyLabel) = "en")'+
+                  '}';
+      var encodedquery = encodeURIComponent(query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
     return{
       queryDataset: queryDataset,
-      getDbPediaPhoto: getDbPediaPhoto
+      getDbPediaPhoto: getDbPediaPhoto,
+      queryDBpediaClass: queryDBpediaClass,
+      queryDBpediaClassProperty: queryDBpediaClassProperty
     };
 }]);

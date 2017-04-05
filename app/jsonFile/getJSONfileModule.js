@@ -9,26 +9,37 @@ angular.module('getJSONfileModule', [])
     },
 
     createJsonFile(results){
-
       //sogg: target (BAND)
       //oo: source
       //p: etichetta della relazione
       //s: istanze di una certa css_classes
       //o itanze di un altra classe
       var len = results["results"]["bindings"].length;
-      var nodiAttributo = '"nodiAttributo":[';
-      var linkAttributo = '"linkAttributo":[';
-      /*links*/
+      var nodeLiteral = '"nodeLiteral":[';
+      var linksToLiterals = '"linksToLiterals":[';
+
+      // links
       var jsonNuovo = '{"links":[';
+      var links = [];
       for(var i=0; i<results["results"]["bindings"].length; i++){
-        jsonNuovo += '{"source": "' +results["results"]["bindings"][i]['oo']['value']+
+        var entryLink = '{"source": "' +results["results"]["bindings"][i]['oo']['value']+
                      '", "target": "' +results["results"]["bindings"][i]['sogg']['value']+
                      '", "label": "' +results["results"]["bindings"][i]['p']['value']+
                      '", "type": "band"}';
-        if(i != len-1){
+        links.push(entryLink);
+      }
+
+      var uniqueLinks = links.filter(function(elem, index, self) {
+          return index == self.indexOf(elem);
+      });
+
+      for(var i=0; i<uniqueLinks.length; i++){
+        jsonNuovo += uniqueLinks[i];
+        if(i != uniqueLinks.length-1){
           jsonNuovo += ", \n"
         }
       }
+      // nodeObject ((nodes))
       jsonNuovo += '], \n "nodes":[';
       var subj = [];
       subj.push(results["results"]["bindings"][0]["s"]['value']);
@@ -38,7 +49,7 @@ angular.module('getJSONfileModule', [])
       }
       jsonNuovo += '{"id": "' +results["results"]["bindings"][0]['sogg']['value']+
                    '", "label": "' +results["results"]["bindings"][0]['s']['value']+
-                   '", "photoUrl": "' +photoUrl+ '", "group": "1", "class": "band"'+
+                   '", "customProperties":[{"type":"photoUrl", "value":"'+photoUrl+'"}], "group": "1", "type": "band"'+
                    '},\n';
       for(var i=0; i<results["results"]["bindings"].length; i++){
         var bool = false;
@@ -57,7 +68,7 @@ angular.module('getJSONfileModule', [])
           }
           jsonNuovo += '{"id": "' +results["results"]["bindings"][i]['sogg']['value']+
                        '", "label": "' +results["results"]["bindings"][i]['s']['value']+
-                       '", "photoUrl": "' +photoUrl+'", "group": "1", "class": "band"'+
+                       '", "customProperties":[{"type":"photoUrl", "value":"'+photoUrl+'"}], "group": "1", "type": "band"'+
                        '},\n';
             subj.push(results["results"]["bindings"][i]["s"]['value']);
         }
@@ -71,16 +82,15 @@ angular.module('getJSONfileModule', [])
       }
       jsonNuovo += '{"id": "' +results["results"]["bindings"][0]['oo']['value']+
                    '", "label": "' +results["results"]["bindings"][0]['o']['value']+
-                   '", "year": "' +results["results"]["bindings"][0]['year']['value']+
-                   '", "photoUrl": "' +photoUrl+ '", "group": "2"'+
-                   '},\n';
-      nodiAttributo += '{"id": "0", "value":"' + results["results"]["bindings"][0]['year']['value'] + '", "group": "3", "label": "year"},\n';
-      linkAttributo += '{"target": "0", "source":"' + results["results"]["bindings"][0]['oo']['value'] + '", "label": "year"},\n';
+                   '", "type": "' +results["results"]["bindings"][0]['year']['value']+
+                   '", "customProperties":[{"type":"photoUrl", "value":"'+photoUrl+'"}], "group": "2"},\n';
+      nodeLiteral += '{"id": "0", "label":"' + results["results"]["bindings"][0]['year']['value'] + '", "group": "3", "type": "year"},\n';
+      linksToLiterals += '{"target": "0", "source":"' + results["results"]["bindings"][0]['oo']['value'] + '", "type": "year", "label":"year"},\n';
 
       var leng = results["results"]["bindings"].length;
 
-      nodiAttributo += '{"id": "'+ leng+1 +'", "value":"' + results["results"]["bindings"][0]['birthLabel']['value'] + '", "group": "4", "label": "birth place"},\n';
-      linkAttributo += '{"target": "'+ leng+1 +'", "source":"' + results["results"]["bindings"][0]['oo']['value'] + '", "label": "birth place"},\n';
+      nodeLiteral += '{"id": "'+ leng+1 +'", "label":"' + results["results"]["bindings"][0]['birthLabel']['value'] + '", "group": "4", "type": "birth place"},\n';
+      linksToLiterals += '{"target": "'+ leng+1 +'", "source":"' + results["results"]["bindings"][0]['oo']['value'] + '", "label": "birth place", "type": "birth place"},\n';
 
       for(var i=0; i<results["results"]["bindings"].length; i++){
         var bool = false;
@@ -95,8 +105,8 @@ angular.module('getJSONfileModule', [])
         if (bool==true){
           if (i>1){
             jsonNuovo += ",\n";
-            nodiAttributo += ",\n";
-            linkAttributo += ",\n";
+            nodeLiteral += ",\n";
+            linksToLiterals += ",\n";
           }
           var photoUrl = "";
           if(results["results"]["bindings"][i]['photoOO']!=undefined){
@@ -104,27 +114,25 @@ angular.module('getJSONfileModule', [])
           }
           jsonNuovo += '{"id": "' +results["results"]["bindings"][i]['oo']['value']+
                        '", "label": "' +results["results"]["bindings"][i]['o']['value']+
-                       '", "year": "' +results["results"]["bindings"][i]['year']['value']+
-                       '", "photoUrl": "' +photoUrl+  '", "group": "2"'+
+                       '", "customProperties":[{"type":"photoUrl", "value":"'+photoUrl+'"}], "group": "2", "type":"band member"'+
                        '}\n';
-          nodiAttributo += '{"id": "' + i + '", "value":"' + results["results"]["bindings"][i]['year']['value'] + '", "group": "3", "label": "year"},\n';
-          linkAttributo += '{"target": "' + i +'", "source":"' + results["results"]["bindings"][i]['oo']['value'] + '", "label": "year"},\n';
+          nodeLiteral += '{"id": "' + i + '", "label":"' + results["results"]["bindings"][i]['year']['value'] + '", "group": "3", "type": "year"},\n';
+          linksToLiterals += '{"target": "' + i +'", "source":"' + results["results"]["bindings"][i]['oo']['value'] + '", "label": "year", "type": "year"},\n';
 
           var index = 0+leng+1+i;
 
-          nodiAttributo += '{"id": "' + index + '", "value":"' + results["results"]["bindings"][i]['birthLabel']['value'] + '", "group": "4", "label": "birth place"}\n';
-          linkAttributo += '{"target": "'+ index +'", "source":"' + results["results"]["bindings"][i]['oo']['value'] + '", "label": "birth place"}\n';
+          nodeLiteral += '{"id": "' + index + '", "label":"' + results["results"]["bindings"][i]['birthLabel']['value'] + '", "group": "4", "type": "birth place"}\n';
+          linksToLiterals += '{"target": "'+ index +'", "source":"' + results["results"]["bindings"][i]['oo']['value'] + '", "label": "birth place", "type":"birth place"}\n';
 
           subj2.push(results["results"]["bindings"][i]["o"]['value']);
         }
       }
       jsonNuovo += "],";
-      linkAttributo += "],";
-      nodiAttributo += "]}";
-      jsonNuovo += linkAttributo;
-      jsonNuovo += nodiAttributo;
+      linksToLiterals += "],";
+      nodeLiteral += "]}";
+      jsonNuovo += linksToLiterals;
+      jsonNuovo += nodeLiteral;
 
-      console.log(JSON.parse(jsonNuovo));
       return JSON.parse(jsonNuovo);
     }
   };

@@ -52,19 +52,54 @@
   <!-- Left Sidebar -->
   <div class="ui wide left sidebar vertical menu">
     <!-- Accordion -->
-    <div class="ui styled fluid accordion">
+    <div class="ui styled fluid accordion" ng-controller="contactEndpointCtrl">
       <div class="title">
         <i class="dropdown icon"></i>
         Select a SPARQL endpoint
       </div>
-      <div class="content" ng-controller="contactEndpointCtrl">
+      <div class="content">
         <div class="ui fluid action input">
           <input type="text"
-            ng-init="selectedEndpoint='http://localhost:3030/semanticLancet/query'"
             ng-model="selectedEndpoint"></input>
           <button class="ui icon button" ng-click="contactSelectedEndpoint()">
             <i class="search icon"></i>
           </button>
+        </div>
+      </div>
+      <div class="title">
+        <i class="dropdown icon"></i>
+        Query dataset
+      </div>
+      <div class="content">
+        <div class="ui menu">
+          <div class="ui fluid search selection dropdown" ng-click="dropdown();">
+            <i class="dropdown icon" ng-click="dropdown();"></i>
+            <div class="default text">Select a class</div>
+              <div class="menu">
+                <div ng-model="classes" class="item"
+                     ng-click="selectClass(class.uri)"
+                     ng-repeat="class in classes | limitTo:totalDisplayed">
+                  {{class.label}}
+                </div>
+                <div ng-show="classes.length!=0" class="ui center aligned segment">
+                  <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ui menu">
+            <div class="ui fluid multiple search normal selection dropdown"
+              ng-click="dropdown();">
+              <i class="dropdown icon" ng-click="dropdown();"></i>
+              <div class="default text">Select class properties</div>
+              <div class="menu">
+              <div class="item" ng-model="classProperty" class="item"
+                   ng-click="selectClassProperty(classProperty.uri);"
+                   ng-repeat="classProperty in classProperties">
+                   {{classProperty.label}}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="title">
@@ -93,21 +128,9 @@
           </button>
         </div>
       </div>
-      <div class="title">
-        <i class="dropdown icon"></i>
-        Query dataset
-      </div>
-      <div class="content" ng-controller="queryDatasetCtrl">
-        <div class="ui fluid action input">
-          <input type="text"></input>
-          <button class="ui icon button" ng-click="queryDataset()">Query
-            <i class="search icon"></i>
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
 
+  </div>
   <!-- Site content -->
   <div class="pusher">
       <!--
@@ -140,6 +163,7 @@
   <script src="d3Visualization/d3Ctrl.js"></script>
   <script src="d3Visualization/d3ClusterDirective.js"></script>
   <script src="d3Visualization/d3GraphDirective.js"></script>
+  <script src="d3Visualization/d3BarChartDirective.js"></script>
   <script src="jsonFile/getJSONfileModule.js"></script>
   <script src="queryDataset/queryDatasetModule.js"></script>
   <script src="queryDataset/queryDatasetCtrl.js"></script>

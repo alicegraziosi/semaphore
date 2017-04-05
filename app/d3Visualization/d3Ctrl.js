@@ -18,13 +18,17 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
       controller: 'D3viewCtrl'
       /*attenzione!! se il controller è specificato nel config della route allora non bisogna
       scriverlo anche nel html altrimenti viene richiamato due volte!!*/
-    }
-  );
+    })
+    .when(
+      '/barchart', {
+      templateUrl: 'd3Visualization/d3BarChartView.html',
+      controller: 'D3viewCtrl'
+      /*attenzione!! se il controller è specificato nel config della route allora non bisogna
+      scriverlo anche nel html altrimenti viene richiamato due volte!!*/
+    });
 }])
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService) {
-
-
     /*
     $http.get('../alicegraph.json').success(function (data) {
       $scope.graph = data;
@@ -69,8 +73,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
     }
 
     // opzioni di clustrizzazione
-    $scope.clusterByOptionsClass = ['band'];
-    $scope.clusterByOptionsProperty = ['year', 'birth place'];
+    $scope.clusterByOptionsClass = ['band', 'birth place'];
+    $scope.clusterByOptionsProperty = ['year'];
 
     $scope.selectedClusterOption = "";
 
@@ -78,12 +82,12 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
         $scope.selectedClusterOption = selectedClusterOption;
     };
 
-    $scope.clearAll = function () {
-      d3.selectAll(".links").remove();
-      d3.selectAll(".nodes").remove();
-      d3.selectAll(".label").remove();
-      d3.selectAll(".image").remove();
-      d3.selectAll(".rect").remove();
-      d3.selectAll(".text").remove();
-    }
+    // opzioni di visualizzazione (shape)
+    $scope.selectObjectShape = function(shape) {
+      $scope.objectShape = shape;
+    };
+
+    $scope.selectDataTypeShape = function(shape) {
+      $scope.datatypeShape = shape;
+    };
 });
