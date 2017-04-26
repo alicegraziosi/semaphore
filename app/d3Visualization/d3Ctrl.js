@@ -39,18 +39,33 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
       $scope.nodeLabels = $scope.nodeLabels.sort();
     });
     */
-    $scope.$watch(function() {
+
+    $rootScope.graph = {
+      nodes : [],
+      linksToLiterals : [],
+      nodeLiteral : [],
+      links : []
+    }
+    $scope.graph = $rootScope.graph;
+
+    $rootScope.$watch(function() {
       return $rootScope.graph;
-    }, function() {
+    }, function(graph) {
       $scope.graph = $rootScope.graph;
+      $scope.nodeLabels = [];
+      for (var i = 0; i < $scope.graph.nodes.length - 1; i++) {
+        $scope.nodeLabels.push($scope.graph.nodes[i].label);
+      }
+      $scope.nodeLabels = $scope.nodeLabels.sort();
     }, true);
 
     var promise = queryDatasetService.queryDataset();
     promise.then(function(response) {
-      $rootScope.graph = GetJSONfileService.createJsonFile(response.results.bindings);
+
+      $scope.graph = GetJSONfileService.createJsonFile(response.results.bindings);
       $scope.nodeLabels = [];
-      for (var i = 0; i < $rootScope.graph.nodes.length - 1; i++) {
-          $scope.nodeLabels.push($rootScope.graph.nodes[i].label);
+      for (var i = 0; i < $scope.graph.nodes.length - 1; i++) {
+        $scope.nodeLabels.push($scope.graph.nodes[i].label);
       }
       $scope.nodeLabels = $scope.nodeLabels.sort();
     });

@@ -2,8 +2,8 @@
 
 var myAppd3view = angular.module('myApp.d3view');
 
-myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse', 'queryDatasetService',
-  function(d3Service, $window, $parse, queryDatasetService) {
+myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse', 'queryDatasetService', '$rootScope',
+  function(d3Service, $window, $parse, queryDatasetService, $rootScope) {
     return{
       //restrict:'E' --> <d3-visualization></d3-visualization>
       //restrict:'A' --> <div d3-visualization ></div>
@@ -60,9 +60,8 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
-
+                clearAll();
                 update();
-
                 function update(){
 
                   var links = [];

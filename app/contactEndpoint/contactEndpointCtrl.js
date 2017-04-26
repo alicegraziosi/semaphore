@@ -114,14 +114,9 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.queryEndpoint = function(){
       console.log("*****************queryEndpoint*****************");
       console.log("Classe: " + $scope.selectedClass);
-      $rootScope.graph = {
-        nodes : [],
-        linksToLiterals : [],
-        nodeLiteral : [],
-        links : []
-      }
       console.log("data prop: " + $scope.selectedClassDatatypeProperties);
       if($scope.selectedClassDatatypeProperties.length != 0){
+
         var promise = queryDatasetService.queryEndpointForLiteral($scope.selectedEndpoint, $scope.selectedGraph, $scope.selectedClass, $scope.selectedClassDatatypeProperties);
         promise.then(function(response) {
           // nodi, literalNode e linkstoliterals della classe scelta
@@ -135,7 +130,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
           graph.nodeLiteral.forEach(function(nl){
             $rootScope.graph.nodeLiteral.push(nl);
           });
-          console.log($rootScope.graph);
         });
       };
 
@@ -151,7 +145,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
           graph.links.forEach(function(l){
             $rootScope.graph.links.push(l);
           });
-          console.log($rootScope.graph);
         });
       }
 

@@ -14,13 +14,15 @@ angular.module('queryDatasetModule', [])
         { ?sogg a dbo:Band;
           rdfs:label ?soggLabel;
           rdfs:label "The Beatles"@en;
-              ?pred ?oo.
-         ?pred rdfs:label ?p;
+              ?p ?oo.
+         ?p rdfs:label ?pLabel;
             rdfs:label "former band member"@en.
             ?oo rdfs:label ?ooLabel;
                 dbp:yearsActive ?ooPropUri0;
                 dbo:birthPlace ?ooPropUri1.
+                dbp:yearsActive rdfs:label ?ooPropType0.
           ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
+          <http://dbpedia.org/property/genre> rdfs:label ?propType.
             OPTIONAL{
             ?soggPropUri0 rdfs:label ?soggPropLabel0.
             FILTER(lang(?soggPropLabel0) = "en")
@@ -30,21 +32,25 @@ angular.module('queryDatasetModule', [])
          OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
          OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
         FILTER (lang(?soggLabel) = "en")
-        FILTER (lang(?p) = "en")
+        FILTER (lang(?pLabel) = "en")
         FILTER (lang(?ooLabel) = "en")
         FILTER (lang(?ooPropLabel1) = "en")
         FILTER (lang(?ooPropLabel0) = "en")
+
+        FILTER (lang(?ooPropType0) = "en")
         } UNION {
           ?sogg a dbo:Band;
                 rdfs:label ?soggLabel;
                 rdfs:label "Paul McCartney and Wings"@en;
-                ?pred ?oo.
-           ?pred rdfs:label ?p;
+                ?p ?oo.
+           ?p rdfs:label ?pLabel;
               rdfs:label "former band member"@en.
               ?oo rdfs:label ?ooLabel;
                 dbp:yearsActive ?ooPropUri0;
                 dbo:birthPlace ?ooPropUri1.
+                dbp:yearsActive rdfs:label ?ooPropType0.
                 ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
+                <http://dbpedia.org/property/genre> rdfs:label ?propType.
                 OPTIONAL{
                 ?soggPropUri0 rdfs:label ?soggPropLabel0.
                 FILTER(lang(?soggPropLabel0) = "en")
@@ -54,44 +60,24 @@ angular.module('queryDatasetModule', [])
            OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
            OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
            FILTER (lang(?soggLabel) = "en")
-           FILTER (lang(?p) = "en")
+           FILTER (lang(?pLabel) = "en")
            FILTER (lang(?ooLabel) = "en")
           FILTER (lang(?ooPropLabel1) = "en")
           FILTER (lang(?ooPropLabel0) = "en")
-        } UNION {
-          ?sogg a dbo:Band;
-                rdfs:label ?soggLabel;
-                rdfs:label "Nirvana (band)"@en;
-                ?pred ?oo.
-           ?pred rdfs:label ?p;
-              rdfs:label "band member"@en.
-              ?oo rdfs:label ?ooLabel;
-                dbp:yearsActive ?ooPropUri0;
-                dbo:birthPlace ?ooPropUri1.
-                ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
-            OPTIONAL{
-            ?soggPropUri0 rdfs:label ?soggPropLabel0.
-            FILTER(lang(?soggPropLabel0) = "en")
-            }
-           ?ooPropUri1 rdfs:label ?ooPropLabel1.
-           dbp:yearsActive rdfs:label ?ooPropLabel0.
-           OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
-           OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
-           FILTER (lang(?soggLabel) = "en")
-           FILTER (lang(?p) = "en")
-           FILTER (lang(?ooLabel) = "en")
-            FILTER (lang(?ooPropLabel1) = "en")
+          FILTER (lang(?ooPropType0) = "en")
         } UNION {
           ?sogg a dbo:Band;
                 rdfs:label ?soggLabel;
                 rdfs:label "Foo Fighters"@en;
-                ?pred ?oo.
-           ?pred rdfs:label ?p;
+                ?p ?oo.
+           ?p rdfs:label ?pLabel;
               rdfs:label "band member"@en.
               ?oo rdfs:label ?ooLabel;
                 dbp:yearsActive ?ooPropUri0;
                 dbo:birthPlace ?ooPropUri1.
-                ?sogg <http://dbpedia.org/property/website> ?soggPropUri0.
+                dbp:yearsActive rdfs:label ?ooPropType0.
+                ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
+                <http://dbpedia.org/property/genre> rdfs:label ?propType.
                 OPTIONAL{
                 ?soggPropUri0 rdfs:label ?soggPropLabel0.
                 FILTER(lang(?soggPropLabel0) = "en")
@@ -101,10 +87,11 @@ angular.module('queryDatasetModule', [])
            OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
            OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
            FILTER (lang(?soggLabel) = "en")
-           FILTER (lang(?p) = "en")
+           FILTER (lang(?pLabel) = "en")
            FILTER (lang(?ooLabel) = "en")
             FILTER (lang(?ooPropLabel1) = "en")
             FILTER (lang(?ooPropLabel0) = "en")
+            FILTER (lang(?ooPropType0) = "en")
         }
         } limit 1000`;
 
@@ -115,8 +102,8 @@ angular.module('queryDatasetModule', [])
                 ?sogg a dbo:Band;
                   rdfs:label ?s;
                   rdfs:label "Pink Floyd"@en;
-                      ?pred ?oo.
-                 ?pred rdfs:label ?p;
+                      ?p ?oo.
+                 ?p rdfs:label ?p;
                     rdfs:label "former band member"@en.
                     ?oo rdfs:label ?o;
                         dbp:yearsActive ?ooPropUri0;
@@ -134,7 +121,7 @@ angular.module('queryDatasetModule', [])
         } }`;
         var encodedquery = encodeURIComponent(query);
         var deferred = $q.defer();
-				$http.get(endpoint + "?format=json&query=" + encodedquery)
+				$http.post(endpoint + "?format=json&query=" + encodedquery)
           .success(function(data) {
             deferred.resolve(data);
           })
