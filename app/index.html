@@ -57,49 +57,105 @@
         <i class="dropdown icon"></i>
         Select a SPARQL endpoint
       </div>
-      <div class="content">
-        <div class="ui fluid action input">
-          <input type="text"
-            ng-model="selectedEndpoint"></input>
-          <button class="ui icon button" ng-click="contactSelectedEndpoint()">
-            <i class="search icon"></i>
-          </button>
+      <div class="content active">
+        <div class="ui relaxed divided list">
+          <div class="item">
+            <div class="ui fluid labeled input">
+              <div class="ui label">
+                Graph
+              </div>
+              <input type="text" ng-model="selectedGraph" placeholder="Select Graph...">
+            </div>
+          </div>
+          <div class="item">
+            <div class="ui fluid labeled action input">
+              <div class="ui label">
+                Endpoint
+              </div>
+              <input type="text" placeholder="Select Endpoint..."
+                ng-model="selectedEndpoint"></input>
+              <button class="ui icon button" ng-click="contactSelectedEndpoint()">
+                <i class="icons">
+                  <i class="database icon"></i>
+                  <i class="corner search icon"></i>
+                </i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="title">
         <i class="dropdown icon"></i>
-        Query dataset
+        Query builder
       </div>
-      <div class="content">
+      <div class="content active">
+        <h5>Class</h5>
         <div class="ui menu">
           <div class="ui fluid search selection dropdown" ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
             <div class="default text">Select a class</div>
-              <div class="menu">
-                <div ng-model="classes" class="item"
-                     ng-click="selectClass(class.uri)"
-                     ng-repeat="class in classes | limitTo:totalDisplayed">
-                  {{class.label}}
-                </div>
-                <div ng-show="classes.length!=0" class="ui center aligned segment">
-                  <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
-                </div>
+            <div class="menu">
+              <div ng-model="classes" class="item"
+                   ng-click="selectClass(class.uri)"
+                   ng-repeat="class in classes | limitTo:totalDisplayed">
+                   {{class.label}}
+              </div>
+              <div ng-show="classes.length!=0" class="ui center aligned segment">
+                <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
               </div>
             </div>
           </div>
-          <div class="ui menu">
-            <div class="ui fluid multiple search normal selection dropdown"
-              ng-click="dropdown();">
-              <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select class properties</div>
-              <div class="menu">
-              <div class="item" ng-model="classProperty" class="item"
-                   ng-click="selectClassProperty(classProperty.uri);"
-                   ng-repeat="classProperty in classProperties">
-                   {{classProperty.label}}
+        </div>
+        <div class="ui divider"></div>
+        <div class="ui menu">
+          <div class="ui fluid multiple search normal selection dropdown"
+            ng-click="dropdown();">
+            <i class="dropdown icon" ng-click="dropdown();"></i>
+            <div class="default text">Select class datatype properties</div>
+            <div class="menu">
+              <div ng-model="classDatatypeProperties" class="item"
+                   ng-click="selectClassDatatypeProperty(classDatatypeProperty.uri);"
+                   ng-repeat="classDatatypeProperty in classDatatypeProperties | limitTo:totalDisplayed">
+                   {{classDatatypeProperty.label}}
+              </div>
+              <div ng-show="classDatatypeProperties.length!=0" class="ui center aligned segment">
+                <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
               </div>
             </div>
           </div>
+        </div>
+        <div class="ui menu">
+          <div class="ui fluid multiple search normal selection dropdown"
+            ng-click="dropdown();">
+            <i class="dropdown icon" ng-click="dropdown();"></i>
+            <div class="default text">Select class object properties</div>
+            <div class="menu">
+              <div class="item" ng-model="classObjectProperty" class="item"
+                   ng-click="selectClassObjectProperty(classObjectProperty);"
+                   ng-repeat="classObjectProperty in classObjectProperties">
+                   {{classObjectProperty.label}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h5 ng-model="selectedClassObjectProperties"
+               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
+               Datatype property for {{selectedClassObjectProperty.label}}
+          </h5>
+          <h5 ng-model="selectedClassObjectProperties"
+               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
+               Object property for {{selectedClassObjectProperty.label}}
+          </h5>
+        </div>
+        <div class="ui divider"></div>
+        <div class="ui one column centered grid">
+          <button class="ui secondary button" ng-click="queryEndpoint()">
+            Query
+          </button>
+          <button class="ui button" ng-click="queryEndpoint()">
+            Cancel
+          </button>
         </div>
       </div>
       <div class="title">
@@ -159,6 +215,7 @@
   <script src="version/interpolate-filter.js"></script>
   <script src="contactEndpoint/contactEndpointService.js"></script>
   <script src="contactEndpoint/contactEndpointCtrl.js"></script>
+  <script src="searchableMultiselect/searchableMultiselectDirective.js"></script>
   <script src="d3Visualization/d3Service.js"></script>
   <script src="d3Visualization/d3Ctrl.js"></script>
   <script src="d3Visualization/d3ClusterDirective.js"></script>

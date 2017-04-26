@@ -39,13 +39,18 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
       $scope.nodeLabels = $scope.nodeLabels.sort();
     });
     */
+    $scope.$watch(function() {
+      return $rootScope.graph;
+    }, function() {
+      $scope.graph = $rootScope.graph;
+    }, true);
 
     var promise = queryDatasetService.queryDataset();
     promise.then(function(response) {
-      $scope.graph = GetJSONfileService.createJsonFile(response);
+      $rootScope.graph = GetJSONfileService.createJsonFile(response.results.bindings);
       $scope.nodeLabels = [];
-      for (var i = 0; i < $scope.graph.nodes.length - 1; i++) {
-          $scope.nodeLabels.push($scope.graph.nodes[i].label);
+      for (var i = 0; i < $rootScope.graph.nodes.length - 1; i++) {
+          $scope.nodeLabels.push($rootScope.graph.nodes[i].label);
       }
       $scope.nodeLabels = $scope.nodeLabels.sort();
     });
@@ -73,7 +78,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
     }
 
     // opzioni di clustrizzazione
-    $scope.clusterByOptionsClass = ['band', 'birth place'];
+    $scope.clusterByOptionsClass = ['band member', 'former band member', 'birth place'];
     $scope.clusterByOptionsProperty = ['year'];
 
     $scope.selectedClusterOption = "";

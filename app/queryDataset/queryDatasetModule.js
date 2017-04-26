@@ -10,90 +10,107 @@ angular.module('queryDatasetModule', [])
         //aggiungere anno o un altra proprietà del cantante
         //aggiungere classe a cui appartiene
         // stile in base alla classe
-        var query = `SELECT DISTINCT ?sogg ?s ?p ?o ?oo ?photoSogg ?photoOO ?year ?yearLabel ?birth ?birthLabel WHERE{
+        var query = `SELECT DISTINCT * WHERE{
         { ?sogg a dbo:Band;
-          rdfs:label ?s;
+          rdfs:label ?soggLabel;
           rdfs:label "The Beatles"@en;
               ?pred ?oo.
          ?pred rdfs:label ?p;
             rdfs:label "former band member"@en.
-            ?oo rdfs:label ?o;
-                dbp:yearsActive ?year;
-                dbo:birthPlace ?birth.
-
-         ?birth rdfs:label ?birthLabel.
-         dbp:yearsActive rdfs:label ?yearLabel.
+            ?oo rdfs:label ?ooLabel;
+                dbp:yearsActive ?ooPropUri0;
+                dbo:birthPlace ?ooPropUri1.
+          ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
+            OPTIONAL{
+            ?soggPropUri0 rdfs:label ?soggPropLabel0.
+            FILTER(lang(?soggPropLabel0) = "en")
+            }
+         ?ooPropUri1 rdfs:label ?ooPropLabel1.
+         dbp:yearsActive rdfs:label ?ooPropLabel0.
          OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
          OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
-        FILTER (lang(?s) = "en")
+        FILTER (lang(?soggLabel) = "en")
         FILTER (lang(?p) = "en")
-        FILTER (lang(?o) = "en")
-        FILTER (lang(?birthLabel) = "en")
-        FILTER (lang(?yearLabel) = "en")
+        FILTER (lang(?ooLabel) = "en")
+        FILTER (lang(?ooPropLabel1) = "en")
+        FILTER (lang(?ooPropLabel0) = "en")
         } UNION {
           ?sogg a dbo:Band;
-                rdfs:label ?s;
+                rdfs:label ?soggLabel;
                 rdfs:label "Paul McCartney and Wings"@en;
                 ?pred ?oo.
            ?pred rdfs:label ?p;
               rdfs:label "former band member"@en.
-              ?oo rdfs:label ?o;
-                dbp:yearsActive ?year;
-                dbo:birthPlace ?birth.
-
-           ?birth rdfs:label ?birthLabel.
-           dbp:yearsActive rdfs:label ?yearLabel.
+              ?oo rdfs:label ?ooLabel;
+                dbp:yearsActive ?ooPropUri0;
+                dbo:birthPlace ?ooPropUri1.
+                ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
+                OPTIONAL{
+                ?soggPropUri0 rdfs:label ?soggPropLabel0.
+                FILTER(lang(?soggPropLabel0) = "en")
+                }
+           ?ooPropUri1 rdfs:label ?ooPropLabel1.
+           dbp:yearsActive rdfs:label ?ooPropLabel0.
            OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
            OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
-          FILTER (lang(?s) = "en")
-          FILTER (lang(?p) = "en")
-          FILTER (lang(?o) = "en")
-          FILTER (lang(?birthLabel) = "en")
-          FILTER (lang(?yearLabel) = "en")
+           FILTER (lang(?soggLabel) = "en")
+           FILTER (lang(?p) = "en")
+           FILTER (lang(?ooLabel) = "en")
+          FILTER (lang(?ooPropLabel1) = "en")
+          FILTER (lang(?ooPropLabel0) = "en")
         } UNION {
           ?sogg a dbo:Band;
-                rdfs:label ?s;
+                rdfs:label ?soggLabel;
                 rdfs:label "Nirvana (band)"@en;
                 ?pred ?oo.
            ?pred rdfs:label ?p;
               rdfs:label "band member"@en.
-              ?oo rdfs:label ?o;
-                dbp:yearsActive ?year;
-                dbo:birthPlace ?birth.
-           ?birth rdfs:label ?birthLabel.
-           dbp:yearsActive rdfs:label ?yearLabel.
+              ?oo rdfs:label ?ooLabel;
+                dbp:yearsActive ?ooPropUri0;
+                dbo:birthPlace ?ooPropUri1.
+                ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
+            OPTIONAL{
+            ?soggPropUri0 rdfs:label ?soggPropLabel0.
+            FILTER(lang(?soggPropLabel0) = "en")
+            }
+           ?ooPropUri1 rdfs:label ?ooPropLabel1.
+           dbp:yearsActive rdfs:label ?ooPropLabel0.
            OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
            OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
-            FILTER (lang(?s) = "en")
-            FILTER (lang(?p) = "en")
-            FILTER (lang(?o) = "en")
-            FILTER (lang(?birthLabel) = "en")
+           FILTER (lang(?soggLabel) = "en")
+           FILTER (lang(?p) = "en")
+           FILTER (lang(?ooLabel) = "en")
+            FILTER (lang(?ooPropLabel1) = "en")
         } UNION {
           ?sogg a dbo:Band;
-                rdfs:label ?s;
+                rdfs:label ?soggLabel;
                 rdfs:label "Foo Fighters"@en;
                 ?pred ?oo.
            ?pred rdfs:label ?p;
               rdfs:label "band member"@en.
-              ?oo rdfs:label ?o;
-                dbp:yearsActive ?year;
-                dbo:birthPlace ?birth.
-
-           ?birth rdfs:label ?birthLabel.
-           dbp:yearsActive rdfs:label ?yearLabel.
+              ?oo rdfs:label ?ooLabel;
+                dbp:yearsActive ?ooPropUri0;
+                dbo:birthPlace ?ooPropUri1.
+                ?sogg <http://dbpedia.org/property/website> ?soggPropUri0.
+                OPTIONAL{
+                ?soggPropUri0 rdfs:label ?soggPropLabel0.
+                FILTER(lang(?soggPropLabel0) = "en")
+                }
+           ?ooPropUri1 rdfs:label ?ooPropLabel1.
+           dbp:yearsActive rdfs:label ?ooPropLabel0.
            OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
            OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
-            FILTER (lang(?s) = "en")
-            FILTER (lang(?p) = "en")
-            FILTER (lang(?o) = "en")
-            FILTER (lang(?birthLabel) = "en")
-            FILTER (lang(?yearLabel) = "en")
+           FILTER (lang(?soggLabel) = "en")
+           FILTER (lang(?p) = "en")
+           FILTER (lang(?ooLabel) = "en")
+            FILTER (lang(?ooPropLabel1) = "en")
+            FILTER (lang(?ooPropLabel0) = "en")
         }
         } limit 1000`;
 
 
         var queryPinkFloyd = `
-        SELECT ?sogg ?s ?p ?o ?oo ?photoSogg ?photoOO ?year ?yearLabel ?birth ?birthLabel WHERE{
+        SELECT ?sogg ?s ?p ?o ?oo ?photoSogg ?photoOO ?ooPropUri0 ?ooPropLabel0 ?ooPropUri1 ?ooPropLabel1 WHERE{
         {
                 ?sogg a dbo:Band;
                   rdfs:label ?s;
@@ -102,18 +119,18 @@ angular.module('queryDatasetModule', [])
                  ?pred rdfs:label ?p;
                     rdfs:label "former band member"@en.
                     ?oo rdfs:label ?o;
-                        dbp:yearsActive ?year;
-                        dbo:birthPlace ?birth.
+                        dbp:yearsActive ?ooPropUri0;
+                        dbo:birthPlace ?ooPropUri1.
 
-                 ?birth rdfs:label ?birthLabel.
-                 dbp:yearsActive rdfs:label ?yearLabel.
+                 ?ooPropUri1 rdfs:label ?ooPropLabel1.
+                 dbp:yearsActive rdfs:label ?ooPropLabel0.
                  OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
                  OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
                 FILTER (lang(?s) = "en")
                 FILTER (lang(?p) = "en")
                 FILTER (lang(?o) = "en")
-                FILTER (lang(?birthLabel) = "en")
-                FILTER (lang(?yearLabel) = "en")
+                FILTER (lang(?ooPropLabel1) = "en")
+                FILTER (lang(?ooPropLabel0) = "en")
         } }`;
         var encodedquery = encodeURIComponent(query);
         var deferred = $q.defer();
@@ -142,10 +159,8 @@ angular.module('queryDatasetModule', [])
         return defer.promise;
     }
 
-    var queryDBpediaClass = function(endpoint){
-      var endpoint = "http://dbpedia.org/sparql";
-      var defaultGraph = "http://dbpedia.org";
-      var query = 'SELECT * FROM <' + defaultGraph + '>' +
+    var queryDatasetClass = function(endpoint, graph){
+      var query = 'SELECT * FROM <' + graph + '>' +
                     `{ ?classUri a owl:Class;
                                  rdfs:label ?classLabel
                       FILTER (lang(?classLabel) = "en")
@@ -163,11 +178,9 @@ angular.module('queryDatasetModule', [])
         return defer.promise;
     }
 
-    var queryDBpediaClassProperty = function(endpoint, dbpediaClass){
-      var endpoint = "http://dbpedia.org/sparql";
-      var defaultGraph = "http://dbpedia.org";
-      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + defaultGraph + '> ' +
-                    '{ ?propertyUri <http://www.w3.org/2000/01/rdf-schema#domain> <'+ dbpediaClass +'>; '+
+    var queryDatasetClassObjectProperty = function(endpoint, graph, selectedClass){
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> ' +
+                    '{ ?propertyUri rdfs:domain  <'+ selectedClass +'>; '+
                   'rdfs:label ?propertyLabel '+
                   'FILTER (lang(?propertyLabel) = "en")'+
                   '}';
@@ -184,10 +197,102 @@ angular.module('queryDatasetModule', [])
         return defer.promise;
     }
 
+    var queryDatasetClassDatatypeProperty = function(endpoint, graph, selectedClass){
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> ' +
+                  'WHERE { ?s a <'+ selectedClass +'>. '+
+                  '?s ?propertyUri ?o. '+
+                  '?propertyUri rdfs:label ?propertyLabel. '+
+                  'FILTER(isLiteral(?o)) '+
+                  'FILTER (lang(?propertyLabel) = "en") '+
+                  '} ORDER BY ASC(UCASE(str(?propertyLabel)))';
+      var encodedquery = encodeURIComponent(query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
+    var queryEndpointForLiteral = function(endpoint, graph, selectedClass, classDatatypeProperties){
+      var query = 'SELECT DISTINCT ?sogg ?soggLabel ?soggType ?propType';
+      classDatatypeProperties.forEach(function(classDatatypeProperty, index){
+        query += '?soggPropUri' + index + ' ?soggPropLabel' + index + ' ';
+      });
+      query += 'FROM <' + graph + '> WHERE { ' +
+               '?sogg a <' + selectedClass + '>; ' +
+                      'rdfs:label ?soggLabel. '+
+               '<' + selectedClass + '> rdfs:label ?soggType. ';
+
+      classDatatypeProperties.forEach(function(classDatatypeProperty, index){
+        query += '?sogg <' + classDatatypeProperty + '> ?soggPropUri' + index + '. ';
+        query += '<' + classDatatypeProperty + '> rdfs:label ?propType. ';
+        query += 'OPTIONAL{ ?soggPropUri' + index + ' rdfs:label ?soggPropLabel' + index + '. ';
+        query += 'FILTER(lang(?soggPropLabel' + index + ') = "en")} '
+      });
+
+      query += 'FILTER(lang(?soggType) = "en") FILTER(lang(?soggLabel) = "en")} LIMIT 5';
+
+      var encodedquery = encodeURIComponent(query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
+    var queryEndpointForObject = function(endpoint, graph, selectedClass, classObjectProperties){
+      var query = 'SELECT DISTINCT ?sogg ?soggLabel ?soggType ';
+      query += '?p ?pLabel ?oo ?ooLabel '+
+                  'FROM <' + graph + '> WHERE { ' +
+                    '?sogg a <' + selectedClass + '>; ' +
+                          'rdfs:label ?soggLabel; ' +
+                          '?p ?oo. ?p rdfs:label ?pLabel. ' +
+                    '?oo rdfs:label ?ooLabel. ' +
+                    '<' + selectedClass + '> rdfs:label ?soggType. ';
+
+      query +=      'FILTER(lang(?soggLabel) = "en") ' +
+                    'FILTER(lang(?pLabel) = "en") ' +
+                    'FILTER(lang(?ooLabel) = "en") ' +
+                    'FILTER ( ';
+
+      classObjectProperties.forEach(function(classObjectProperty){
+        query += '?p = <' + classObjectProperty.uri + '> ';
+        if(classObjectProperties.indexOf(classObjectProperty)!=classObjectProperties.length-1){
+          query += ' || ';
+        }
+      });
+      query += ')} LIMIT 50';
+
+      var encodedquery = encodeURIComponent(query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
     return{
       queryDataset: queryDataset,
       getDbPediaPhoto: getDbPediaPhoto,
-      queryDBpediaClass: queryDBpediaClass,
-      queryDBpediaClassProperty: queryDBpediaClassProperty
+      queryDatasetClass: queryDatasetClass,
+      queryDatasetClassObjectProperty: queryDatasetClassObjectProperty,
+      queryDatasetClassDatatypeProperty: queryDatasetClassDatatypeProperty,
+      queryEndpointForLiteral: queryEndpointForLiteral,
+      queryEndpointForObject: queryEndpointForObject
     };
 }]);

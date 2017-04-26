@@ -31,8 +31,6 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
               maxRadius = 25, //radius nodo cluster
               radius = 10;
 
-
-
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
 
@@ -51,7 +49,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
               function update(selectedClusterOption){
 
 
-                if(selectedClusterOption == "band"){
+                if(selectedClusterOption == "band member" || selectedClusterOption == "former band member"){
 
                 var nodi_cluster = [];
                 graph.nodes.forEach(function(n) {
