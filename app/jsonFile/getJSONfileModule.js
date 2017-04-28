@@ -31,7 +31,7 @@ angular.module('getJSONfileModule', [])
           var node = {
             id: d.sogg.value,
             label: d.soggLabel.value,
-            type: d.p.value,//type: d.ooLabel.value,
+            type: d.soggType.value,//type: d.ooLabel.value,
             group: 1,
             customProperties : [
               {
@@ -44,7 +44,7 @@ angular.module('getJSONfileModule', [])
         }
         if (nodesArray.indexOf(d.oo.value)==-1){
           nodesArray.push(d.oo.value);
-          // nod object property della classe scelta
+          // node object property della classe scelta
           var node = {
             id: d.oo.value,
             label: d.ooLabel.value,
@@ -83,12 +83,15 @@ angular.module('getJSONfileModule', [])
           type: d.propType.value,
           label: d.propType.value
         }
-        linksToLiteralsObj.push(linkToLiteral);
+        if (_.findWhere(linksToLiteralsObj, linkToLiteral) == null) {
+            linksToLiteralsObj.push(linkToLiteral);
+        }
+        //linksToLiteralsObj.push(linkToLiteral);
 
         // proprietà literal delle object property della classe scellta
         var ooproplabel = "";
-        if(d.ooPropLabel0 !== undefined){
-          ooproplabel = d.ooPropLabel0.value;
+        if(d.ooPropUri0 !== undefined){
+          ooproplabel = d.ooPropUri0.value;
         }
         var literalNode = {
           id: "ooPropUri0"+index,

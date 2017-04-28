@@ -81,13 +81,20 @@ div.pusher{
 }
 
 /* info laterali nodo selezionato */
-#node_info p{
+#node_info p,
+#data_info p{
   font-size: 12px;
   font-family: sans-serif;
   color: grey;
   opacity: 0.9;
   word-break: break-all;
   margin-bottom: 0px;
+}
+
+#data_info .dataInfoLabel{
+  font-size: 12px;
+  font-family: sans-serif;
+  color: black;
 }
 
 #node_info a{

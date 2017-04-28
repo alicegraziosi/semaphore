@@ -34,7 +34,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
 
-              var selectedClusterOption = "year";
+              var selectedClusterOption = "years active";
               scope.$watch('selectedClusterOption', function (selectedClusterOption) {
 
                 if(selectedClusterOption){
@@ -49,10 +49,11 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
               function update(selectedClusterOption){
 
 
-                if(selectedClusterOption == "band member" || selectedClusterOption == "former band member"){
+                if(selectedClusterOption == "http://dbpedia.org/ontology/Band" || selectedClusterOption == "Band"){
 
                 var nodi_cluster = [];
                 graph.nodes.forEach(function(n) {
+                  console.log(n.type);
                   if(n.type==selectedClusterOption) nodi_cluster.push(n);
                 });
 

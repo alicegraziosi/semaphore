@@ -23,6 +23,8 @@
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
 
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
   <!-- semantic-ui -->
   <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
   <script src="semantic/dist/semantic.min.js"></script>
@@ -96,7 +98,7 @@
             <div class="default text">Select a class</div>
             <div class="menu">
               <div ng-model="classes" class="item"
-                   ng-click="selectClass(class.uri)"
+                   ng-click="selectClass(class)"
                    ng-repeat="class in classes | limitTo:totalDisplayed">
                    {{class.label}}
               </div>
@@ -114,7 +116,7 @@
             <div class="default text">Select class datatype properties</div>
             <div class="menu">
               <div ng-model="classDatatypeProperties" class="item"
-                   ng-click="selectClassDatatypeProperty(classDatatypeProperty.uri);"
+                   ng-click="selectClassDatatypeProperty(classDatatypeProperty);"
                    ng-repeat="classDatatypeProperty in classDatatypeProperties | limitTo:totalDisplayed">
                    {{classDatatypeProperty.label}}
               </div>

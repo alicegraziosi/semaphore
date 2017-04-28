@@ -40,6 +40,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
     });
     */
 
+
+
     $rootScope.graph = {
       nodes : [],
       linksToLiterals : [],
@@ -63,12 +65,30 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
     promise.then(function(response) {
 
       $scope.graph = GetJSONfileService.createJsonFile(response.results.bindings);
-      $scope.nodeLabels = [];
+
       for (var i = 0; i < $scope.graph.nodes.length - 1; i++) {
         $scope.nodeLabels.push($scope.graph.nodes[i].label);
       }
       $scope.nodeLabels = $scope.nodeLabels.sort();
     });
+
+    $rootScope.dataInfo = {
+      headClass : {
+        uri : ' ',
+        label : ' '
+      },
+      litPropHeadClass: [],
+      objPropHeadClass: []
+    }
+    $scope.dataInfo = $rootScope.dataInfo;
+
+    $rootScope.$watch(function() {
+      return $rootScope.dataInfo;
+    }, function(dataInfo) {
+      $scope.dataInfo = $rootScope.dataInfo;
+      console.log($scope.dataInfo);
+    }, true);
+
 
     $scope.selected = " ";
 
@@ -92,9 +112,9 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
       console.log('"menuItemClick" button clicked');
     }
 
-    // opzioni di clustrizzazione
-    $scope.clusterByOptionsClass = ['band member', 'former band member', 'birth place'];
-    $scope.clusterByOptionsProperty = ['year'];
+    // opzioni di clusterizzazione
+    $scope.clusterByOptionsClass = ['http://dbpedia.org/ontology/Band', 'Band', 'former band member', 'birth place'];
+    $scope.clusterByOptionsProperty = ['years active', 'genre'];
 
     $scope.selectedClusterOption = "";
 

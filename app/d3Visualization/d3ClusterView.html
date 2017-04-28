@@ -35,5 +35,24 @@
           </div>
         </div>
       </div>
+      <div class="ui top aligned four wide column">
+        <div id="data_info">
+          <p class="dataInfoLabel" ng-show="dataInfo.headClass.uri != ' '">Class<p>
+          <p>{{dataInfo.headClass.uri}}</p>
+          <p>{{dataInfo.headClass.label}}</p>
+          <div ng-model="dataInfo.litPropHeadClass" class="item"
+               ng-repeat="prop in dataInfo.litPropHeadClass">
+               <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Literal Properties<p>
+               <p>{{prop.label}}</p>
+               <p>{{prop.uri}}</p>
+          </div>
+          <div ng-model="dataInfo.objPropHeadClass" class="item"
+               ng-repeat="prop in dataInfo.objPropHeadClass">
+               <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Properties<p>
+               <p>{{prop.label}}</p>
+               <p>{{prop.uri}}</p>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
