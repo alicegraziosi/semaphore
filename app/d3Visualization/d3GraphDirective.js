@@ -65,6 +65,8 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                 update();
                 function update(){
 
+                  console.log(graph);
+
                   var links = [];
                   var nodes = [];
                   var radius = 16;
@@ -392,7 +394,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                 d3.selectAll(".rectLabel").remove();
               }
             } // if(graph)
-          }); // scope.$watch('graph', function (graph) {
+          }, true); // scope.$watch('graph', function (graph) { con  deep dirty checking
         }); // d3Service.then(function(d3) {
       } // link
     } // return

@@ -17,7 +17,7 @@
     <div class="text" ng-click="dropdown();">Search node...</div>
     <i class="dropdown icon" ng-click="dropdown();"></i>
     <div class="menu">
-      <div data-value="{{nodeLabels}}" class="item" ng-repeat="label in nodeLabels" ng-click="selectNodeLabel(label)">
+      <div data-value="{{nodeLabels}}" class="item" ng-repeat="label in nodeLabels track by $index" ng-click="selectNodeLabel(label)">
         {{label}}
       </div>
     </div>

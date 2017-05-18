@@ -1,7 +1,7 @@
 <div class="container">
   <!--
     <div ng-controller="D3viewCtrl">
-    attenzione!! se il controller è specificatp nel config della route allora non bisogna
+    attenzione!! se il controller è specificato nel config della route allora non bisogna
     scriverlo anche nel html altrimenti viene richiamato due volte!!
   -->
   <div class="ui internally celled grid">
@@ -11,25 +11,31 @@
         <div ng-include="'d3Visualization/menuVisualization.html'"></div>
         <d3-clustervisualization graph="graph"
                                  selected-node-label="selectedNodeLabel"
-                                 selected-cluster-option="selectedClusterOption">
+                                 selected-cluster-option="selectedClusterOption"
+                                 data-info="dataInfo">
         </d3-clustervisualization>
       </div>
       <div class="ui top aligned four wide column">
         <div class="ui form">
           <div class="grouped fields">
-            <label>Cluster by</label>
-            <h5 class="ui dividing header">Object Property<h5>
-            <div class="field" data-value="{{clusterByOptionsClass}}" ng-repeat="clusterOption in clusterByOptionsClass">
+            <label>Cluster</label>
+            <div class="field" ng-value="{{clusterByHeadClass}}">
               <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
-                <label>{{clusterOption}}</label>
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterByHeadClass.label);">
+                <label>{{clusterByHeadClass.label}}</label>
               </div>
             </div>
-            <h5 class="ui dividing header">Datatype Property<h5>
+            <div class="field" data-value="{{clusterByOptionsClass}}" ng-repeat="clusterOption in clusterByOptionsClass">
+              <div class="ui radio checkbox">
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption.label);">
+                <label>{{clusterOption.label}}</label>
+              </div>
+            </div>
+            <label>Cluster by</label>
             <div class="field" data-value="{{clusterByOptionsProperty}}" ng-repeat="clusterOption in clusterByOptionsProperty">
               <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
-                <label>{{clusterOption}}</label>
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption.label);">
+                <label>{{clusterOption.label}}</label>
               </div>
             </div>
           </div>
@@ -40,19 +46,19 @@
           <p class="dataInfoLabel" ng-show="dataInfo.headClass.uri != ' '">Class<p>
           <p>{{dataInfo.headClass.uri}}</p>
           <p>{{dataInfo.headClass.label}}</p>
+          <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Literal Properties</p>
           <div ng-model="dataInfo.litPropHeadClass" class="item"
                ng-repeat="prop in dataInfo.litPropHeadClass">
-               <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Literal Properties<p>
                <p>{{prop.label}}</p>
                <p>{{prop.uri}}</p>
           </div>
+          <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Properties</p>
           <div ng-model="dataInfo.objPropHeadClass" class="item"
                ng-repeat="prop in dataInfo.objPropHeadClass">
-               <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Properties<p>
                <p>{{prop.label}}</p>
                <p>{{prop.uri}}</p>
           </div>
         </div>
-      </div>
+
     </div>
 </div>

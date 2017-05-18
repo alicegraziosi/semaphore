@@ -16,13 +16,16 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
           graph: "=",
           model: "=",
           selectedNodeLabel: "=",  // nella view: selected-node-label
-          selectedClusterOption: "="
+          selectedClusterOption: "=",
+          dataInfo: "="
       },
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
         d3ServiceVersion3.then(function(d3) {
           // now you can use d3 as usual!
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
+
+          var dataInfo = scope.dataInfo;
 
           var width = 960,
               height = 600,
@@ -34,22 +37,20 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
 
-              var selectedClusterOption = "years active";
-              scope.$watch('selectedClusterOption', function (selectedClusterOption) {
-
+              scope.$watch('selectedClusterOption', function(selectedClusterOption) {
                 if(selectedClusterOption){
-                    selectedClusterOption = selectedClusterOption;
                     $("svg").remove();
                     update(selectedClusterOption);
                 } // if (selectedClusterOption)
-              }); // scope.$watch('selectedClusterOption', function (selectedNodeLabel) {
-
-              update(selectedClusterOption);
+              }); // scope.$watch('selectedClusterOption', function(selectedClusterOption) {
 
               function update(selectedClusterOption){
 
 
                 if(selectedClusterOption == "http://dbpedia.org/ontology/Band" || selectedClusterOption == "Band"){
+
+
+
 
                 var nodi_cluster = [];
                 graph.nodes.forEach(function(n) {
@@ -80,11 +81,12 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                     type: "cluster"
                   });
                 });
-
+ //dataInfo.objPropHeadClass.uri
                 graph.nodes.forEach(function(n) {
                   var cluster = " ";
                   graph.links.forEach(function(la){
-                    if(la.source == n.id && la.type==selectedClusterOption){
+                    dataInfo.objPropHeadClass.forEach(function(prop){
+                    if(la.source == n.id && la.type==prop.uri){
                       unique.forEach(function(elem, index){
                         if(la.target === elem.id){
                           cluster = index;
@@ -98,6 +100,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                       });
                     };
                   });
+                });
                   nodi.forEach(function(elem){
                     if(elem.cluster==cluster && elem.type=="cluster"){
                       elem.total = elem.total+1;
@@ -353,7 +356,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
               } //update()
             } //if(graph)
-          }); //scope.$watch('graph', function (graph) {
+          }, true); //scope.$watch('graph', function (graph) {
         }); // d3Service.then(function(d3) {
       } // link
     } // return

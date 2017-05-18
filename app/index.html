@@ -91,8 +91,8 @@
         Query builder
       </div>
       <div class="content active">
-        <h5>Class</h5>
-        <div class="ui menu">
+        <h5 ng-show="classes.length!=0" >Class</h5>
+        <div ng-show="classes.length!=0" class="ui menu">
           <div class="ui fluid search selection dropdown" ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
             <div class="default text">Select a class</div>
@@ -102,61 +102,100 @@
                    ng-repeat="class in classes | limitTo:totalDisplayed">
                    {{class.label}}
               </div>
-              <div ng-show="classes.length!=0" class="ui center aligned segment">
+              <div ng-show="classes.length>totalDisplayed" class="ui center aligned segment">
                 <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="ui divider"></div>
-        <div class="ui menu">
-          <div class="ui fluid multiple search normal selection dropdown"
-            ng-click="dropdown();">
+        <div ng-show="classDatatypeProperties.length!=0" class="ui divider"></div>
+        <div ng-show="classDatatypeProperties.length!=0" class="ui menu">
+          <!--<div class="ui fluid multiple search normal selection dropdown"
+            ng-click="dropdown();">-->
+            <div class="ui fluid search selection dropdown"
+              ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
             <div class="default text">Select class datatype properties</div>
             <div class="menu">
               <div ng-model="classDatatypeProperties" class="item"
-                   ng-click="selectClassDatatypeProperty(classDatatypeProperty);"
-                   ng-repeat="classDatatypeProperty in classDatatypeProperties | limitTo:totalDisplayed">
-                   {{classDatatypeProperty.label}}
+                  ng-click="selectClassDatatypeProperty(classDatatypeProperty);"
+                  ng-repeat="classDatatypeProperty in classDatatypeProperties | limitTo:totalDisplayed">
+                  {{classDatatypeProperty.label}}
               </div>
-              <div ng-show="classDatatypeProperties.length!=0" class="ui center aligned segment">
+              <div ng-show="classDatatypeProperties.length>totalDisplayed" class="ui center aligned segment">
                 <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="ui menu">
-          <div class="ui fluid multiple search normal selection dropdown"
-            ng-click="dropdown();">
+        <div ng-show="classObjectProperties.length!=0" class="ui menu">
+          <!--<div class="ui fluid multiple search normal selection dropdown"
+            ng-click="dropdown();">-->
+            <div class="ui fluid search selection dropdown"
+              ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
             <div class="default text">Select class object properties</div>
             <div class="menu">
               <div class="item" ng-model="classObjectProperty" class="item"
-                   ng-click="selectClassObjectProperty(classObjectProperty);"
-                   ng-repeat="classObjectProperty in classObjectProperties">
-                   {{classObjectProperty.label}}
+                  ng-click="selectClassObjectProperty(classObjectProperty);"
+                  ng-repeat="classObjectProperty in classObjectProperties">
+                  {{classObjectProperty.label}}
+              </div>
+              <div ng-show="classObjectProperty.length>totalDisplayed" class="ui center aligned segment">
+                <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
               </div>
             </div>
           </div>
         </div>
         <div>
           <h5 ng-model="selectedClassObjectProperties"
-               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
-               Datatype property for {{selectedClassObjectProperty.label}}
+              ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
+              Datatype property of {{selectedClassObjectProperty.label}}
           </h5>
-          <h5 ng-model="selectedClassObjectProperties"
-               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
-               Object property for {{selectedClassObjectProperty.label}}
+          <div class="ui menu" ng-show="objDatatypeProperties.length!=0">
+          <div class="ui fluid search selection dropdown" ng-click="dropdown();">
+            <i class="dropdown icon" ng-click="dropdown();"></i>
+            <div class="default text">Select datatype property </div>
+            <div class="menu">
+              <div ng-model="objDatatypeProperties" class="item"
+                  ng-click="selectObjDatatypeProperty(prop)"
+                  ng-repeat="prop in objDatatypeProperties | limitTo:totalDisplayed">
+                  {{prop.label}}
+              </div>
+              <div ng-show="objDatatypeProperties.length!=0" class="ui center aligned segment">
+                <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
+              </div>
+            </div>
+          </div>
+          </div>
+          <h5 ng-model="selectedClassObjectProperties" ng-show="selectedClassObjectProperties.length!=0"
+              ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
+              Object property of {{selectedClassObjectProperty.label}}
           </h5>
+          <div class="ui menu" ng-show="objObjectProperties.length!=0">
+          <div class="ui fluid search selection dropdown" ng-click="dropdown();">
+            <i class="dropdown icon" ng-click="dropdown();"></i>
+            <div class="default text">Select object property </div>
+            <div class="menu">
+              <div ng-model="objObjectProperties" class="item"
+                  ng-click="selectObjObjectProperty(prop)"
+                  ng-repeat="prop in objObjectProperties | limitTo:totalDisplayed">
+                  {{prop.label}}
+              </div>
+              <div ng-show="objObjectProperties.length>totalDisplayed" class="ui center aligned segment">
+                <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="ui divider"></div>
+       </div>
+        <div class="ui divider" ng-show=""></div>
         <div class="ui one column centered grid">
           <button class="ui secondary button" ng-click="queryEndpoint()">
             Query
           </button>
-          <button class="ui button" ng-click="queryEndpoint()">
-            Cancel
+          <button class="ui button" ng-click="clearQueryParam()">
+            Clear
           </button>
         </div>
       </div>

@@ -28,7 +28,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
     });
 }])
 .controller('D3viewCtrl',
-  function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService) {
+  function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q) {
     /*
     $http.get('../alicegraph.json').success(function (data) {
       $scope.graph = data;
@@ -39,61 +39,87 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
       $scope.nodeLabels = $scope.nodeLabels.sort();
     });
     */
-
-
-
-    $rootScope.graph = {
-      nodes : [],
-      linksToLiterals : [],
-      nodeLiteral : [],
-      links : []
-    }
-    $scope.graph = $rootScope.graph;
-
-    $rootScope.$watch(function() {
-      return $rootScope.graph;
-    }, function(graph) {
-      $scope.graph = $rootScope.graph;
-      $scope.nodeLabels = [];
-      for (var i = 0; i < $scope.graph.nodes.length - 1; i++) {
-        $scope.nodeLabels.push($scope.graph.nodes[i].label);
-      }
-      $scope.nodeLabels = $scope.nodeLabels.sort();
+    $rootScope.prova="prova";
+    $rootScope.$watch('prova', function(prova, provaold) {
+      $scope.prova=$rootScope.prova;
     }, true);
 
-    var promise = queryDatasetService.queryDataset();
-    promise.then(function(response) {
+    // wait for all promises
+    $q.all([
+      queryDatasetService.queryDataset(),
+      queryDatasetService.queryDatasetLiteralBand()
+      ]).then(function(data) {
+        var graph = GetJSONfileService.createJsonFile(data[0].results.bindings);
+        var graph2 = GetJSONfileService.createNodeLiteral(data[1].results.bindings, "soggPropLabel");
+        $rootScope.nodeLabels = [];
+        graph2.nodes.forEach(function(node){
+          graph.nodes.push(node);
+          $rootScope.nodeLabels.push(node.label)
+        });
+        graph2.links.forEach(function(l){
+          graph.links.push(l);
+        });
+        graph2.linksToLiterals.forEach(function(ltl){
+          graph.linksToLiterals.push(ltl);
+        });
+        graph2.nodeLiteral.forEach(function(nl){
+          graph.nodeLiteral.push(nl);
+        });
+        $rootScope.graph = graph;
+        $rootScope.nodeLabels = $rootScope.nodeLabels.sort();
 
-      $scope.graph = GetJSONfileService.createJsonFile(response.results.bindings);
+        $rootScope.dataInfo = {
+          headClass : {
+            uri : 'http://dbpedia.org/ontology/Band',
+            label : 'Band'
+          },
+          litPropHeadClass: [
+            {uri :'http://dbpedia.org/property/genre',
+             label : 'genre'},
+            {uri : 'http://dbpedia.org/property/yearsActive',
+             label : 'years active'}
+          ],
+          objPropHeadClass: [
+            {uri: 'http://dbpedia.org/ontology/FormerBandMember',
+             label : 'former band member'},
+            {uri: 'http://dbpedia.org/ontology/bandMember',
+             label : 'band member'}
+          ]
+        }
 
-      for (var i = 0; i < $scope.graph.nodes.length - 1; i++) {
-        $scope.nodeLabels.push($scope.graph.nodes[i].label);
-      }
-      $scope.nodeLabels = $scope.nodeLabels.sort();
+        // istanze da clusterizzare: quelle della classe principale o obj prop di classe p.
+        $scope.clusterByHeadClass = $rootScope.dataInfo.headClass;
+        $scope.clusterByOptionsClass = $rootScope.dataInfo.objPropHeadClass;
+
+        // cluster by:
+        $scope.clusterByOptionsProperty = $rootScope.dataInfo.litPropHeadClass;
+
     });
 
-    $rootScope.dataInfo = {
-      headClass : {
-        uri : ' ',
-        label : ' '
-      },
-      litPropHeadClass: [],
-      objPropHeadClass: []
-    }
-    $scope.dataInfo = $rootScope.dataInfo;
+    $rootScope.$watch('graph', function(graph, graphold) {
+      $scope.graph = $rootScope.graph;
+      $rootScope.nodeLabels = [];
+      if($scope.graph != undefined){
+        $scope.graph.nodes.forEach(function(node){
+          $rootScope.nodeLabels.push(node.label)
+        });
+        $scope.nodeLabels = $scope.nodeLabels.sort();
+      }
+      $scope.nodeLabels = $rootScope.nodeLabels;
+    }, true);
+
 
     $rootScope.$watch(function() {
       return $rootScope.dataInfo;
     }, function(dataInfo) {
       $scope.dataInfo = $rootScope.dataInfo;
-      console.log($scope.dataInfo);
     }, true);
-
 
     $scope.selected = " ";
 
     $scope.exportJSON = function () {
       console.log('"Export as JSON" button clicked');
+      console.log($rootScope.graph);
     }
 
     $scope.selectNodeLabel = function(label) {
@@ -112,11 +138,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
       console.log('"menuItemClick" button clicked');
     }
 
-    // opzioni di clusterizzazione
-    $scope.clusterByOptionsClass = ['http://dbpedia.org/ontology/Band', 'Band', 'former band member', 'birth place'];
-    $scope.clusterByOptionsProperty = ['years active', 'genre'];
 
-    $scope.selectedClusterOption = "";
+    $scope.selectedClusterOption = "years active";
 
     $scope.toggleSelectionClusterOption = function toggleSelection(selectedClusterOption) {
         $scope.selectedClusterOption = selectedClusterOption;
