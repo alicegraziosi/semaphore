@@ -233,10 +233,59 @@ angular.module('queryDatasetModule', [])
         return defer.promise;
     }
 
+    // todo values
+    var queryDatasetValuesObjObjectProperty = function(endpoint, graph, obj){
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> { ';
+      query += 'VALUES ?soggetto {';
+      obj.forEach(function(ob, index){
+        query += '<' + ob + '> ';
+      });
+      query +=    '} ?soggetto ?p ?propertyUri. ?propertyUri rdfs:label ?propertyLabel. '+
+                  'FILTER (lang(?propertyLabel) = "en")'+
+                  '}';
+      var encodedquery = encodeURIComponent(query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
+
     var queryDatasetClassDatatypeProperty = function(endpoint, graph, selectedClass){
       var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> ' +
                   'WHERE { ?s a <'+ selectedClass +'>. '+
                   '?s ?propertyUri ?o. '+
+                  '?propertyUri rdfs:label ?propertyLabel. '+
+                  'FILTER(isLiteral(?o)) '+
+                  'FILTER (lang(?propertyLabel) = "en") '+
+                  '} LIMIT 100';
+      var encodedquery = encodeURIComponent(query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
+    // todo values
+    var queryDatasetValuesObjDatatypeProperty = function(endpoint, graph, obj){
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> {';
+      query += 'VALUES ?soggetto {';
+      obj.forEach(function(ob, index){
+        query += '<' + ob + '>';
+      });
+      query += '} ?soggetto ?propertyUri ?o. '+
                   '?propertyUri rdfs:label ?propertyLabel. '+
                   'FILTER(isLiteral(?o)) '+
                   'FILTER (lang(?propertyLabel) = "en") '+
@@ -299,6 +348,7 @@ angular.module('queryDatasetModule', [])
       query +=      'FILTER(lang(?soggLabel) = "en") ' +
                     'FILTER(lang(?pLabel) = "en") ' +
                     'FILTER(lang(?ooLabel) = "en") ' +
+                    'FILTER(lang(?soggType) = "en") ' +
                     'FILTER ( ';
 
       classObjectProperties.forEach(function(classObjectProperty){
@@ -410,6 +460,8 @@ angular.module('queryDatasetModule', [])
       queryEndpointForObject: queryEndpointForObject,
       queryEndpointForObjLiteral: queryEndpointForObjLiteral,
       queryEndpointForObjObject: queryEndpointForObjObject,
-      queryDatasetObjectPropertyRange: queryDatasetObjectPropertyRange
+      queryDatasetObjectPropertyRange: queryDatasetObjectPropertyRange,
+      queryDatasetValuesObjObjectProperty: queryDatasetValuesObjObjectProperty,
+      queryDatasetValuesObjDatatypeProperty: queryDatasetValuesObjDatatypeProperty
     };
 }]);

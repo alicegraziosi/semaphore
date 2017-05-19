@@ -15,7 +15,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.selectedClassObjectProperties = [];
 
     $scope.classDatatypeProperties = [];
-    $scope.selectedClassDatatypeProperties = []; 
+    $scope.selectedClassDatatypeProperties = [];
 
     $scope.objObjectProperties = [];
     $scope.selectedObjObjectProperties = [];
@@ -101,6 +101,30 @@ contactEndpointModule.controller('contactEndpointCtrl',
       });
     }
 
+    $scope.queryDatasetValuesObjDatatypeProperty = function(obj){
+      var promise = queryDatasetService.queryDatasetValuesObjDatatypeProperty($scope.selectedEndpoint, $scope.selectedGraph, obj);
+      promise.then(function(response) {
+        for(var i=0; i<response.data.results.bindings.length; i++){
+          $scope.objDatatypeProperties.push({
+            uri: response.data.results.bindings[i].propertyUri.value,
+            label: response.data.results.bindings[i].propertyLabel.value
+          });
+        };
+      });
+    }
+
+    $scope.queryDatasetValuesObjObjectProperty = function(obj){
+      var promise = queryDatasetService.queryDatasetValuesObjObjectProperty($scope.selectedEndpoint, $scope.selectedGraph, obj);
+      promise.then(function(response) {
+        for(var i=0; i<response.data.results.bindings.length; i++){
+          $scope.objObjectProperties.push({
+            uri: response.data.results.bindings[i].propertyUri.value,
+            label: response.data.results.bindings[i].propertyLabel.value
+          });
+        };
+      });
+    }
+
     //quando si seleziona una classe
     $scope.selectClass = function(selectedClass){
       //nuova classe corrente
@@ -129,12 +153,21 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.selectedClassObjectProperties.push(selectedClassProperty);
       console.log($scope.selectedClassObjectProperties);
 
+      /*
       var promise = queryDatasetService.queryDatasetObjectPropertyRange($scope.selectedEndpoint, $scope.selectedGraph, selectedClassProperty.uri);
       promise.then(function(response) {
         var rangeClass = response.data.results.bindings[0].rangeClass.value;
         console.log("rangeClass" + rangeClass);
         $scope.queryDatasetObjDatatypeProperty(rangeClass);
         $scope.queryDatasetObjObjectProperty(rangeClass);
+      });*/
+
+      //  obj.push(response.data.results.bindings[i].oo.value);
+
+      var promise = queryDatasetService.queryEndpointForObject($scope.selectedEndpoint, $scope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassObjectProperties);
+      promise.then(function(response) {
+        $scope.queryDatasetValuesObjObjectProperty(obj)
+        $scope.queryDatasetValuesObjDatatypeProperty(obj)
       });
     }
 
@@ -201,9 +234,9 @@ contactEndpointModule.controller('contactEndpointCtrl',
       //$rootScope.$digest(); // $apply è già in corso, quindi non si può usare $digest
       if($scope.selectedObjDatatypeProperties.length != 0){
 
-        var promise = queryDatasetService.queryEndpointForObjLiteral($scope.selectedEndpoint, 
-                                                                  $scope.selectedGraph, 
-                                                                  $scope.selectedClassObjectProperties[0].uri, 
+        var promise = queryDatasetService.queryEndpointForObjLiteral($scope.selectedEndpoint,
+                                                                  $scope.selectedGraph,
+                                                                  $scope.selectedClassObjectProperties[0].uri,
                                                                   $scope.selectedObjDatatypeProperties);
         promise.then(function(response) {
           // nodi, literalNode e linkstoliterals della classe scelta
@@ -219,19 +252,19 @@ contactEndpointModule.controller('contactEndpointCtrl',
       };
 
       if($scope.selectedObjObjectProperties.length != 0){
-        var promise = queryDatasetService.queryEndpointForObjObject($scope.selectedEndpoint, 
-                                                                 $scope.selectedGraph, 
-                                                                 $scope.selectedClassObjectProperties[0].uri, 
+        var promise = queryDatasetService.queryEndpointForObjObject($scope.selectedEndpoint,
+                                                                 $scope.selectedGraph,
+                                                                 $scope.selectedClassObjectProperties[0].uri,
                                                                  $scope.selectedObjObjectProperties);
         promise.then(function(response) {
           // nodi, nodi e linkstoliterals della classe scelta
           var graph = GetJSONfileService.createNodeObject(response.data.results.bindings);
-          
+
           graph.nodes.forEach(function(node){
             if (_.findWhere($rootScope.graph.nodes, node) == null) {
               $rootScope.graph.nodes.push(node);
             }
-            
+
           });
           graph.links.forEach(function(l){
             $rootScope.graph.links.push(l);
@@ -247,7 +280,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.selectedClassObjectProperties = [];
 
       $scope.classDatatypeProperties = [];
-      $scope.selectedClassDatatypeProperties = []; 
+      $scope.selectedClassDatatypeProperties = [];
 
       $scope.objObjectProperties = [];
       $scope.selectedObjObjectProperties = [];

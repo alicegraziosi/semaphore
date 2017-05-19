@@ -147,6 +147,16 @@
             </div>
           </div>
         </div>
+        <div class="ui divider"></div>
+          <div class="ui one column centered grid">
+            <button class="ui button" ng-click="queryEndpointClassObj()">
+              Query
+            </button>
+            <button class="ui button" ng-click="clearQueryParam()">
+              Clear
+            </button>
+          </div>
+        </div>
         <div>
           <h5 ng-model="selectedClassObjectProperties"
               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
@@ -189,9 +199,9 @@
           </div>
         </div>
        </div>
-        <div class="ui divider" ng-show=""></div>
+      <div class="ui divider"></div>
         <div class="ui one column centered grid">
-          <button class="ui secondary button" ng-click="queryEndpoint()">
+          <button class="ui button" ng-click="queryEndpoint()">
             Query
           </button>
           <button class="ui button" ng-click="clearQueryParam()">
