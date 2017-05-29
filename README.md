@@ -6,7 +6,7 @@ To get you started you can simply clone the `semaphore` repository and install t
 
 ### Prerequisites
 
-You need git to clone the `semaphore` repository. You can get git from [here][https://git-scm.com/].
+You need git to clone the `semaphore` repository. You can get git from [here](https://git-scm.com/).
 
 You must also have Node.js and its package manager (npm) installed. You can get them from [here][https://nodejs.org/en/].
 
