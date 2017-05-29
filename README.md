@@ -6,9 +6,9 @@ To get you started you can simply clone the `semaphore` repository and install t
 
 ### Prerequisites
 
-You need git to clone the `semaphore` repository. You can get git from [here][git].
+You need git to clone the `semaphore` repository. You can get git from [here][https://git-scm.com/].
 
-You must also have Node.js and its package manager (npm) installed. You can get them from [here][node].
+You must also have Node.js and its package manager (npm) installed. You can get them from [here][https://nodejs.org/en/].
 
 ### Clone `semaphore`
 
@@ -17,8 +17,7 @@ Use Git or checkout with SVN using the web URL https://github.com/alicegraziosi/
 Clone the `semaphore` repository using git:
 
 ```
-https://github.com/alicegraziosi/semaphore.git
-cd semaphore-master
+git clone https://github.com/alicegraziosi/semaphore.git
 ```
 
 ### Install Dependencies
@@ -26,8 +25,8 @@ cd semaphore-master
 We have two kinds of dependencies in this project: tools and Angular framework code. The tools help
 us manage and test the application.
 
-* We get the tools we depend upon via `npm`, the [Node package manager][npm].
-* We get the Angular code via `bower`, a [client-side code package manager][bower].
+* We get the tools we depend upon via `npm`, the [Node package manager][https://www.npmjs.com/].
+* We get the Angular code via `bower`, a [client-side code package manager][https://bower.io/].
 
 We have preconfigured `npm` to automatically run `bower` so we can simply do:
 
@@ -35,15 +34,7 @@ We have preconfigured `npm` to automatically run `bower` so we can simply do:
 npm install
 ```
 
-Behind the scenes this will also call `bower install`. After that, you should find out that you have
-two new folders in your project.
-
-* `node_modules` - contains the npm packages for the tools we need
-* `app/bower_components` - contains the Angular framework files
-
-*Note that the `bower_components` folder would normally be installed in the root folder but
-`angular-seed` changes this location through the `.bowerrc` file. Putting it in the `app` folder
-makes it easier to serve the files by a web server.*
+Behind the scenes this will also call `bower install`.
 
 ### Run the Application
 
@@ -56,25 +47,10 @@ npm start
 
 Now browse to the app at [`localhost:8000/index.html`][local-app-url].
 
-
-## Updating Angular
-
-Since the Angular framework library code and tools are acquired through package managers (npm and
-bower) you can use these tools to easily update the dependencies. Simply run the preconfigured
-script:
-
-```
-npm run update-deps
-```
-
-This will call `npm update` and `bower update`, which in turn will find and install the latest
-versions that match the version ranges specified in the `package.json` and `bower.json` files
-respectively.
-
 ### Running the App during Development
 
 The `semaphore` project comes preconfigured with a local development web server. It is a Node.js
-tool called [http-server][http-server]. You can start this web server with `npm start`, but you may
+tool called [http-server][https://www.npmjs.com/package/http-server]. You can start this web server with `npm start`, but you may
 choose to install the tool globally:
 
 ```
@@ -103,9 +79,3 @@ If your Angular app is talking to the backend server via XHR or other means, you
 what is the best way to host the static files to comply with the same origin policy if applicable.
 Usually this is done by hosting the files by the backend server or through reverse-proxying the
 backend server(s) and web server(s).
-
-## Contact
-
-For more information on AngularJS please check out [angularjs.org][angularjs].
-
-# semaphore
