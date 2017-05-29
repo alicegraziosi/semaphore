@@ -8,7 +8,7 @@ To get you started you can simply clone the `semaphore` repository and install t
 
 You need git to clone the `semaphore` repository. You can get git from [here](https://git-scm.com/).
 
-You must also have Node.js and its package manager (npm) installed. You can get them from [here][https://nodejs.org/en/].
+You must also have Node.js and its package manager (npm) installed. You can get them from [here](https://nodejs.org/en/).
 
 ### Clone `semaphore`
 
@@ -25,8 +25,8 @@ git clone https://github.com/alicegraziosi/semaphore.git
 We have two kinds of dependencies in this project: tools and Angular framework code. The tools help
 us manage and test the application.
 
-* We get the tools we depend upon via `npm`, the [Node package manager][https://www.npmjs.com/].
-* We get the Angular code via `bower`, a [client-side code package manager][https://bower.io/].
+* We get the tools we depend upon via `npm`, the [Node package manager](https://www.npmjs.com/).
+* We get the Angular code via `bower`, a [client-side code package manager](https://bower.io/).
 
 We have preconfigured `npm` to automatically run `bower` so we can simply do:
 
@@ -45,12 +45,12 @@ this server is:
 npm start
 ```
 
-Now browse to the app at [`localhost:8000/index.html`][local-app-url].
+Now browse to the app at [`localhost:8000/`](localhost:8000/).
 
 ### Running the App during Development
 
 The `semaphore` project comes preconfigured with a local development web server. It is a Node.js
-tool called [http-server][https://www.npmjs.com/package/http-server]. You can start this web server with `npm start`, but you may
+tool called [http-server](https://www.npmjs.com/package/http-server). You can start this web server with `npm start`, but you may
 choose to install the tool globally:
 
 ```
