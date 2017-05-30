@@ -1,4 +1,4 @@
-# `semaphore` — a web based tool for LOD visualization
+﻿# `semaphore` — a web based tool for LOD visualization
 
 ## Getting Started
 
@@ -51,13 +51,13 @@ Now browse to the app at [`localhost:8000/`](localhost:8000/).
 
 The `semaphore` project comes preconfigured with a local development web server. It is a Node.js
 tool called [http-server](https://www.npmjs.com/package/http-server). You can start this web server with `npm start`, but you may
-choose to install the tool globally:
+choose to install `http-server` tool globally via npm:
 
 ```
 sudo npm install -g http-server
 ```
 
-Then you can start your own development web server to serve static files from a folder by running:
+Then you can start the web server locally by running:
 
 ```
 http-server -a localhost -p 8000
@@ -67,6 +67,12 @@ Alternatively, you can choose to configure your own web server, such as Apache o
 configure your server to serve the files under the `app/` directory.
 
 ### Running the App in Production
+
+You can start the web server in production by running:
+
+```
+http-server -a [host ip (default 0.0.0.0)] -p [port(default 8080)]
+```
 
 This really depends on how complex your app is and the overall infrastructure of your system, but
 the general rule is that all you need in production are the files under the `app/` directory.

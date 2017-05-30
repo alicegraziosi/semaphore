@@ -8,10 +8,11 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.selectedEndpoint = "http://dbpedia.org/sparql";
     $scope.endpointList = ["http://dbpedia.org/sparql", 
                            "http://localhost:3030/spacin/query", 
-                           "http://localhost:3030/semanticlancet/query"]
+                           "http://localhost:3030/semanticlancet/query",
+                           "http://two.eelst.cs.unibo.it:8181/data/query"]
 
-    $scope.selectedGraph = "http://dbpedia.org";
-    $scope.graphList = ["http://dbpedia.org", "default graph"];
+    $scope.selectedGraph = "default";
+    $scope.graphList = ["http://dbpedia.org", "default"];
 
     $scope.classes = [];
     $scope.selectedClass = {};
@@ -39,6 +40,10 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     $scope.selectEndpoint = function (endpoint) {
        $scope.selectedEndpoint = endpoint;
+    };
+
+    $scope.selectGraph = function (graph) {
+       $scope.selectedGraph = graph;
     };
 
     // ask for endpoint

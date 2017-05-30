@@ -19,18 +19,29 @@ angular.module('contactEndpointModule', [])
   return{
     //var selectedEndpoint = "http://localhost:3030/semanticLancet/query";  //endpoint di esempio
     contactSelectedEndpoint: function(selectedEndpoint){  //selectedEndpoint è variabile di scope
-        var query = "ASK  { ?x ?y ?z }";
+        var query = "ASK{?s ?p ?o}";
 				return $http({
 					method:"GET",
+          // http://localhost:3030/semanticlancet/query?format=json&query=ASK{?s ?p ?o}
 					url: selectedEndpoint + "?format=json&query=" + encodeURIComponent(query),
 					timeout: 3000
 				})
 				.success(function(data, status, headers, config){
-					console.log("Selected endpoint " + selectedEndpoint + " succesfully reached");
+					console.log("Selected endpoint " + selectedEndpoint + " succesfully reached!!!");
 				})
 				.error(function(data, status, headers, config){
-					console.log("selected endpoint " + selectedEndpoint + " unreachable");
+					console.log("Selected endpoint " + selectedEndpoint + " unreachable :(");
 				});
     }
   }
 }]);
+
+
+
+/*
+
+How to allow CORS in Apache Jena Fuseki
+
+http://mail-archives.apache.org/mod_mbox/jena-users/201507.mbox/%3C55A6974E.9010009%40maudry.com%3E
+
+*/

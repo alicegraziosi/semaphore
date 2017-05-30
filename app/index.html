@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <meta name="keywords" content="semantic web technologies computer network ontologies">
+  <meta name="keywords" content="semantic web technologies linked open dataset visualization">
   <meta name="description" content="semantic web technologies project">
   <meta name="author" content="Alice Graziosi">
 
@@ -57,24 +57,29 @@
     <div class="ui styled fluid accordion" ng-controller="contactEndpointCtrl">
       <div class="title">
         <i class="dropdown icon"></i>
-        Select a SPARQL endpoint
+        Select a SPARQL endpoint and a graph
       </div>
       <div class="content active">
+
         <div class="ui relaxed divided list">
-          <div class="item">
-            <div class="ui fluid labeled input">
-              <div class="ui label">
-                Graph
+          <h5>Select a SPARQL endpoint</h5>
+          <div class="ui menu">
+            <div class="ui fluid search selection dropdown" ng-click="dropdown();">
+              <i class="dropdown icon" ng-click="dropdown();"></i>
+              <div class="default text">Select a SPARQL endpoint</div>
+              <div class="menu">
+                <div ng-model="endpointList" class="item"
+                     ng-click="selectEndpoint(endpoint)"
+                     ng-repeat="endpoint in endpointList">
+                     {{endpoint}}
+                </div>
               </div>
-              <input type="text" ng-model="selectedGraph" placeholder="Select Graph...">
             </div>
           </div>
+
           <div class="item">
-            <div class="ui fluid labeled action input">
-              <div class="ui label">
-                Endpoint
-              </div>
-              <input type="text" placeholder="Select Endpoint..."
+            <div class="ui fluid action input">
+              <input type="text" placeholder="Select an Endpoint..."
                 ng-model="selectedEndpoint"></input>
               <button class="ui icon button" ng-click="contactSelectedEndpoint()">
                 <i class="icons">
@@ -84,14 +89,38 @@
               </button>
             </div>
           </div>
+
+          <h5>Select a graph for the selected SPARQL endpoint</h5>
+          <div class="ui menu">
+            <div class="ui fluid search selection dropdown" ng-click="dropdown();">
+              <i class="dropdown icon" ng-click="dropdown();"></i>
+              <div class="default text">Select a graph</div>
+              <div class="menu">
+                <div ng-model="graphList" class="item"
+                     ng-click="selectGraph(graph)"
+                     ng-repeat="graph in graphList">
+                     {{graph}}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="ui fluid input">
+              <input type="text" ng-model="selectedGraph" placeholder="Select a graph...">
+            </div>
+          </div>
+
         </div>
-      </div>
+      </div> <!-- chiude <div class="content active">-->
+
       <div class="title">
         <i class="dropdown icon"></i>
         Query builder
       </div>
       <div class="content active">
-        <h5 ng-show="classes.length!=0" >Class</h5>
+
+        <h5 ng-show="classes.length!=0">1) Select a Class</h5>
         <div ng-show="classes.length!=0" class="ui menu">
           <div class="ui fluid search selection dropdown" ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
@@ -108,7 +137,11 @@
             </div>
           </div>
         </div>
+
         <div ng-show="classDatatypeProperties.length!=0" class="ui divider"></div>
+        <h5 ng-show="classDatatypeProperties.length!=0 ||
+            classObjectProperties.length!=0">2) Select Class Properties</h5>
+        <h5 ng-show="classDatatypeProperties.length!=0">Select class datatype properties</h5>
         <div ng-show="classDatatypeProperties.length!=0" class="ui menu">
           <!--<div class="ui fluid multiple search normal selection dropdown"
             ng-click="dropdown();">-->
@@ -128,6 +161,10 @@
             </div>
           </div>
         </div>
+        
+        
+        <div ng-show="classObjectProperties.length!=0" class="ui divider"></div>
+        <h5 ng-show="classObjectProperties.length!=0">Select class object properties</h5>
         <div ng-show="classObjectProperties.length!=0" class="ui menu">
           <!--<div class="ui fluid multiple search normal selection dropdown"
             ng-click="dropdown();">-->
@@ -147,17 +184,18 @@
             </div>
           </div>
         </div>
+
         <div class="ui divider"></div>
-          <div class="ui one column centered grid">
-            <button class="ui button" ng-click="queryEndpointClassObj()">
-              Query
-            </button>
-            <button class="ui button" ng-click="clearQueryParam()">
-              Clear
-            </button>
-          </div>
+        <div ng-show="classDatatypeProperties.length!=0 ||
+            classObjectProperties.length!=0" class="ui one column centered grid">
+          <button class="ui button" ng-click="queryEndpointClassProperties()">
+            Query
+          </button>
+          <button class="ui button" ng-click="clearQueryParam()">
+            Clear
+          </button>
         </div>
-        <div>
+        
           <h5 ng-model="selectedClassObjectProperties"
               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
               Datatype property of {{selectedClassObjectProperty.label}}
@@ -192,14 +230,15 @@
                   ng-repeat="prop in objObjectProperties | limitTo:totalDisplayed">
                   {{prop.label}}
               </div>
-              <div ng-show="objObjectProperties.length>totalDisplayed" class="ui center aligned segment">
+              <div ng-show="objObjectProperties.length>totalDisplayed" 
+                  class="ui center aligned segment">
                 <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
               </div>
             </div>
           </div>
         </div>
-       </div>
-      <div class="ui divider"></div>
+       
+        <div class="ui divider"></div>
         <div class="ui one column centered grid">
           <button class="ui button" ng-click="queryEndpoint()">
             Query
@@ -208,6 +247,7 @@
             Clear
           </button>
         </div>
+
       </div>
       <div class="title">
         <i class="dropdown icon"></i>
@@ -309,6 +349,7 @@
     });
   </script>
   <script id="prefixes" type="text/template">
+      PREFIX owl:     <http://www.w3.org/2002/07/owl#>
       PREFIX fabio:   <http://purl.org/spar/fabio/>
       PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX frbr:    <http://purl.org/vocab/frbr/core#>

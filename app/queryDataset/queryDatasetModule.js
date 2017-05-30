@@ -3,13 +3,26 @@
 angular.module('queryDatasetModule', [])
 
 .factory('queryDatasetService', ['$http', '$q', function($http, $q){
+
+  var prefixes = `PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+                  PREFIX owl:     <http://www.w3.org/2002/07/owl#>
+                  PREFIX fabio:   <http://purl.org/spar/fabio/>
+                  PREFIX frbr:    <http://purl.org/vocab/frbr/core#>
+                  PREFIX co:      <http://purl.org/co/>
+                  PREFIX foaf:    <http://xmlns.com/foaf/0.1/>
+                  PREFIX pro:     <http://purl.org/spar/pro/>
+                  PREFIX dcterms: <http://purl.org/dc/terms/>
+                  PREFIX c4o:     <http://purl.org/spar/c4o/>
+                  PREFIX cito:    <http://purl.org/spar/cito/>
+                  PREFIX prism:   <http://prismstandard.org/namespaces/basic/2.0/>
+                  PREFIX sro:     <http://salt.semanticauthoring.org/ontologies/sro#>
+                  PREFIX biro:    <http://purl.org/spar/biro/>
+                  PREFIX oa:      <http://www.w3.org/ns/oa#>
+                  PREFIX doco:    <http://purl.org/spar/doco/>
+                  PREFIX dbo:     <http://dbpedia.org/ontology/>`;
+
   var queryDataset = function(){
         var endpoint = "http://dbpedia.org/sparql";
-        var prefixes = $();
-        //to do
-        //aggiungere anno o un altra proprietà del cantante
-        //aggiungere classe a cui appartiene
-        // stile in base alla classe
         var query = `SELECT DISTINCT * WHERE{
         { ?sogg a dbo:Band;
           rdfs:label ?soggLabel;
@@ -116,7 +129,6 @@ angular.module('queryDatasetModule', [])
 
     var queryDatasetLiteralBand = function(){
       var endpoint = "http://dbpedia.org/sparql";
-      var prefixes = $();
       var query = `SELECT DISTINCT *
         WHERE{
         {
@@ -178,11 +190,9 @@ angular.module('queryDatasetModule', [])
 
         FILTER(lang(?soggType) = "en")
         FILTER(lang(?soggLabel) = "en")
-
-
-
         }
         }`;
+
       var encodedquery = encodeURIComponent(query);
       var deferred = $q.defer();
       $http.post(endpoint + "?format=json&query=" + encodedquery)
@@ -196,12 +206,15 @@ angular.module('queryDatasetModule', [])
     }
 
     var queryDatasetClass = function(endpoint, graph){
-      var query = 'SELECT * FROM <' + graph + '>' +
-                    `{ ?classUri a owl:Class;
-                                 rdfs:label ?classLabel
+      var query = 'SELECT * ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += `{ ?classUri a owl:Class;
+                      rdfs:label ?classLabel 
                       FILTER (lang(?classLabel) = "en")
                     }`;
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -215,12 +228,15 @@ angular.module('queryDatasetModule', [])
     }
 
     var queryDatasetClassObjectProperty = function(endpoint, graph, selectedClass){
-      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> ' +
-                    '{ ?propertyUri rdfs:domain  <'+ selectedClass +'>; '+
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += '{ ?propertyUri rdfs:domain  <'+ selectedClass +'>; '+
                   'rdfs:label ?propertyLabel '+
                   'FILTER (lang(?propertyLabel) = "en")'+
                   '}';
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -235,7 +251,10 @@ angular.module('queryDatasetModule', [])
 
     // todo values
     var queryDatasetValuesObjObjectProperty = function(endpoint, graph, obj){
-      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> { ';
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> { ';
+      }
       query += 'VALUES ?soggetto { ';
       obj.forEach(function(ob, index){
         query += '<' + ob + '> ';
@@ -243,7 +262,7 @@ angular.module('queryDatasetModule', [])
       query +=    ' } ?soggetto ?p ?propertyUri. ?propertyUri rdfs:label ?propertyLabel. '+
                   'FILTER (lang(?propertyLabel) = "en")'+
                   '}';
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -258,14 +277,17 @@ angular.module('queryDatasetModule', [])
 
 
     var queryDatasetClassDatatypeProperty = function(endpoint, graph, selectedClass){
-      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> ' +
-                  'WHERE { ?s a <'+ selectedClass +'>. '+
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += 'WHERE { ?s a <'+ selectedClass +'>. '+
                   '?s ?propertyUri ?o. '+
                   '?propertyUri rdfs:label ?propertyLabel. '+
                   'FILTER(isLiteral(?o)) '+
                   'FILTER (lang(?propertyLabel) = "en") '+
                   '} LIMIT 100';
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -280,7 +302,10 @@ angular.module('queryDatasetModule', [])
 
     // todo values
     var queryDatasetValuesObjDatatypeProperty = function(endpoint, graph, obj){
-      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel FROM <' + graph + '> {';
+      var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> {';
+      }
       query += 'VALUES ?soggetto { ';
       obj.forEach(function(ob, index){
         query += '<' + ob + '>';
@@ -290,7 +315,7 @@ angular.module('queryDatasetModule', [])
                   'FILTER(isLiteral(?o)) '+
                   'FILTER (lang(?propertyLabel) = "en") '+
                   '}';
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -308,7 +333,10 @@ angular.module('queryDatasetModule', [])
       classDatatypeProperties.forEach(function(classDatatypeProperty, index){
         query += '?soggPropUri' + index + ' ?soggPropLabel' + index + ' ';
       });
-      query += 'FROM <' + graph + '> WHERE { ' +
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += ' WHERE { ' +
                '?sogg a <' + selectedClass + '>; ' +
                       'rdfs:label ?soggLabel. '+
                '<' + selectedClass + '> rdfs:label ?soggType. ';
@@ -322,7 +350,7 @@ angular.module('queryDatasetModule', [])
 
       query += 'FILTER(lang(?soggType) = "en") FILTER(lang(?propType) = "en") FILTER(lang(?soggLabel) = "en")} LIMIT 50';
 
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -336,16 +364,17 @@ angular.module('queryDatasetModule', [])
     }
 
     var queryEndpointForObject = function(endpoint, graph, selectedClass, classObjectProperties){
-      var query = 'SELECT DISTINCT ?sogg ?soggLabel ?soggType ';
-      query += '?p ?pLabel ?oo ?ooLabel '+
-                  'FROM <' + graph + '> WHERE { ' +
+      var query = 'SELECT DISTINCT ?sogg ?soggLabel ?soggType ?p ?pLabel ?oo ?ooLabel ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += ' WHERE { ' +
                     '?sogg a <' + selectedClass + '>; ' +
                           'rdfs:label ?soggLabel; ' +
                           '?p ?oo. ?p rdfs:label ?pLabel. ' +
                     '?oo rdfs:label ?ooLabel. ' +
-                    '<' + selectedClass + '> rdfs:label ?soggType. ';
-
-      query +=      'FILTER(lang(?soggLabel) = "en") ' +
+                    '<' + selectedClass + '> rdfs:label ?soggType. '+ 
+                    'FILTER(lang(?soggLabel) = "en") ' +
                     'FILTER(lang(?pLabel) = "en") ' +
                     'FILTER(lang(?ooLabel) = "en") ' +
                     'FILTER(lang(?soggType) = "en") ' +
@@ -359,7 +388,7 @@ angular.module('queryDatasetModule', [])
       });
       query += ')} LIMIT 50';
 
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -440,7 +469,10 @@ angular.module('queryDatasetModule', [])
       classDatatypeProperties.forEach(function(classDatatypeProperty, index){
         query += '?soggPropUri' + index + ' ?soggPropLabel' + index + ' ';
       });
-      query += 'FROM <' + graph + '> WHERE { ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += 'WHERE { ';
       query += 'VALUES ?sogg { ';
         obj.forEach(function(ob, index){
           query += '<' + ob + '>';
@@ -457,7 +489,7 @@ angular.module('queryDatasetModule', [])
 
       query += 'FILTER(lang(?soggType) = "en") FILTER(lang(?propType) = "en") FILTER(lang(?soggLabel) = "en")}';
 
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -471,10 +503,11 @@ angular.module('queryDatasetModule', [])
     }
 
     var queryEndpointForObjObjectVAL = function(endpoint, graph, classObjectProperties, obj){
-      var query = 'SELECT DISTINCT ?sogg ?soggLabel ?soggType ';
-      query += '?pLabel ?oo ?ooLabel '+
-                  'FROM <' + graph + '> WHERE { ';
-      query += 'VALUES ?sogg { ';
+      var query = 'SELECT DISTINCT ?sogg ?soggLabel ?soggType ?pLabel ?oo ?ooLabel ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += 'WHERE {  VALUES ?sogg { ';
         obj.forEach(function(ob, index){
           query += '<' + ob + '>';
         });
@@ -490,7 +523,7 @@ angular.module('queryDatasetModule', [])
 
       query += '}';
 
-      var encodedquery = encodeURIComponent(query);
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
