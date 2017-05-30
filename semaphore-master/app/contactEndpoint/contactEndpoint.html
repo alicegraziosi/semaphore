@@ -1,0 +1,15 @@
+<!--
+per includere questo file in index.html
+<div ng-include="'contactEndpoint/contactEndpoint.html'" ></div>
+-->
+
+<div class="content" ng-controller="contactEndpointCtrl">
+  <div class="ui fluid action input">
+    <input type="text"
+      ng-init="selectedEndpoint='http://localhost:3030/semanticLancet/query'"
+      ng-model="selectedEndpoint"></input>
+    <button class="ui icon button" ng-click="contactSelectedEndpoint()">
+      <i class="search icon"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,191 @@
+{
+"links":[
+{"source": "http://dbpedia.org/resource/Ringo_Starr" ,"target": "http://dbpedia.org/resource/The_Beatles", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/John_Lennon" ,"target": "http://dbpedia.org/resource/The_Beatles", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Paul_McCartney" ,"target": "http://dbpedia.org/resource/The_Beatles", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/George_Harrison" ,"target": "http://dbpedia.org/resource/The_Beatles", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Geoff_Britton" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Denny_Seiwell" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Paul_McCartney" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Henry_McCullough" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Linda_McCartney" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Jimmy_McCulloch" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Joe_English_(musician)" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Laurence_Juber" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Denny_Laine" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Steve_Holley" ,"target": "http://dbpedia.org/resource/Paul_McCartney_and_Wings", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"former band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Dave_Grohl" ,"target": "http://dbpedia.org/resource/Nirvana_(band)", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Kurt_Cobain" ,"target": "http://dbpedia.org/resource/Nirvana_(band)", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Krist_Novoselic" ,"target": "http://dbpedia.org/resource/Nirvana_(band)", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Chris_Shiflett" ,"target": "http://dbpedia.org/resource/Foo_Fighters", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Pat_Smear" ,"target": "http://dbpedia.org/resource/Foo_Fighters", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Nate_Mendel" ,"target": "http://dbpedia.org/resource/Foo_Fighters", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Taylor_Hawkins" ,"target": "http://dbpedia.org/resource/Foo_Fighters", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":[
+		{"id":"band member","fill":"blue","stroke":"black","stroke_dasharray":0}]
+},
+{"source": "http://dbpedia.org/resource/Dave_Grohl" ,"target": "http://dbpedia.org/resource/Foo_Fighters", "cssclass": "","sstyle":[
+	{"fill":"yellow","stroke_dasharray":0,"stroke_width":4,"direction":"forward"}],"label":
+[		{"id":"band member","fill":"blue","stroke":"black","stroke_dasharray":0}
+]
+}],
+"nodes": [
+{"id": "http://dbpedia.org/resource/The_Beatles" ,"label": "The Beatles", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Paul_McCartney_and_Wings" ,"label": "Paul McCartney and Wings", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Nirvana_(band)" ,"label": "Nirvana (band)", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Foo_Fighters" ,"label": "Foo Fighters", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{ "id": "http://dbpedia.org/resource/Ringo_Starr" ,"label": "Ringo Starr", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/John_Lennon" ,"label": "John_Lennon", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Paul_McCartney" ,"label": "Paul_McCartney", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/George_Harrison" ,"label": "George_Harrison", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Geoff_Britton" ,"label": "Geoff_Britton", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Denny_Seiwell" ,"label": "Denny_Seiwell", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Henry_McCullough" ,"label": "Henry_McCullough", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Linda_McCartney" ,"label": "Linda_McCartney", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Jimmy_McCulloch" ,"label": "Jimmy_McCulloch", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Joe_English_(musician)" ,"label": "Joe_English_(musician)", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Laurence_Juber" ,"label": "Laurence_Juber", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Denny_Laine" ,"label": "Denny_Laine", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Steve_Holley" ,"label": "Steve_Holley", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Dave_Grohl" ,"label": "Dave_Grohl", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Kurt_Cobain" ,"label": "Kurt_Cobain", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Krist_Novoselic" ,"label": "Krist_Novoselic", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Chris_Shiflett" ,"label": "Chris_Shiflett", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Pat_Smear" ,"label": "Pat_Smear", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Nate_Mendel" ,"label": "Nate_Mendel", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+},
+{"id": "http://dbpedia.org/resource/Taylor_Hawkins" ,"label": "Taylor_Hawkins", "size": 21,"popup_mo":"resource","mouseover":"fill","color_mo":"aquamarine","cssclass":"subject","shape":"circle","sstyle":[
+	{"fill":"gold","stroke":"black","stroke_width":2,"stroke_dasharray":0,"text_color":"black"}
+]
+}
+],
+"css_classes":[
+{"classname":"subject","fill":"pink","stroke":"black","stroke_width":5,"stroke_dasharray":1},{"classname":"subject:hover","fill":"red"},{"classname":"object","fill":"Orange","stroke":"black","stroke_width":1,"stroke_dasharray":0},{"classname":"object:hover","stroke_width":4}]}

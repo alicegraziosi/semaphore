@@ -1,0 +1,20 @@
+<div class="container">
+  <!--
+    <div ng-controller="D3viewCtrl">
+    attenzione!! se il controller è specificatp nel config della route allora non bisogna
+    scriverlo anche nel html altrimenti viene richiamato due volte!!
+  -->
+  <div class="ui internally celled grid">
+    <div class="row" id="graph_box">
+      <div class="twelve wide column">
+        <!-- d3-visualization = directive -->
+        <div ng-include="'d3Visualization/menuVisualization.html'"></div>
+        <d3-barchartvisualization graph="graph"
+                                 selected-node-label="selectedNodeLabel">
+        </d3-barchartvisualization>
+      </div>
+      <div class="ui top aligned four wide column">
+
+      </div>
+    </div>
+</div>

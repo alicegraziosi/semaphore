@@ -1,0 +1,152 @@
+/* app css stylesheet */
+
+/* top menu */
+div.ui.top.fixed.menu{
+  font-family: sans-serif;
+  border-top: 2px solid #b92b27;
+  box-shadow: none;
+}
+
+/* logo */
+a.logo{
+  font-family: 'PT Sans', sans-serif;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+a.logo:hover {
+  color: rgba(0, 0, 0, 0.63);
+}
+
+.logo-icon{
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+/* colori icona e logo */
+.darkGrey{
+  color: rgba(0, 0, 0, 0.63);
+}
+
+.darkRed{
+  color: #b92b27;
+}
+
+/* sidebar and pusher sotto al top menu */
+div.ui.left.sidebar.vertical.menu,
+div.pusher{
+  top: 49px;
+}
+
+/* accordion all'interno della sidebar */
+.ui.styled.accordion, .usi.styled.accordion .accordion{
+  border-radius: 0px;
+}
+
+/* sidebar */
+.ui.left.visible.sidebar, .ui.right.visible.sidebar{
+  box-shadow: none;
+}
+
+/* dropdown menu */
+.ui.selection.dropdown{
+  border: none;
+}
+
+/* d3 visualization styles */
+#graph_box{
+  background-color: rgb(251, 251, 251);
+  opacity: 1;
+  padding: 20px;
+}
+
+.links line,
+.links path{
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 1;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.markers{
+  viewBox: 0 -5 10 10;
+  refX: 15;
+  refY: 0;
+  orient: auto;
+  fill: #999;
+}
+
+/* info laterali nodo selezionato */
+#node_info p,
+#data_info p{
+  font-size: 12px;
+  font-family: sans-serif;
+  color: grey;
+  opacity: 0.9;
+  word-break: break-all;
+  margin-bottom: 0px;
+}
+
+#data_info .dataInfoLabel{
+  font-size: 12px;
+  font-family: sans-serif;
+  color: black;
+}
+
+#node_info a{
+  font-size: 12px;
+  font-family: sans-serif;
+  color: grey;
+  word-break: break-all;
+}
+
+/* pagina about */
+.about, .about a, .about a:hover {
+  font-family: sans-serif;
+  color: grey;
+}
+
+footer{
+  bottom:0;
+}
+
+
+
+/* */
+.searchable-multi-select {
+  position: relative;
+}
+
+.searchable-multi-select a {
+	width: 100%;
+	padding: 5px 7px;
+	overflow: hidden;
+}
+
+.searchable-multi-select a span {
+	display: block;
+	overflow: hidden;
+	margin-right: 10px;
+}
+
+.searchable-multi-select a .caret {
+	position: absolute;
+	right: 5px;
+	top: 50%;
+}
+
+ul.dropdown-menu-form {
+	padding: 5px 10px 0;
+	overflow-y: auto;
+	height: 300px;
+}
+
+span.limit-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

@@ -1,0 +1,51 @@
+<div class="ui compact menu">
+
+  <a href="#!/graph" class="item">
+    Graph
+  </a>
+  <a href="#!/cluster" class="active item">
+    Cluster
+  </a>
+  <a href="#!/barchart" class="item">
+    Bar Chart
+  </a>
+  <a class="item">
+    Other
+  </a>
+
+  <div class="ui floating search selection dropdown item">
+    <div class="text" ng-click="dropdown();">Search node...</div>
+    <i class="dropdown icon" ng-click="dropdown();"></i>
+    <div class="menu">
+      <div data-value="{{nodeLabels}}" class="item" ng-repeat="label in nodeLabels track by $index" ng-click="selectNodeLabel(label)">
+        {{label}}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--
+<div class="ui secondary vertical menu">
+  <div class="ui dropdown item" ng-click="dropdown();">
+    <i class="dropdown icon" ng-click="dropdown();"></i>
+    Entity Display Options
+    <div class="menu">
+      <div class="header">Entity shape</div>
+      <a class="item" ng-click="selectObjectShape('circle');" >Circle</a>
+      <a class="item" ng-click="selectObjectShape('rect');">Rectangule</a>
+      <a class="item" ng-click="selectObjectShape('ellipsis');">Ellipsis</a>
+    </div>
+  </div>
+  <div class="ui dropdown item" ng-click="dropdown();">
+    <i class="dropdown icon" ng-click="dropdown();"></i>
+    DataType property Display Options
+    <div class="menu">
+      <div class="header">DataType property shape</div>
+      <a class="item" ng-click="selectDataTypeShape('circle');">Circle</a>
+      <a class="item" ng-click="selectDataTypeShape('rect');">Rectangule</a>
+      <a class="item" ng-click="selectDataTypeShape('ellipsis');">Ellipsis</a>
+    </div>
+  </div>
+</div>
+-->
