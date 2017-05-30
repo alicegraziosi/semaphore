@@ -59,7 +59,7 @@
         <i class="dropdown icon"></i>
         Select a SPARQL endpoint and a graph
       </div>
-      <div class="content active">
+      <div class="content">
 
         <div class="ui relaxed divided list">
           <h5>Select a SPARQL endpoint</h5>
@@ -237,9 +237,10 @@
             </div>
           </div>
         </div>
-       
-        <div class="ui divider"></div>
-        <div class="ui one column centered grid">
+       <div class="ui divider"></div>
+        <div ng-show="objDatatypeProperties.length!=0 ||
+            objObjectProperties.length!=0" class="ui one column centered grid">
+
           <button class="ui button" ng-click="queryEndpoint()">
             Query
           </button>
