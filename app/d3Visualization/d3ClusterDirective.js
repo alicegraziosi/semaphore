@@ -21,43 +21,66 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
       },
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
-        d3ServiceVersion3.then(function(d3) {
+        d3ServiceVersion3.then(function(d3v3) {
           // now you can use d3 as usual!
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
-
-          var dataInfo = scope.dataInfo;
-
-          var width = 960,
-              height = 600,
-              padding = 1.5, // separation between same-color nodes
-              clusterPadding = 100, // separation between different-color nodes
+          var width = 1024,
+              height = 1000,
+              padding = 2, // separation between same-color nodes
+              clusterPadding = 150, // separation between different-color nodes
               maxRadius = 25, //radius nodo cluster
-              radius = 10;
+              radius = 25;
+
+          var dataInfo = {
+          headClass : {
+            uri : 'http://dbpedia.org/ontology/Band',
+            label : 'Band',
+            type: 'obj'
+          },
+          litPropHeadClass: [
+            {uri : 'http://dbpedia.org/property/genre',
+             label : 'genre', 
+             type : 'lit'},
+            {uri : 'http://dbpedia.org/property/yearsActive',
+             label : 'years active',
+             type : 'lit'}
+          ],
+          objPropHeadClass: [
+            {uri: 'http://dbpedia.org/ontology/formerBandMember',
+             label : 'former band member',
+             type : 'obj'},
+            {uri: 'http://dbpedia.org/ontology/bandMember',
+             label : 'band member',
+             type : 'obj'}
+          ]
+        }
+        scope.$watch('dataInfo', function (dataInfo) {
+          if(dataInfo){
+            console.log("changed" + dataInfo);
+          }
+        });
 
           scope.$watch('graph', function (graph) {
-            if(graph){ //Checking if the given value is not undefined
+            if(graph){ //Checking if the given value is not undefined;
 
               scope.$watch('selectedClusterOption', function(selectedClusterOption) {
                 if(selectedClusterOption){
                     $("svg").remove();
-                    update(selectedClusterOption);
+                      clusterBy(selectedClusterOption);      
                 } // if (selectedClusterOption)
               }); // scope.$watch('selectedClusterOption', function(selectedClusterOption) {
 
-              function update(selectedClusterOption){
-
-
-                if(selectedClusterOption == "http://dbpedia.org/ontology/Band" || selectedClusterOption == "Band"){
-
-
-
+              function clusterBy(selectedClusterOption){
+                if(selectedClusterOption.type=="obj"){
 
                 var nodi_cluster = [];
                 graph.nodes.forEach(function(n) {
-                  console.log(n.type);
-                  if(n.type==selectedClusterOption) nodi_cluster.push(n);
+                  if(n.type==selectedClusterOption.label) {
+                      nodi_cluster.push(n);
+                    }
                 });
 
+                // nodi cluster unici, m numero
                 var unique = nodi_cluster.filter(function(elem, index, self) {
                     return index == self.indexOf(elem);
                 });
@@ -65,7 +88,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 var m = unique.length; //10; // number of distinct clusters
                 var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
-                var color = d3.scale.category20().domain(d3.range(m)); // m colori
+                var color = d3v3.scale.category20().domain(d3v3.range(m)); // m colori
 
                 // The largest node for each cluster.
                 var clusters = new Array(m);  //Array di 10 elementi
@@ -81,39 +104,47 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                     type: "cluster"
                   });
                 });
- //dataInfo.objPropHeadClass.uri
+
                 graph.nodes.forEach(function(n) {
                   var cluster = " ";
+
                   graph.links.forEach(function(la){
+                
                     dataInfo.objPropHeadClass.forEach(function(prop){
+                   
                     if(la.source == n.id && la.type==prop.uri){
+                     
                       unique.forEach(function(elem, index){
-                        if(la.target === elem.id){
+
+                        if(la.target == elem.id){
                           cluster = index;
                         }
                       });
-                      nodi.push({
-                        label: n.label,
-                        id: n.id,
-                        cluster: cluster,
-                        type: "node"
-                      });
-                    };
+                        nodi.push({
+                          label: n.label,
+                          id: n.id,
+                          cluster: cluster,
+                          type: "node"
+                        });
+                      };
+                    });
                   });
                 });
-                  nodi.forEach(function(elem){
-                    if(elem.cluster==cluster && elem.type=="cluster"){
-                      elem.total = elem.total+1;
-                    }
-                  });
+                nodi.forEach(function(nodocluster){
+                  if(nodocluster.type=="cluster"){
+                    nodi.forEach(function(nodo){
+                      if(nodo.cluster==nodocluster.cluster && nodo.type=="node"){
+                        nodocluster.total++;
+                      };
+                    });
+                  }  
                 });
-
               } else {
 
 
                 var nodi_cluster = [];
                 graph.nodeLiteral.forEach(function(n) {
-                  if(n.type==selectedClusterOption) nodi_cluster.push(n.label);
+                  if(n.type==selectedClusterOption.label && n.label !="") nodi_cluster.push(n.label);
 
                 });
 
@@ -124,7 +155,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 var m = unique.length; //10; // number of distinct clusters
                 var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
-                var color = d3.scale.category20().domain(d3.range(m)); // m colori
+                var color = d3v3.scale.category20().domain(d3v3.range(m)); // m colori
 
                 // The largest node for each cluster.
                 var clusters = new Array(m);  //Array di 10 elementi
@@ -146,7 +177,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                   var cluster = " ";
 
                   graph.linksToLiterals.forEach(function(la){
-                    if(la.source == n.id && la.type==selectedClusterOption){
+                    if(la.source == n.id && la.type==selectedClusterOption.label){
                       graph.nodeLiteral.forEach(function(na){
                         if(la.target == na.id){
                           propertyValue = na.label;
@@ -162,20 +193,23 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                             cluster: cluster,
                             type: "node"
                           });
-                          nodi.forEach(function(elem){
-                            if(elem.cluster==cluster  && elem.type=="cluster"){
-                              elem.total = elem.total+1;
-                            }
-                          });
+
                         };
                       });
                     };
                   });
-
-
                 });
-
+                nodi.forEach(function(nodocluster){
+                  if(nodocluster.type=="cluster"){
+                    nodi.forEach(function(nodo){
+                      if(nodo.cluster==nodocluster.cluster && nodo.type=="node"){
+                        nodocluster.total++;
+                      };
+                    });
+                  }  
+                });
               }
+
 
                 var nodes = nodi.map(function(n) {
                   var i = n.cluster,
@@ -196,7 +230,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 });
 
 
-                var force = d3.layout.force()
+                var force = d3v3.layout.force()
                     .nodes(nodes)
                     .size([width, height])
                     .gravity(.02)
@@ -204,9 +238,27 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                     .on("tick", tick)
                     .start();
 
-                var svg = d3.select(elem[0]).append("svg")
+                var svg = d3v3.select(elem[0]).append("svg")
                     .attr("width", width)
-                    .attr("height", height);
+                    .attr("height", height)
+                    .call(d3.behavior.zoom().on("zoom", function () {
+                      svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+                    }));
+
+
+                /* svg > gzoom */
+                var gzoom = svg.append("g");
+
+                function zoomed() {
+                  gzoom.attr("transform", d3V3.event.transform);
+                }
+
+                function zoomFunction() {
+                  var transform = d3V3.zoomTransform(this);
+                  d3V3.select(elem[0])
+                  .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+                }
+
 
                 /*un rettangolo contenitore per ogni nodo cluster*/
                 var nodirect = nodes.filter(function(elem, index, self) {
@@ -261,7 +313,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                     .duration(750)
                     .delay(function(d, i) { return i * 5; })
                     .attrTween("r", function(d) {
-                      var i = d3.interpolate(0, d.radius);
+                      var i = d3v3.interpolate(0, d.radius);
                       return function(t) { return d.radius = i(t); };
                     });
 
@@ -306,7 +358,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
 
                 // Resolves collisions between d and all other circles.
                 function collide(alpha) {
-                  var quadtree = d3.geom.quadtree(nodes);
+                  var quadtree = d3v3.geom.quadtree(nodes);
                   return function(d) {
                     var r = d.radius + maxRadius + Math.max(padding, clusterPadding),
                         nx1 = d.x - r,

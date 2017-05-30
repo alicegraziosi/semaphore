@@ -23,6 +23,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3) {
+          
           // now you can use d3 as usual!
           var d3 = $window.d3;
           var width = "900";
@@ -64,8 +65,6 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                 clearAll();
                 update();
                 function update(){
-
-                  console.log(graph);
 
                   var links = [];
                   var nodes = [];
@@ -114,7 +113,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
 
                   /* directed force layout */
                   var simulation = d3.forceSimulation()
-                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(60)) // replace force.linkStrength
+                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100)) // replace force.linkStrength
                     .force("charge", d3.forceManyBody()) // replace force.charge
                     .force("center", d3.forceCenter(width / 2, height / 2));
 

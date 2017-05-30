@@ -12,7 +12,8 @@
         <d3-clustervisualization graph="graph"
                                  selected-node-label="selectedNodeLabel"
                                  selected-cluster-option="selectedClusterOption"
-                                 data-info="dataInfo">
+                                 data-info="dataInfo"
+                                 model="$parent">
         </d3-clustervisualization>
       </div>
       <div class="ui top aligned four wide column">
@@ -21,27 +22,25 @@
             <label>Cluster</label>
             <div class="field" ng-value="{{clusterByHeadClass}}">
               <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterByHeadClass.label);">
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterByHeadClass);">
                 <label>{{clusterByHeadClass.label}}</label>
               </div>
             </div>
             <div class="field" data-value="{{clusterByOptionsClass}}" ng-repeat="clusterOption in clusterByOptionsClass">
               <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption.label);">
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
                 <label>{{clusterOption.label}}</label>
               </div>
             </div>
             <label>Cluster by</label>
             <div class="field" data-value="{{clusterByOptionsProperty}}" ng-repeat="clusterOption in clusterByOptionsProperty">
               <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption.label);">
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
                 <label>{{clusterOption.label}}</label>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="ui top aligned four wide column">
         <div id="data_info">
           <p class="dataInfoLabel" ng-show="dataInfo.headClass.uri != ' '">Class<p>
           <p>{{dataInfo.headClass.uri}}</p>
@@ -59,6 +58,5 @@
                <p>{{prop.uri}}</p>
           </div>
         </div>
-
-    </div>
+      </div>
 </div>

@@ -39,10 +39,13 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
       $scope.nodeLabels = $scope.nodeLabels.sort();
     });
     */
+
+    /*
     $rootScope.prova="prova";
     $rootScope.$watch('prova', function(prova, provaold) {
       $scope.prova=$rootScope.prova;
     }, true);
+    */
 
     // wait for all promises
     $q.all([
@@ -71,33 +74,43 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
         $rootScope.dataInfo = {
           headClass : {
             uri : 'http://dbpedia.org/ontology/Band',
-            label : 'Band'
+            label : 'Band',
+            type: "obj" 
           },
           litPropHeadClass: [
-            {uri :'http://dbpedia.org/property/genre',
-             label : 'genre'},
+            {uri : 'http://dbpedia.org/property/genre',
+             label : 'genre', 
+             type : 'lit'},
             {uri : 'http://dbpedia.org/property/yearsActive',
-             label : 'years active'}
+             label : 'years active',
+             type : 'lit'}
           ],
           objPropHeadClass: [
-            {uri: 'http://dbpedia.org/ontology/FormerBandMember',
-             label : 'former band member'},
+            {uri: 'http://dbpedia.org/ontology/formerBandMember',
+             label : 'former band member',
+             type : 'obj'},
             {uri: 'http://dbpedia.org/ontology/bandMember',
-             label : 'band member'}
+             label : 'band member',
+             type : 'obj'}
           ]
         }
+
+        $scope.dataInfo = $rootScope.dataInfo;
 
         // istanze da clusterizzare: quelle della classe principale o obj prop di classe p.
         $scope.clusterByHeadClass = $rootScope.dataInfo.headClass;
         $scope.clusterByOptionsClass = $rootScope.dataInfo.objPropHeadClass;
 
-        // cluster by:
+        // cluster by: proprietà sia della classe principale che delle sue object properties
         $scope.clusterByOptionsProperty = $rootScope.dataInfo.litPropHeadClass;
+
+        $scope.selectedClusterOption = $scope.clusterByOptionsProperty[0];
 
     });
 
     $rootScope.$watch('graph', function(graph, graphold) {
       $scope.graph = $rootScope.graph;
+      console.log("controller graph changed" + $scope.graph);
       $rootScope.nodeLabels = [];
       if($scope.graph != undefined){
         $scope.graph.nodes.forEach(function(node){
@@ -109,10 +122,9 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
     }, true);
 
 
-    $rootScope.$watch(function() {
-      return $rootScope.dataInfo;
-    }, function(dataInfo) {
+    $rootScope.$watch('dataInfo', function(dataInfo, dataInfoold) {
       $scope.dataInfo = $rootScope.dataInfo;
+      console.log("controller datainfo changed" + $scope.dataInfo);
     }, true);
 
     $scope.selected = " ";
@@ -138,8 +150,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute'])
       console.log('"menuItemClick" button clicked');
     }
 
-
-    $scope.selectedClusterOption = "years active";
 
     $scope.toggleSelectionClusterOption = function toggleSelection(selectedClusterOption) {
         $scope.selectedClusterOption = selectedClusterOption;
