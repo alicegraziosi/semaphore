@@ -12,51 +12,80 @@
         <d3-clustervisualization graph="graph"
                                  selected-node-label="selectedNodeLabel"
                                  selected-cluster-option="selectedClusterOption"
-                                 data-info="dataInfo"
-                                 model="$parent">
+                                 model="$parent"
+                                 info="info">
         </d3-clustervisualization>
       </div>
       <div class="ui top aligned four wide column">
         <div class="ui form">
           <div class="grouped fields">
+
             <label>Cluster</label>
-            <div class="field" ng-value="{{clusterByHeadClass}}">
-              <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterByHeadClass);">
-                <label>{{clusterByHeadClass.label}}</label>
-              </div>
-            </div>
-            <div class="field" data-value="{{clusterByOptionsClass}}" ng-repeat="clusterOption in clusterByOptionsClass">
+            <div class="ui horizontal label">{{clusterClasse.label}}</div>
+            <label>by</label>
+
+            <div class="field" data-value="{{litPropClasse}}" ng-repeat="clusterOption in litPropClasse">
               <div class="ui radio checkbox">
                 <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
                 <label>{{clusterOption.label}}</label>
               </div>
             </div>
-            <label>Cluster by</label>
-            <div class="field" data-value="{{clusterByOptionsProperty}}" ng-repeat="clusterOption in clusterByOptionsProperty">
+
+            <div class="ui horizontal divider">
+              Or
+            </div>
+
+            <label>Cluster</label>
+            <div class="ui horizontal label">{{clusterObj.label}}</div>
+            <label>by</label>
+
+            <div class="field" data-value="{{litPropObj}}" ng-repeat="clusterOption in litPropObj">
+              <div class="ui radio checkbox">
+                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
+                <label>{{clusterOption.label}}</label>
+              </div>
+            </div>
+
+          <div class="field" data-value="{{objPropObj}}" ng-repeat="clusterOption in objPropObj">
               <div class="ui radio checkbox">
                 <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
                 <label>{{clusterOption.label}}</label>
               </div>
             </div>
           </div>
-        </div>
+
+
+        
+        <div class="ui horizontal divider"></div>
         <div id="data_info">
           <p class="dataInfoLabel" ng-show="dataInfo.headClass.uri != ' '">Class<p>
-          <p>{{dataInfo.headClass.uri}}</p>
-          <p>{{dataInfo.headClass.label}}</p>
+          <p>{{dataInfo.classe.uri}}</p>
+          <p>{{dataInfo.classe.label}}</p>
+
           <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Literal Properties</p>
-          <div ng-model="dataInfo.litPropHeadClass" class="item"
-               ng-repeat="prop in dataInfo.litPropHeadClass">
+          <div ng-model="dataInfo.litPropClasse" class="item"
+               ng-repeat="prop in dataInfo.litPropClasse">
                <p>{{prop.label}}</p>
                <p>{{prop.uri}}</p>
           </div>
           <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Properties</p>
-          <div ng-model="dataInfo.objPropHeadClass" class="item"
-               ng-repeat="prop in dataInfo.objPropHeadClass">
+          <div ng-model="dataInfo.objPropClasse" class="item">
+               <p>{{objPropClasse.label}}</p>
+               <p>{{objPropClasse.uri}}</p>
+          </div>
+
+          <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Object Property Literal Properties</p>
+          <div ng-model="dataInfo.litPropObj" class="item"
+               ng-repeat="prop in dataInfo.litPropObj">
                <p>{{prop.label}}</p>
                <p>{{prop.uri}}</p>
           </div>
+          <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Property Object Properties</p>
+          <div ng-model="dataInfo.objPropClasse" class="item">
+               <p>{{objPropObj.label}}</p>
+               <p>{{objPropObj.uri}}</p>
+          </div>
         </div>
       </div>
+    </div>
 </div>

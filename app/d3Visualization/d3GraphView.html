@@ -14,7 +14,7 @@
                                selected-node-label="selectedNodeLabel"
                                object-shape="objectShape"
                                datatype-shape="datatypeShape"
-                               console.log("controller datainfo changed" + $scope.dataInfo);>
+                               data-info="dataInfo">
         </d3-graphvisualization>
       </div>
       <div class="ui top aligned four wide column">
@@ -30,22 +30,36 @@
           <p>{{selected.label}}</p>
           <img src="{{selected.photoUrl}}" style="width:300;height:300;">
         </div>
+
         <div class="ui horizontal divider"></div>
+
         <div id="data_info">
           <p class="dataInfoLabel" ng-show="dataInfo.headClass.uri != ' '">Class<p>
-          <p>{{dataInfo.headClass.uri}}</p>
-          <p>{{dataInfo.headClass.label}}</p>
+          <p>{{dataInfo.classe.uri}}</p>
+          <p>{{dataInfo.classe.label}}</p>
+
           <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Literal Properties</p>
-          <div ng-model="dataInfo.litPropHeadClass" class="item"
-               ng-repeat="prop in dataInfo.litPropHeadClass">
+          <div ng-model="dataInfo.litPropClasse" class="item"
+               ng-repeat="prop in dataInfo.litPropClasse">
                <p>{{prop.label}}</p>
                <p>{{prop.uri}}</p>
           </div>
           <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Properties</p>
-          <div ng-model="dataInfo.objPropHeadClass" class="item"
-               ng-repeat="prop in dataInfo.objPropHeadClass">
+          <div ng-model="dataInfo.objPropClasse" class="item">
+               <p>{{objPropClasse.label}}</p>
+               <p>{{objPropClasse.uri}}</p>
+          </div>
+
+          <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Object Property Literal Properties</p>
+          <div ng-model="dataInfo.litPropObj" class="item"
+               ng-repeat="prop in dataInfo.litPropObj">
                <p>{{prop.label}}</p>
                <p>{{prop.uri}}</p>
+          </div>
+          <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Property Object Properties</p>
+          <div ng-model="dataInfo.objPropClasse" class="item">
+               <p>{{objPropObj.label}}</p>
+               <p>{{objPropObj.uri}}</p>
           </div>
         </div>
       </div>

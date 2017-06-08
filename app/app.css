@@ -150,3 +150,12 @@ span.limit-ellipsis {
   white-space: nowrap;
   overflow: hidden;
 }
+
+
+.bottoni {
+  padding: 1em 0em;
+}
+
+.messVisible{
+  display: none;
+}

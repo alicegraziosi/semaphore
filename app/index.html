@@ -29,9 +29,42 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
   <script src="semantic/dist/semantic.min.js"></script>
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-  <!-- d3.js
-  <script src="https://d3js.org/d3.v4.min.js"></script>.
+  
+  <!-- d3v3 e d3v4
+
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  
   -->
+ 
+  <!--
+  <script type="text/javascript">
+  
+    var script1 = document.createElement("script"),
+        script2 = document.createElement("script"),
+        newD3;
+
+    function noConflict() {
+        newD3 = d3;
+        console.log("loaded v4");
+        script2.type = 'text/javascript';
+        script2.src = "http://d3js.org/d3.v3.min.js";
+        script2.addEventListener("load", ready, false);
+        document.head.appendChild(script2);
+    }
+
+    function ready() {
+        console.log("loaded v3");
+        console.log(d3, newD3);
+    }
+
+    script1.type = 'text/javascript';
+    script1.src = "http://d3js.org/d3.v4.min.js";
+    script1.addEventListener("load", noConflict, false);
+    document.head.appendChild(script1);
+  </script>
+  -->
+  
   <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
@@ -59,7 +92,7 @@
         <i class="dropdown icon"></i>
         Select a SPARQL endpoint and a graph
       </div>
-      <div class="content">
+      <div class="active content" id="endpointandgraph">
 
         <div class="ui relaxed divided list">
           <h5>Select a SPARQL endpoint</h5>
@@ -74,19 +107,6 @@
                      {{endpoint}}
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="item">
-            <div class="ui fluid action input">
-              <input type="text" placeholder="Select an Endpoint..."
-                ng-model="selectedEndpoint"></input>
-              <button class="ui icon button" ng-click="contactSelectedEndpoint()">
-                <i class="icons">
-                  <i class="database icon"></i>
-                  <i class="corner search icon"></i>
-                </i>
-              </button>
             </div>
           </div>
 
@@ -105,20 +125,43 @@
             </div>
           </div>
 
-          <div class="item">
-            <div class="ui fluid input">
-              <input type="text" ng-model="selectedGraph" placeholder="Select a graph...">
-            </div>
+          <div ng-if="selectedEndpoint!='' && selectedGraph!=''" class="bottoni">
+          <button class="ui primary button" ng-click="contactSelectedEndpoint()">
+            Okay
+            <i class="icons">
+              <i class="database icon"></i>
+              <i class="corner search icon"></i>
+            </i>
+          </button>
+          <button class="ui button" ng-click="restoreToDefault()">
+            Discard
+          </button>
           </div>
-
         </div>
+
+        
+        <div class="ui hidden success message">
+          <div class="header">
+            SPARQL endpoint succesfully reached!
+          </div>
+          <p>You may now start query the dataset</p>
+        </div>
+
+        <div class="ui negative hidden message">
+          <div class="header">
+            SPARQL endpoint unreachable :(
+          </div>
+          <p>Try again later or choose another one</p>
+        </div>
+        
+
       </div> <!-- chiude <div class="content active">-->
 
       <div class="title">
         <i class="dropdown icon"></i>
         Query builder
       </div>
-      <div class="content active">
+      <div class="content active" id="datasetInfoRichieste">
 
         <h5 ng-show="classes.length!=0">1) Select a Class</h5>
         <div ng-show="classes.length!=0" class="ui menu">
@@ -185,7 +228,8 @@
           </div>
         </div>
 
-        <div class="ui divider"></div>
+        <div ng-show="classDatatypeProperties.length!=0 ||
+            classObjectProperties.length!=0"class="ui divider"></div>
         <div ng-show="classDatatypeProperties.length!=0 ||
             classObjectProperties.length!=0" class="ui one column centered grid">
           <button class="ui button" ng-click="queryEndpointClassProperties()">
@@ -237,10 +281,10 @@
             </div>
           </div>
         </div>
-       <div class="ui divider"></div>
+       <div ng-show="objDatatypeProperties.length!=0 ||
+            objObjectProperties.length!=0" class="ui divider"></div>
         <div ng-show="objDatatypeProperties.length!=0 ||
             objObjectProperties.length!=0" class="ui one column centered grid">
-
           <button class="ui button" ng-click="queryEndpoint()">
             Query
           </button>
@@ -297,6 +341,62 @@
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+
+      /*
+      chiusura dei messaggi 'dismissable'
+      sia success che negative
+      */
+
+      $('.message .close')
+        .on('click', function() {
+          $(this)
+            .closest('.message')
+            .transition('fade')
+          ;
+        });
+
+      $('.accordion')
+        .accordion({
+          selector: {
+            trigger: '.title'
+          },
+          exclusive: false  // Disable exclusivity to allow multiple sections to be open at once.
+        });
+
+      $('.ui.left.sidebar').sidebar({
+        dimPage: false,
+        transition: 'push',
+        exclusive: false,
+        closable: false
+      });
+
+      $('.ui.left.sidebar').sidebar('attach events', '#left-sidebar-toggle');
+
+      $('.ui.dropdown').dropdown();
+
+      $('.ui.accordion').accordion('refresh');
+
+      $('.ui.compact.menu')
+      .on('click', '.item', function() {
+          $(this)
+            .addClass('active')
+            .siblings('.item')
+            .removeClass('active');
+      });
+
+
+    });
+
+   
+
+    /*
+    The <script src=...> blocks the browser while 
+    document.createElement('script') loads the JavaScript asynchronously
+    */
+  </script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="app.js"></script>
@@ -316,57 +416,5 @@
   <script src="jsonFile/getJSONfileModule.js"></script>
   <script src="queryDataset/queryDatasetModule.js"></script>
   <script src="queryDataset/queryDatasetCtrl.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('.accordion')
-        .accordion({
-          selector: {
-            trigger: '.title'
-          },
-          exclusive: false  // Disable exclusivity to allow multiple sections to be open at once.
-        })
-      ;
-
-      $('.ui.left.sidebar').sidebar({
-        dimPage: false,
-        transition: 'push',
-        exclusive: false,
-        closable: false
-      });
-
-      $('.ui.left.sidebar').sidebar('attach events', '#left-sidebar-toggle');
-
-      $('.ui.dropdown').dropdown();
-
-      $('.ui.compact.menu')
-      .on('click', '.item', function() {
-          $(this)
-            .addClass('active')
-            .siblings('.item')
-            .removeClass('active');
-      });
-
-
-    });
-  </script>
-  <script id="prefixes" type="text/template">
-      PREFIX owl:     <http://www.w3.org/2002/07/owl#>
-      PREFIX fabio:   <http://purl.org/spar/fabio/>
-      PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
-      PREFIX frbr:    <http://purl.org/vocab/frbr/core#>
-      PREFIX co:      <http://purl.org/co/>
-      PREFIX foaf:    <http://xmlns.com/foaf/0.1/>
-      PREFIX pro:     <http://purl.org/spar/pro/>
-      PREFIX dcterms: <http://purl.org/dc/terms/>
-      PREFIX c4o:     <http://purl.org/spar/c4o/>
-      PREFIX cito:    <http://purl.org/spar/cito/>
-      PREFIX prism:   <http://prismstandard.org/namespaces/basic/2.0/>
-      PREFIX sro:     <http://salt.semanticauthoring.org/ontologies/sro#>
-      PREFIX biro:    <http://purl.org/spar/biro/>
-      PREFIX oa:      <http://www.w3.org/ns/oa#>
-      PREFIX doco:    <http://purl.org/spar/doco/>
-      PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
-      PREFIX dbo:     <http://dbpedia.org/ontology/>
-   </script>
 </body>
 </html>

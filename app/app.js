@@ -16,8 +16,21 @@ angular.module('myApp', [
 .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
   $routeProvider.otherwise({redirectTo: '/graph'});
-  //$routeProvider.otherwise({redirectTo: '/cluster'});
 }])
+
+
+/*
+
+set global timeout milliseconds for http request
+.config(['$httpProvider', function($httpProvider) {
+  $httpProvider.defaults.timeout = 30000;
+}])
+
+
+but...
+$http will not respect default setting for timeout set it in httpProvider
+
+*/
 
 .controller('myAppCtrl', function($rootScope){
   $rootScope.appName = "project";

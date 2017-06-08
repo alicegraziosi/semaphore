@@ -5,63 +5,45 @@ var myAppd3view = angular.module('myApp.d3view');
 myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window', '$parse', 'queryDatasetService',
   function(d3ServiceVersion3, $window, $parse, queryDatasetService) {
     return{
+
       //restrict:'E' --> <d3-visualization></d3-visualization>
       //restrict:'A' --> <div d3-visualization ></div>
       //restrict:'EA' --> entrambe le forme
       restrict:'E',
+
       //this is important,
       replace: false,
+
+      //Use isolated scope
+      //and two-way data binding ( "=" )
       //<d3-visualization graph="graph"></d3-visualization> --> $scope.graph
       scope: {
           graph: "=",
           model: "=",
           selectedNodeLabel: "=",  // nella view: selected-node-label
-          selectedClusterOption: "=",
-          dataInfo: "="
-      },
+          selectedClusterOption: "=",  // nella view: selected-cluster-option
+          info: "="  //two-way data binding
+      },        
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
         d3ServiceVersion3.then(function(d3v3) {
+          var d3 = d3v3;
           // now you can use d3 as usual!
-          //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
+          // nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
+        
           var width = 1024,
               height = 1000,
               padding = 2, // separation between same-color nodes
               clusterPadding = 150, // separation between different-color nodes
-              maxRadius = 25, //radius nodo cluster
-              radius = 25;
+              maxRadius = 20, //radius nodo cluster
+              radius = 15;
 
-          var dataInfo = {
-          headClass : {
-            uri : 'http://dbpedia.org/ontology/Band',
-            label : 'Band',
-            type: 'obj'
-          },
-          litPropHeadClass: [
-            {uri : 'http://dbpedia.org/property/genre',
-             label : 'genre', 
-             type : 'lit'},
-            {uri : 'http://dbpedia.org/property/yearsActive',
-             label : 'years active',
-             type : 'lit'}
-          ],
-          objPropHeadClass: [
-            {uri: 'http://dbpedia.org/ontology/formerBandMember',
-             label : 'former band member',
-             type : 'obj'},
-            {uri: 'http://dbpedia.org/ontology/bandMember',
-             label : 'band member',
-             type : 'obj'}
-          ]
-        }
-        scope.$watch('dataInfo', function (dataInfo) {
-          if(dataInfo){
-            console.log("changed" + dataInfo);
-          }
-        });
+          var dataInfo = scope.info;
 
-          scope.$watch('graph', function (graph) {
+          scope.$watch('graph', function (graph) {  //Scope.$watch accepts as first parameter expression or function
             if(graph){ //Checking if the given value is not undefined;
+            console.log("changed graph " + graph);
+
 
               scope.$watch('selectedClusterOption', function(selectedClusterOption) {
                 if(selectedClusterOption){
@@ -88,7 +70,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 var m = unique.length; //10; // number of distinct clusters
                 var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
-                var color = d3v3.scale.category20().domain(d3v3.range(m)); // m colori
+                var color = d3.scale.category20().domain(d3.range(m)); // m colori
 
                 // The largest node for each cluster.
                 var clusters = new Array(m);  //Array di 10 elementi
@@ -155,7 +137,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 var m = unique.length; //10; // number of distinct clusters
                 var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
-                var color = d3v3.scale.category20().domain(d3v3.range(m)); // m colori
+                var color = d3.scale.category20().domain(d3.range(m)); // m colori
 
                 // The largest node for each cluster.
                 var clusters = new Array(m);  //Array di 10 elementi
@@ -230,7 +212,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 });
 
 
-                var force = d3v3.layout.force()
+                var force = d3.layout.force()
                     .nodes(nodes)
                     .size([width, height])
                     .gravity(.02)
@@ -238,26 +220,12 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                     .on("tick", tick)
                     .start();
 
-                var svg = d3v3.select(elem[0]).append("svg")
+                var svg = d3.select(elem[0]).append("svg")
                     .attr("width", width)
                     .attr("height", height)
                     .call(d3.behavior.zoom().on("zoom", function () {
                       svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
                     }));
-
-
-                /* svg > gzoom */
-                var gzoom = svg.append("g");
-
-                function zoomed() {
-                  gzoom.attr("transform", d3V3.event.transform);
-                }
-
-                function zoomFunction() {
-                  var transform = d3V3.zoomTransform(this);
-                  d3V3.select(elem[0])
-                  .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
-                }
 
 
                 /*un rettangolo contenitore per ogni nodo cluster*/
@@ -271,8 +239,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                   .append("rect")
                   .style("fill", function(d) { return color(d.cluster); })
                     .attr("opacity", "0.6")
-                    .attr("width", function(d) { return 2*maxRadius + d.total*2*radius + d.total*2*padding; })
-                    .attr("height", function(d) { return 2*maxRadius + d.total*2*radius + d.total*2*padding; });
+                    .attr("width", function(d) { return 2*maxRadius + d.total*2*radius })
+                    .attr("height", function(d) { return 2*maxRadius + d.total*2*radius; });
 
                 var rectLabel = svg.append("g")
                   .attr("class", "rectLable")
@@ -284,7 +252,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                   .attr("id",function(d,i){return "rectLabelId" + i;})
                   .style("fill", function(d) { return color(d.cluster); })
                   .attr("opacity", "1")
-                  .attr("width", function(d) { return 2*maxRadius + d.total*2*radius + d.total*2*padding; })
+                  .attr("width", function(d) { return 2*maxRadius + d.total*2*radius; })
                   .attr("height", "15");
 
                 rectLabel.append("text")
@@ -313,7 +281,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                     .duration(750)
                     .delay(function(d, i) { return i * 5; })
                     .attrTween("r", function(d) {
-                      var i = d3v3.interpolate(0, d.radius);
+                      var i = d3.interpolate(0, d.radius);
                       return function(t) { return d.radius = i(t); };
                     });
 
@@ -322,10 +290,13 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                       .each(collide(.5))
                       .attr("cx", function(d) { return d.x; })
                       .attr("cy", function(d) { return d.y; });
-                  label.attr("x", function(d){ return d.x; })
-                       .attr("y", function (d) {return d.y; });
-                  rect.attr("x", function(d){ return d.x - maxRadius - d.total*radius - d.total*padding; })
-                      .attr("y", function (d) {return d.y - maxRadius - d.total*radius - d.total*padding;; });
+                  label.attr("x", function(d) { return d.x; })
+                       .attr("y", function(d) {return d.y; });
+                  
+                  rect.attr("x", function(d){ return d.x - maxRadius - d.total*radius -d.total*padding; })
+                      .attr("y", function (d) {return d.y - maxRadius - d.total*radius -d.total*padding; });
+
+
 
                   /*
                   rectLabel.attr("x", function(d){ return d.x - maxRadius - d.total*radius - d.total*padding; })
@@ -358,7 +329,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
 
                 // Resolves collisions between d and all other circles.
                 function collide(alpha) {
-                  var quadtree = d3v3.geom.quadtree(nodes);
+                  var quadtree = d3.geom.quadtree(nodes);
                   return function(d) {
                     var r = d.radius + maxRadius + Math.max(padding, clusterPadding),
                         nx1 = d.x - r,
@@ -408,7 +379,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
               } //update()
             } //if(graph)
-          }, true); //scope.$watch('graph', function (graph) {
+          }, true); //scope.$watch('graph', function (graph) {   // true = deep object dirty checking
         }); // d3Service.then(function(d3) {
       } // link
     } // return

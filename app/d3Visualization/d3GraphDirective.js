@@ -12,25 +12,31 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
       //this is important,
       replace: false,
       //<d3-visualization graph="graph"></d3-visualization> --> $scope.graph
+
+      //The @ symbol tells angular that this is a one-way bound value
+      //The = symbol tells angular that this is a two-way bound value
+      
       scope: {
           graph: "=",
           model: "=",
           selectedNodeLabel: "=",  // nella view: selected-node-label
           objectShape: "=",  // nella view: object-shape
-          datatypeShape: "="  // nella view: datatype-shape
+          datatypeShape: "=",  // nella view: datatype-shape
+          datainfo: "="
 
       },
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
-        d3Service.then(function(d3) {
+        d3Service.then(function(d3v4) {
+          var newD3 = d3v4;
           
           // now you can use d3 as usual!
-          var d3 = $window.d3;
+       
           var width = "900";
           var height = "500";
 
           /* svg */
-          var svg = d3.select(elem[0]).append("svg")
+          var svg = newD3.select(elem[0]).append("svg")
             .attr("height", "500")
             .attr("width", '100%');
 
@@ -39,7 +45,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
             .attr("width", '100%')
             .attr("fill", "rgb(251, 251, 251)")
             .attr("fill-opacity", "1")
-            .call(d3.zoom()
+            .call(newD3.zoom()
                     .scaleExtent([1/2, 4])
                     .on("zoom", zoomed));
 
@@ -47,16 +53,25 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
           var gzoom = svg.append("g");
 
           function zoomed() {
-            gzoom.attr("transform", d3.event.transform);
+            gzoom.attr("transform", newD3.event.transform);
           }
 
           function zoomFunction() {
-            var transform = d3.zoomTransform(this);
-            d3.select(elem[0])
+            var transform = newD3.zoomTransform(this);
+            newD3.select(elem[0])
             .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
           }
 
-          var color = d3.scaleOrdinal(d3.schemeCategory20);
+          var color = newD3.scaleOrdinal(newD3.schemeCategory20);
+
+
+          scope.$watch('datainfo', function (dataInfo) {
+            if(dataInfo){
+              console.log("changed datainfo" + dataInfo);
+            }
+          }, true); // deep object dirty checking
+
+
 
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph) {
@@ -112,10 +127,10 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                   });
 
                   /* directed force layout */
-                  var simulation = d3.forceSimulation()
-                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100)) // replace force.linkStrength
-                    .force("charge", d3.forceManyBody()) // replace force.charge
-                    .force("center", d3.forceCenter(width / 2, height / 2));
+                  var simulation = newD3.forceSimulation()
+                    .force("link", newD3.forceLink().id(function (d) { return d.id; }).distance(100)) // replace force.linkStrength
+                    .force("charge", newD3.forceManyBody()) // replace force.charge
+                    .force("center", newD3.forceCenter(width / 2, height / 2));
 
                   //simulation.nodes(graph.nodes).on("tick", ticked);
                   //simulation.force("link").links(graph.links);
@@ -130,14 +145,14 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                     .enter().append("line") //.enter().append("path")
                       .attr("id",function(d,i) { return "linkId_" + i; })
                       .on("mouseover", function(d){
-                        d3.select(this).style('stroke-width', 1.2);
+                        newD3.select(this).style('stroke-width', 1.2);
                         node.style('stroke', function(n) {
                           if (n === d.source || n === d.target)
                             return color(n.group);
                           });
                       })
                       .on("mouseout", function(d){
-                        d3.select(this).style('stroke-width', 1);
+                        newD3.select(this).style('stroke-width', 1);
                         node.style('stroke', function(n) {
                           if (n === d.source || n === d.target)
                             return '#ffffff';
@@ -162,19 +177,19 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                         .attr("height", 8)  //if rect
                         .attr("r", function(d) { return d.radius; }) // i circle
                         .attr("fill", function(d) { return color(d.group); })
-                        .call(d3.drag()
+                        .call(newD3.drag()
                             .on("start", dragstarted)
                             .on("drag", dragged)
                             .on("end", dragended))
                         .on("mouseover", function(d){
-                          d3.selectAll("circle").style("stroke", '#ffffff')
-                          d3.select(this).style("stroke", color(d.group));
+                          newD3.selectAll("circle").style("stroke", '#ffffff')
+                          newD3.select(this).style("stroke", color(d.group));
                           scope.$apply(function () {
                             $parse(attrs.selectedItem).assign(scope.$parent, d);
                           });
                         })
                         .on("mouseout", function(d){
-                          d3.selectAll("circle").style("stroke", '#ffffff')
+                          newD3.selectAll("circle").style("stroke", '#ffffff')
                         })
                         .on('dblclick', connectedNodes);
 
@@ -196,19 +211,19 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                       .attr("xlink:href", function (d) { return d.photoUrl; })
                       .attr("width", 12)
                       .attr("height", 12)
-                      .call(d3.drag()
+                      .call(newD3.drag()
                           .on("start", dragstarted)
                           .on("drag", dragged)
                           .on("end", dragended))
                       .on("mouseover", function(d){
-                        d3.selectAll("circle").style("stroke", '#ffffff')
-                        d3.select(this).style("stroke", color(d.group));
+                        newD3.selectAll("circle").style("stroke", '#ffffff')
+                        newD3.select(this).style("stroke", color(d.group));
                         scope.$apply(function () {
                           $parse(attrs.selectedItem).assign(scope.$parent, d);
                         });
                       })
                       .on("mouseout", function(d){
-                        d3.selectAll("circle").style("stroke", '#ffffff')
+                        newD3.selectAll("circle").style("stroke", '#ffffff')
                       });
 
                   /*rect e label */
@@ -283,20 +298,20 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                 function dragstarted(d) {
                   // desired alpha (temperature) of the simulation: 1.5 in modo
                   // che non sia troppo lento . alpha puo' essere tra 0 e 1
-                  if (!d3.event.active) simulation.alphaTarget(0.2).restart();
+                  if (!newD3.event.active) simulation.alphaTarget(0.2).restart();
                   d.fx = d.x;
                   d.fy = d.y;
                 }
 
                 function dragged(d){
-                  d.fx = d3.event.x;
-                  d.fy = d3.event.y;
+                  d.fx = newD3.event.x;
+                  d.fy = newD3.event.y;
                 }
 
                 function dragended(d) {
                   // alla fine dell'interazione alpha a 0
                   // altrimenti il grafico continua a muoversi
-                  if (!d3.event.active) simulation.alphaTarget(0);
+                  if (!newD3.event.active) simulation.alphaTarget(0);
                   d.fx = null;
                   d.fy = null;
                 }
@@ -318,7 +333,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
                 function connectedNodes() {
                     if (toggle == 0) {
                         //Reduce the opacity of all but the neighbouring nodes
-                        var d = d3.select(this).node().__data__;
+                        var d = newD3.select(this).node().__data__;
                         node.style("opacity", function (o) {
                             return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
                         });
@@ -386,11 +401,11 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
               });
 
               function clearAll() {
-                d3.selectAll(".links").remove();
-                d3.selectAll(".nodes").remove();
-                d3.selectAll(".label").remove();
-                d3.selectAll(".image").remove();
-                d3.selectAll(".rectLabel").remove();
+                newD3.selectAll(".links").remove();
+                newD3.selectAll(".nodes").remove();
+                newD3.selectAll(".label").remove();
+                newD3.selectAll(".image").remove();
+                newD3.selectAll(".rectLabel").remove();
               }
             } // if(graph)
           }, true); // scope.$watch('graph', function (graph) { con  deep dirty checking

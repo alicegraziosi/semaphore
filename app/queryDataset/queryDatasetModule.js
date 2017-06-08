@@ -191,7 +191,7 @@ angular.module('queryDatasetModule', [])
         FILTER(lang(?soggType) = "en")
         FILTER(lang(?soggLabel) = "en")
         }
-        }`;
+      }`;
 
       var encodedquery = encodeURIComponent(query);
       var deferred = $q.defer();
@@ -206,6 +206,16 @@ angular.module('queryDatasetModule', [])
     }
 
     var queryDatasetClass = function(endpoint, graph){
+      /*
+      OLD query
+
+      si chiedono le owl:class, ma per il dataset di semanticLancet non si avevano risultati
+      perchè non c'è la tripla che specifica che una risorsa è proprio una owl:class
+
+      Per dbpedia è ok. Per semanticLancet no.
+      */
+
+      /*
       var query = 'SELECT * ';
       if(graph != "default"){
         query += ' FROM <' + graph + '> ';
@@ -213,14 +223,31 @@ angular.module('queryDatasetModule', [])
       query += `{ ?classUri a owl:Class;
                       rdfs:label ?classLabel 
                       FILTER (lang(?classLabel) = "en")
-                    }`;
+                    } LIMIT 10000`;
+      */
+ 
+    
+      // NEW query
+      // non si chiedono le owl:class ma gli rdf:type
+      
+      var query = 'SELECT DISTINCT ?classUri ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += `{
+        ?classe a ?classUri.
+      } LIMIT 1500`;
+      
+      //Va bene sia per dbpedia che per semanticLancet
+
+
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery, {timeout: 60000})
         .then(function(data) {
           defer.resolve(data);
         });
@@ -234,7 +261,8 @@ angular.module('queryDatasetModule', [])
       }
       query += '{ ?propertyUri rdfs:domain  <'+ selectedClass +'>; '+
                   'rdfs:label ?propertyLabel '+
-                  'FILTER (lang(?propertyLabel) = "en")'+
+                  'FILTER (lang(?propertyLabel) = "en") '+
+                  'FILTER(!isLiteral(?propertyUri)) ' +
                   '}';
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
@@ -502,7 +530,7 @@ angular.module('queryDatasetModule', [])
         return defer.promise;
     }
 
-    var queryEndpointForObjObjectVAL = function(endpoint, graph, classObjectProperties, obj){
+    var queryEndpointForObjObjectVAL = function(endpoint, graph, selectedClass, classObjectProperties, obj){
       var query = 'SELECT DISTINCT ?sogg ?soggLabel ?soggType ?pLabel ?oo ?ooLabel ';
       if(graph != "default"){
         query += ' FROM <' + graph + '> ';
