@@ -30,7 +30,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
   function($rootScope, $scope, $http, queryDatasetService, 
     GetJSONfileService, $q, ContactSPARQLendpoint, d3ServiceVersion3, d3Service) {    
     
-    /*
+  
     var newD3;
     d3ServiceVersion3.then(function(d3) {
        console.log(d3);
@@ -39,7 +39,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       newD3 = d3v4;
       console.log(d3v4);
     }); // d3Service.then(function(d3) {
-      */
+      
 
     /*
     $http.get('../alicegraph.json').success(function (data) {
