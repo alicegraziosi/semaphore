@@ -39,6 +39,7 @@
     "ng2-semantic-ui": "^0.4.7",
     "semantic-ui": "^2.2.9",
     "body-parser":"^1.17.2",
-    "follow-redirects": "^1.2.4"
+    "follow-redirects": "^1.2.4",
+    "path": "^0.12.7"
   }
 }
