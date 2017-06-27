@@ -34,6 +34,8 @@
   "dependencies": {
     "angucomplete-alt": "^3.0.0",
     "angular2-semantic-ui": "^1.3.3",
+    "express": "^4.15.3",
+    "http-proxy": "^1.16.2",
     "ng2-semantic-ui": "^0.4.7",
     "semantic-ui": "^2.2.9"
   }

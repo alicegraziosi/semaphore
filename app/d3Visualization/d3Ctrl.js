@@ -30,7 +30,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
   function($rootScope, $scope, $http, queryDatasetService, 
     GetJSONfileService, $q, ContactSPARQLendpoint, d3ServiceVersion3, d3Service) {    
     
-  
+
     var newD3;
     d3ServiceVersion3.then(function(d3) {
        console.log(d3);
@@ -178,6 +178,38 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     $scope.exportJSON = function () {
       console.log('"Export as JSON" button clicked');
       console.log($rootScope.graph);
+      
+      // In an HTTP POST request, the parameters are not sent along with the URI.
+      $http({
+          method: 'POST',
+          url: 'http://localhost:8080/api/savetofile',
+          // use $.param jQuery function to serialize data from JSON 
+          data: $.param($rootScope.graph),
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          
+      }).then(
+        function(response){
+          // success callback
+          console.log("success, filename: " + response.data);
+          var filename = response.data;
+          
+          window.open('http://localhost:8080/api/download?filename='+filename);
+          
+          $http({
+            method: 'GET',
+            url: 'http://localhost:8080/api/download?filename='+filename,
+          }).then(
+            function(response){
+              console.log("success2");
+            });
+          
+          
+        }, 
+        function(response){
+          // failure callback
+          console.log('ERROR: could not download file');
+        }
+      );
     }
 
     $scope.selectNodeLabel = function(label) {

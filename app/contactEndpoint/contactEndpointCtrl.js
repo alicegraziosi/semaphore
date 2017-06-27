@@ -60,6 +60,22 @@ contactEndpointModule.controller('contactEndpointCtrl',
       return prefix;
     };
 
+    $rootScope.prefixes = [];
+
+    $scope.convertUriToPrefixProxy = function(uri){  // uri="http://xmlns.com/foaf/0.1/"
+      var prefix;
+      var promise = ContactSPARQLendpoint.convertUriToPrefixProxy(uri);
+        promise.then(function(response, status, headers, config) {
+          prefix=Object.keys(response.data)[0];
+          if(_.contains(Object.keys($rootScope.prefixes), prefix) === false) {
+            $rootScope.prefixes.push(response.data);
+          }
+          console.log(prefix);
+        });
+
+      return prefix;
+    };
+
     // clear selected graph and endpoint
     $scope.restoreToDefault = function(){
       $('#endpointandgraph .ui.dropdown').dropdown('restore placeholder text');

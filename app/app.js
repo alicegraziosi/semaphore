@@ -32,6 +32,13 @@ $http will not respect default setting for timeout set it in httpProvider
 
 */
 
+.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    }
+])
+
 .controller('myAppCtrl', function($rootScope){
   $rootScope.appName = "project";
+
 });

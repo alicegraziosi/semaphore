@@ -17,7 +17,6 @@ angular.module('contactEndpointModule', [])
 
 .factory('ContactSPARQLendpoint', ['$http', '$q', function($http, $q){
 
-
   return{
 
     //var selectedEndpoint = "http://localhost:3030/semanticLancet/query";  //endpoint di esempio
@@ -56,8 +55,41 @@ angular.module('contactEndpointModule', [])
         //Inside then() callback you simply resolve or reject deferred promise. 
         //.then(successCallback, errorCallback)
         $http.get("https://prefix.cc/?q="+uri)
-        .then(function(response) {
+        .then(function(response, status, headers, config) {
           //resolving the deferred promise here
+          
+          deferred.resolve(response);
+        });
+
+        // The function must return the deferred.promise
+        return deferred.promise;
+
+        //Note:
+        //url da cui è partita la richiesta http preso dagli headers della response
+        //non funziona in caso di redirect, in caso di redirect restituisce comunque l'url iniziale
+        //console.log(headers.location); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
+          
+        //url da cui è partita la richiesta http preso dagli header della request
+        //console.log(config.url); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
+    },
+    // uri to prefix
+    // url: https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
+    // redirect to: https://prefix.cc/foaf = http response location header
+    // 302 -Redirect is being handled directly by the browser
+    // https://stackoverflow.com/questions/10596999/javascript-get-http-header-location-after-redirection
+    // url: "https://prefix.cc/?q="+uri
+    convertUriToPrefixProxy: function(uri){
+        var deferred = $q.defer();
+        //Do not return  here
+        //you need to return the deferred.promise
+          
+
+        //Inside then() callback you simply resolve or reject deferred promise. 
+        //.then(successCallback, errorCallback)
+        $http.get("http://localhost:8080/api/label?label="+uri)
+        .then(function(response, status, headers, config) {
+          //resolving the deferred promise here
+          
           deferred.resolve(response);
         });
 
@@ -72,5 +104,6 @@ angular.module('contactEndpointModule', [])
         //url da cui è partita la richiesta http preso dagli header della request
         //console.log(config.url); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
     }
+
   }
 }]);

@@ -2,8 +2,9 @@
 
 var myAppd3view = angular.module('myApp.d3view');
 
-myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse', 'queryDatasetService', '$rootScope',
-  function(d3Service, $window, $parse, queryDatasetService, $rootScope) {
+myAppd3view.directive('d3Graphvisualization', 
+  ['d3Service', '$window', '$parse', 'queryDatasetService', '$rootScope', 'ContactSPARQLendpoint',
+  function(d3Service, $window, $parse, queryDatasetService, $rootScope, ContactSPARQLendpoint) {
     return{
       //restrict:'E' --> <d3-visualization></d3-visualization>
       //restrict:'A' --> <div d3-visualization ></div>
@@ -28,6 +29,7 @@ myAppd3view.directive('d3Graphvisualization', ['d3Service', '$window', '$parse',
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3v4) {
+
           var newD3 = d3v4;
           
           // now you can use d3 as usual!
