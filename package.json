@@ -40,6 +40,7 @@
     "semantic-ui": "^2.2.9",
     "body-parser":"^1.17.2",
     "follow-redirects": "^1.2.4",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "cors": "^2.8.3"
   }
 }
