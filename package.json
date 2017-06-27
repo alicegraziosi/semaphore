@@ -38,6 +38,7 @@
     "http-proxy": "^1.16.2",
     "ng2-semantic-ui": "^0.4.7",
     "semantic-ui": "^2.2.9",
-    "body-parser":"^1.17.2"
+    "body-parser":"^1.17.2",
+    "follow-redirects": "^1.2.4",
   }
 }
