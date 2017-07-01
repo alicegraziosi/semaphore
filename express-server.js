@@ -50,41 +50,48 @@ router.get('/label', function(request, response) {
     http.get('http://prefix.cc/?q='+request.query.label, 
 	  function (res) {
 
-	  	// url al quale si viene ridirezionati 
-	  	// http://prefix.cc/foaf
-	    console.log("url redirected to: "+res.responseUrl);
-	    
-	    // seconda nested http call
-	    // http://prefix.cc/foaf.file.json
-	    http.get(res.responseUrl+".file.json",
-	      function (res) {
-	      	// if http://prefix.cc/foaf.file.json
-	      	if (res.statusCode < 200 || res.statusCode > 299) {
-		        console.log("Error, statusCode: ", res.statusCode); // <======= Here's the status code
-		    }
-		    else {
-		    	// if http://prefix.cc/foaf.file.json
-		        res.on("data", function(chunk) {
-		            const parsedData = JSON.parse(chunk);
-	                prefix = Object.keys(parsedData)[0];
-		            console.log("prefix: "+prefix);
-					
-		            response.write(chunk);
-		            response.end();
+	  	if (res.statusCode < 200 || res.statusCode > 299) {
+	        console.log("Error, statusCode: ", res.statusCode); // <======= Here's the status code
+	    	
+	    } else {
 
-		            /*
-					Restituisce:
+		  	// url al quale si viene ridirezionati 
+		  	// http://prefix.cc/foaf
+		    console.log("url redirected to: "+res.responseUrl);
+		    
+		    // seconda nested http call
+		    // http://prefix.cc/foaf.file.json
+		    http.get(res.responseUrl+".file.json",
+		      function(res) {
+		      	// if http://prefix.cc/foaf.file.json
+		      	if (res.statusCode < 200 || res.statusCode > 299) {
+			        //non ci arriva mai
+			        console.log("Error, statusCode: ", res.statusCode); // <======= Here's the status code
+			    }
+			    else {
+			    	// if http://prefix.cc/foaf.file.json
+			        res.on("data", function(chunk) {
+			            const parsedData = JSON.parse(chunk);
+		                prefix = Object.keys(parsedData)[0];
+			            console.log("prefix: "+prefix);
+						
+			            response.write(chunk);
+			            response.end();
 
-		            {  
-					    "foaf":"http://xmlns.com/foaf/0.1/"
-					}
-					*/
-		        });
-		    }
+			            /*
+						Restituisce:
 
-	    }).on('error', function(e) {
-		    console.error(e);
-		});
+			            {  
+						    "foaf":"http://xmlns.com/foaf/0.1/"
+						}
+						*/
+			        });
+			    }
+
+		    })
+		}
+	},
+	function (res) {
 
 	});
 });

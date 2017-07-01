@@ -175,6 +175,10 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
     $scope.selected = " ";
 
+    $rootScope.$watch('prefixes', function(prefixes) {
+      $scope.prefixes = $rootScope.prefixes;
+    });
+
     $scope.exportJSON = function () {
       console.log('"Export as JSON" button clicked');
       console.log($rootScope.graph);
@@ -190,20 +194,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       }).then(
         function(response){
           // success callback
-          console.log("success, filename: " + response.data);
           var filename = response.data;
-          
           window.open('http://localhost:8080/api/download?filename='+filename);
-          
-          $http({
-            method: 'GET',
-            url: 'http://localhost:8080/api/download?filename='+filename,
-          }).then(
-            function(response){
-              console.log("success2");
-            });
-          
-          
         }, 
         function(response){
           // failure callback

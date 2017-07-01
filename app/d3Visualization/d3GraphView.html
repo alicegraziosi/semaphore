@@ -62,6 +62,17 @@
                <p>{{objPropObj.uri}}</p>
           </div>
         </div>
+
+        <div class="ui horizontal divider"></div>
+        <div>
+          <div class="ui list">
+            <div ng-repeat="prefixUrl in prefixes" class="item">
+              <div class="content">
+                <a class="header" href="{{prefixUrl.url}}" target="_blank">{{prefixUrl.prefix}}</a>
+                <div class="description">{{prefixUrl.url}}</div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
   </div>

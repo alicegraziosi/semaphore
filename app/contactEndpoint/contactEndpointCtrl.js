@@ -46,36 +46,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
        $scope.selectedGraph = graph;
     };
 
-    // from uri to prefix
-    // Per esempio:
-    // from http://purl.org/spar/cito/CitationAct
-    // to cito:CitationAct
-    $scope.convertUriToPrefix = function(uri){
-      var prefix;
-      var promise = ContactSPARQLendpoint.convertUriToPrefix(uri);
-      promise.then(function(response) {
-        prefix = $(response.data).find('h1').text();
-        console.log(prefix);
-      });
-      return prefix;
-    };
-
-    $rootScope.prefixes = [];
-
-    $scope.convertUriToPrefixProxy = function(uri){  // uri="http://xmlns.com/foaf/0.1/"
-      var prefix;
-      var promise = ContactSPARQLendpoint.convertUriToPrefixProxy(uri);
-        promise.then(function(response, status, headers, config) {
-          prefix=Object.keys(response.data)[0];
-          if(_.contains(Object.keys($rootScope.prefixes), prefix) === false) {
-            $rootScope.prefixes.push(response.data);
-          }
-          console.log(prefix);
-        });
-
-      return prefix;
-    };
-
     // clear selected graph and endpoint
     $scope.restoreToDefault = function(){
       $('#endpointandgraph .ui.dropdown').dropdown('restore placeholder text');
@@ -100,42 +70,86 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.queryDatasetClass();
     };
 
+    $rootScope.prefixes = [];
+    $rootScope.prefixes.push({
+          'prefix' : 'dbo',
+          'url' : 'http://dbpedia.org/ontology/'
+        },
+        {
+          'prefix' : 'owl',
+          'url' : 'http://www.w3.org/2002/07/owl#'
+        });
+
+    $scope.convertUriToPrefixProxy = function(classUri, uriToFind, name){  // uri="http://xmlns.com/foaf/0.1/"
+      var promise = ContactSPARQLendpoint.convertUriToPrefixProxy(uriToFind);
+      promise.then(function(data) {
+
+        var prefix = Object.keys(data)[0];
+        var url = Object.values(data)[0];
+
+        var prefixUrl = {
+          'prefix' : prefix,
+          'url' : url
+        };
+
+
+        if (_.findWhere($rootScope.prefixes, prefixUrl) == null) {
+            $rootScope.prefixes.push(prefixUrl);
+        };
+
+        $scope.classes.push({
+            uri: classUri,
+            label: prefix + ":" + name
+          });
+      }, function (error) {
+          console.error(error);
+      });
+
+    };
+
     // classi del dataset
     $scope.queryDatasetClass = function(){
       var promise = queryDatasetService.queryDatasetClass($scope.selectedEndpoint, $scope.selectedGraph);
       promise.then(function(response) {
-        for(var i=0; i<response.data.results.bindings.length; i++){
+        console.log("num res: "+response.data.results.bindings.length);
+        //for(var i=0; i<response.data.results.bindings.length; i++){
+        for(var i=0; i<30; i++){
           // La label della classe potrebbe non esserci, classLabel nella query è OPZIONALE
           // Alla fine si è scelto di non chiedere la label della classe nella query, 
           // ma si sceglie il rdf:type, e per la label si fa richiesta a prefix.cc
-
-          var uri = response.data.results.bindings[i].classUri.value;
           
-          $scope.classes.push({
-            uri: uri,
-            label: uri
-          });
-
-          //var label = $scope.convertUriToPrefix(uri);
-          
-          /*
-          var label;
-          var promise = ContactSPARQLendpoint.convertUriToPrefix(uri);
-          promise.then(function(response) {
-            label = $(response.data).find('h1').text();
-            $scope.classes.push({
-              uri: uri,
-              label: label
-            });
-          });*/
-
-          /*
-          if(response.data.results.bindings[i].classLabel != undefined){
-            label= response.data.results.bindings[i].classLabel.value
-          } else {  
-            label= response.data.results.bindings[i].classUri.value
+          var classUri = response.data.results.bindings[i].classUri.value;
+          var lastSlash = classUri.lastIndexOf('/');
+          var lastHash = classUri.lastIndexOf('#');
+          var name = ""; // nome classe
+          var label = ""; //prefix:name
+          var uriToFind = "";
+          if(lastHash>lastSlash){
+            name = classUri.substring(lastHash+1, classUri.length);
+            uriToFind = classUri.substring(0, lastHash+1);
+          }else{
+            name = classUri.substring(lastSlash+1, classUri.length);
+            uriToFind = classUri.substring(0, lastSlash+1);
           }
-          */
+          
+          // cerco uriToFind in $scope.prefixes
+          var found = false;
+          for(var k = 0; k < $rootScope.prefixes.length; k++) {
+              if ($rootScope.prefixes[k].url == uriToFind) {
+                  found = true;
+                  label = $rootScope.prefixes[k].prefix + ":" + name;
+                  $scope.classes.push({
+                    uri: classUri,
+                    label: label
+                  });
+                  break;
+              }
+          }
+          
+          // se non c'è, richiedo il prefisso
+          if(!found) {
+            $scope.convertUriToPrefixProxy(classUri, uriToFind, name);
+          }
         };
       });
     }
@@ -319,7 +333,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
             $rootScope.dataInfo.objPropClasse =  {
               uri: prop.uri,
               label : prop.label,
-              type : 'obj'}
+              type : 'obj'
+            }
           });
         });
       }

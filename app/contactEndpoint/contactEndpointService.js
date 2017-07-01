@@ -39,7 +39,7 @@ angular.module('contactEndpointModule', [])
           $(".success.message").addClass("hidden"); 
         });
     },
-
+    // non usato
     // uri to prefix
     // url: https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
     // redirect to: https://prefix.cc/foaf = http response location header
@@ -72,6 +72,7 @@ angular.module('contactEndpointModule', [])
         //url da cui è partita la richiesta http preso dagli header della request
         //console.log(config.url); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
     },
+    // usato
     // uri to prefix
     // url: https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
     // redirect to: https://prefix.cc/foaf = http response location header
@@ -86,13 +87,32 @@ angular.module('contactEndpointModule', [])
 
         //Inside then() callback you simply resolve or reject deferred promise. 
         //.then(successCallback, errorCallback)
-        $http.get("http://localhost:8080/api/label?label="+uri)
-        .then(function(response, status, headers, config) {
-          //resolving the deferred promise here
-          
-          deferred.resolve(response);
-        });
+        $http({
+          method: 'GET',
+          url: "http://localhost:8080/api/label?label="+uri
+        })
+        .then(function successCallback(response) { //response status code between 200 and 299
 
+          // this callback will be called asynchronously
+          // when the response is available
+
+          // resolve deferred promise
+          deferred.resolve(response.data);
+
+        }, function errorCallback(response) {
+
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+
+          // reject deferred promise
+          deferred.reject('Error occurred ..' + response.status);
+
+          if(response.status == -1){
+            console.log("Prefix api service unreachable.." + response.status + "..request was aborted");
+          } else {
+            console.log("Prefix api service unreachable.." + response.status + ".." + response.statusText);
+          }
+        })
         // The function must return the deferred.promise
         return deferred.promise;
 
@@ -104,6 +124,5 @@ angular.module('contactEndpointModule', [])
         //url da cui è partita la richiesta http preso dagli header della request
         //console.log(config.url); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
     }
-
   }
 }]);
