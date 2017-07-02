@@ -1,8 +1,8 @@
-﻿# `semaphore` — a web based tool for LOD visualization
+﻿# `semaphore` — a web based tool for LOD customizable visualization
 
 ## Getting Started
 
-To get you started you can simply clone the `semaphore` repository and install the dependencies:
+To get you started you can simply clone the `semaphore` repository and install the dependencies.
 
 ### Prerequisites
 

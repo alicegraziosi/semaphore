@@ -87,9 +87,13 @@ angular.module('contactEndpointModule', [])
 
         //Inside then() callback you simply resolve or reject deferred promise. 
         //.then(successCallback, errorCallback)
+
+        var prefixApiUrl = "http://eelst.cs.unibo.it:9292/";
+        //var prefixApiUrl = "http://localhost:8080/";
+        
         $http({
           method: 'GET',
-          url: "http://localhost:8080/api/label?label="+uri
+          url: prefixApiUrl+"api/label?label="+uri
         })
         .then(function successCallback(response) { //response status code between 200 and 299
 

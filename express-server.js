@@ -20,6 +20,8 @@ var http = require('follow-redirects').http;  // follow-redirects npm package
 var https = require('follow-redirects').https;
 var fs = require('fs');
 var path = require('path');
+var mkdirp = require('mkdirp');
+var getDirName = require('path').dirname;
 
 var port = process.env.NODE_PORT || 8080;  // set our port, 9092
 var host = process.env.NODE_HOST || '127.0.0.1';  // set our port, 130.136.131.42
@@ -96,17 +98,21 @@ router.get('/label', function(request, response) {
 	});
 });
 
+function writeFile(path, contents) {
+  mkdirp(getDirName(path), function (err) {
+    if (err) {
+    	return console.log(err);
+  	}
+
+    fs.writeFile(path, contents);
+  });
+}
+
 // Route that receives a POST request to /savetofile
 router.post('/savetofile', function(request, response) {
     filename = 'rdfGraphData.json';
     response.send(filename);
-	fs.writeFile('rdfGraphData.json', JSON.stringify(request.body), function (err, data) {
-	  if (err) {
-	    return console.log(err);
-	  }
-	});
-    
-
+    writeFile('files/rdfGraphData.json', JSON.stringify(request.body));
 });
 
 // Return the generated file for download

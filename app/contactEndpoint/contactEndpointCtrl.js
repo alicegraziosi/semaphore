@@ -71,32 +71,28 @@ contactEndpointModule.controller('contactEndpointCtrl',
     };
 
     $rootScope.prefixes = [];
-    $rootScope.prefixes.push({
-          'prefix' : 'dbo',
-          'url' : 'http://dbpedia.org/ontology/'
-        },
-        {
-          'prefix' : 'owl',
-          'url' : 'http://www.w3.org/2002/07/owl#'
-        });
+    $rootScope.prefixes.push(
+    {
+      'prefix' : 'dbo',
+      'url' : 'http://dbpedia.org/ontology/'
+    },
+    {
+      'prefix' : 'owl',
+      'url' : 'http://www.w3.org/2002/07/owl#'
+    });
 
     $scope.convertUriToPrefixProxy = function(classUri, uriToFind, name){  // uri="http://xmlns.com/foaf/0.1/"
       var promise = ContactSPARQLendpoint.convertUriToPrefixProxy(uriToFind);
       promise.then(function(data) {
-
         var prefix = Object.keys(data)[0];
         var url = Object.values(data)[0];
-
         var prefixUrl = {
           'prefix' : prefix,
           'url' : url
         };
-
-
         if (_.findWhere($rootScope.prefixes, prefixUrl) == null) {
             $rootScope.prefixes.push(prefixUrl);
         };
-
         $scope.classes.push({
             uri: classUri,
             label: prefix + ":" + name

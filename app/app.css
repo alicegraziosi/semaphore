@@ -105,16 +105,23 @@ div.pusher{
 }
 
 /* pagina about */
-.about, .about a, .about a:hover {
+.about{
   font-family: sans-serif;
+  color: darkgrey;
+}
+
+.about a, .about a:hover {
   color: grey;
 }
 
 footer{
-  bottom:0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 200px;
+  width: 100%;
+  overflow:hidden;
 }
-
-
 
 /* */
 .searchable-multi-select {
