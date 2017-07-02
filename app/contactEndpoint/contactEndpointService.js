@@ -88,7 +88,7 @@ angular.module('contactEndpointModule', [])
         //Inside then() callback you simply resolve or reject deferred promise. 
         //.then(successCallback, errorCallback)
 
-        var prefixApiUrl = "http://eelst.cs.unibo.it:9292/";
+        var prefixApiUrl = "http://eelst.cs.unibo.it:9092/";
         //var prefixApiUrl = "http://localhost:8080/";
         
         $http({
