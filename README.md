@@ -1,16 +1,16 @@
-﻿# `semaphore` — a web based tool for LOD customizable visualization
+﻿# `GIG` — a web based tool for LOD customizable visualization
 
 ## Getting Started
 
-To get you started you can simply clone the `semaphore` repository and install the dependencies.
+To get you started you can simply clone the `GIG` repository and install the dependencies.
 
 ### Prerequisites
 
-You need git to clone the `semaphore` repository. You can get git from [here](https://git-scm.com/).
+You need git to clone the `GIG` repository. You can get git from [here](https://git-scm.com/).
 
 You must also have Node.js and its package manager (npm) installed. You can get them from [here](https://nodejs.org/en/).
 
-### Clone `semaphore`
+### Clone `GIG`
 
 Use Git or checkout with SVN using the web URL https://github.com/alicegraziosi/semaphore.git to clone the repo with HTTPS.
 
@@ -49,7 +49,7 @@ Now browse to the app at [`localhost:8000/`](localhost:8000/).
 
 ### Running the App during Development
 
-The `semaphore` project comes preconfigured with a local development web server. It is a Node.js
+The `GIG` project comes preconfigured with a local development web server. It is a Node.js
 tool called [http-server](https://www.npmjs.com/package/http-server). You can start this web server with `npm start`, but you may
 choose to install `http-server` tool globally via npm:
 

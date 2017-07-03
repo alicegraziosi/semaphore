@@ -39,5 +39,5 @@ $http will not respect default setting for timeout set it in httpProvider
 ])
 
 .controller('myAppCtrl', function($rootScope){
-  $rootScope.appName = "project";
+  $rootScope.appName = "GIG";
 });

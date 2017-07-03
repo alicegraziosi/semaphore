@@ -109,7 +109,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
       promise.then(function(response) {
         console.log("num res: "+response.data.results.bindings.length);
         //for(var i=0; i<response.data.results.bindings.length; i++){
-        for(var i=0; i<30; i++){
+        for(var i=0; i<response.data.results.bindings.length; i++){
           // La label della classe potrebbe non esserci, classLabel nella query è OPZIONALE
           // Alla fine si è scelto di non chiedere la label della classe nella query, 
           // ma si sceglie il rdf:type, e per la label si fa richiesta a prefix.cc

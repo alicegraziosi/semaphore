@@ -28,17 +28,14 @@ myAppd3view.directive('d3Graphvisualization',
       },
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
-        d3Service.then(function(d3v4) {
-
-          var newD3 = d3v4;
-          
+        d3Service.then(function(d3) {
           // now you can use d3 as usual!
        
           var width = "900";
           var height = "500";
 
           /* svg */
-          var svg = newD3.select(elem[0]).append("svg")
+          var svg = d3.select(elem[0]).append("svg")
             .attr("height", "500")
             .attr("width", '100%');
 
@@ -47,7 +44,7 @@ myAppd3view.directive('d3Graphvisualization',
             .attr("width", '100%')
             .attr("fill", "rgb(251, 251, 251)")
             .attr("fill-opacity", "1")
-            .call(newD3.zoom()
+            .call(d3.zoom()
                     .scaleExtent([1/2, 4])
                     .on("zoom", zoomed));
 
@@ -55,16 +52,16 @@ myAppd3view.directive('d3Graphvisualization',
           var gzoom = svg.append("g");
 
           function zoomed() {
-            gzoom.attr("transform", newD3.event.transform);
+            gzoom.attr("transform", d3.event.transform);
           }
 
           function zoomFunction() {
-            var transform = newD3.zoomTransform(this);
-            newD3.select(elem[0])
+            var transform = d3.zoomTransform(this);
+            d3.select(elem[0])
             .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
           }
 
-          var color = newD3.scaleOrdinal(newD3.schemeCategory20);
+          var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 
           scope.$watch('datainfo', function (dataInfo) {
@@ -73,16 +70,14 @@ myAppd3view.directive('d3Graphvisualization',
             }
           }, true); // deep object dirty checking
 
-
-
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
 
                 clearAll();
                 update();
-                function update(){
 
+                function update(){
                   var links = [];
                   var nodes = [];
                   var radius = 16;
@@ -129,13 +124,13 @@ myAppd3view.directive('d3Graphvisualization',
                   });
 
                   /* directed force layout */
-                  var simulation = newD3.forceSimulation()
-                    .force("link", newD3.forceLink().id(function (d) { return d.id; }).distance(100)) // replace force.linkStrength
-                    .force("charge", newD3.forceManyBody()) // replace force.charge
-                    .force("center", newD3.forceCenter(width / 2, height / 2));
+                  var simulation = d3.forceSimulation()
+                    // replace force.linkStrength in d3v3
+                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100)) 
+                    // replace force.charge of d3v3
+                    .force("charge", d3.forceManyBody()) 
+                    .force("center", d3.forceCenter(width / 2, height / 2));
 
-                  //simulation.nodes(graph.nodes).on("tick", ticked);
-                  //simulation.force("link").links(graph.links);
                   simulation.nodes(nodes).on("tick", ticked);
                   simulation.force("link").links(links);
 
@@ -147,14 +142,14 @@ myAppd3view.directive('d3Graphvisualization',
                     .enter().append("line") //.enter().append("path")
                       .attr("id",function(d,i) { return "linkId_" + i; })
                       .on("mouseover", function(d){
-                        newD3.select(this).style('stroke-width', 1.2);
+                        d3.select(this).style('stroke-width', 1.2);
                         node.style('stroke', function(n) {
                           if (n === d.source || n === d.target)
                             return color(n.group);
                           });
                       })
                       .on("mouseout", function(d){
-                        newD3.select(this).style('stroke-width', 1);
+                        d3.select(this).style('stroke-width', 1);
                         node.style('stroke', function(n) {
                           if (n === d.source || n === d.target)
                             return '#ffffff';
@@ -179,19 +174,19 @@ myAppd3view.directive('d3Graphvisualization',
                         .attr("height", 8)  //if rect
                         .attr("r", function(d) { return d.radius; }) // i circle
                         .attr("fill", function(d) { return color(d.group); })
-                        .call(newD3.drag()
+                        .call(d3.drag()
                             .on("start", dragstarted)
                             .on("drag", dragged)
                             .on("end", dragended))
                         .on("mouseover", function(d){
-                          newD3.selectAll("circle").style("stroke", '#ffffff')
-                          newD3.select(this).style("stroke", color(d.group));
+                          d3.selectAll("circle").style("stroke", '#ffffff')
+                          d3.select(this).style("stroke", color(d.group));
                           scope.$apply(function () {
                             $parse(attrs.selectedItem).assign(scope.$parent, d);
                           });
                         })
                         .on("mouseout", function(d){
-                          newD3.selectAll("circle").style("stroke", '#ffffff')
+                          d3.selectAll("circle").style("stroke", '#ffffff')
                         })
                         .on('dblclick', connectedNodes);
 
@@ -213,19 +208,19 @@ myAppd3view.directive('d3Graphvisualization',
                       .attr("xlink:href", function (d) { return d.photoUrl; })
                       .attr("width", 12)
                       .attr("height", 12)
-                      .call(newD3.drag()
+                      .call(d3.drag()
                           .on("start", dragstarted)
                           .on("drag", dragged)
                           .on("end", dragended))
                       .on("mouseover", function(d){
-                        newD3.selectAll("circle").style("stroke", '#ffffff')
-                        newD3.select(this).style("stroke", color(d.group));
+                        d3.selectAll("circle").style("stroke", '#ffffff')
+                        d3.select(this).style("stroke", color(d.group));
                         scope.$apply(function () {
                           $parse(attrs.selectedItem).assign(scope.$parent, d);
                         });
                       })
                       .on("mouseout", function(d){
-                        newD3.selectAll("circle").style("stroke", '#ffffff')
+                        d3.selectAll("circle").style("stroke", '#ffffff')
                       });
 
                   /*rect e label */
@@ -258,7 +253,7 @@ myAppd3view.directive('d3Graphvisualization',
                     .append("title")
                       .text(function(d){return d.label;});
 
-                  /* frecce dei links - markers to indicate that this is a directed graph */
+                  /* frecce dei nodo link nodo - markers to indicate that this is a directed graph 
                   gzoom.append("defs")
                     .selectAll("marker")
                     .data(links) //.data(graph.links)
@@ -273,6 +268,7 @@ myAppd3view.directive('d3Graphvisualization',
                       .attr("fill", "#999")
                       .append("path") //shape of the arrow
                         .attr("d", "M0,-5L10,0L0,5");
+                  */
 
                 /* tooltip di nodi e link*/
                 node.append("title").text(function(d) { return d.id; });
@@ -287,33 +283,32 @@ myAppd3view.directive('d3Graphvisualization',
                       .attr("cy", function(d) { return d.y; }); // if circle
                   node.attr("x",  function(d) { return d.x - 30/2; })
                       .attr("y",  function(d) { return d.y - 5; }); // if rect
-                  label.attr("x", function(d){ return d.x - 15; })
-            			     .attr("y", function (d) {return d.y + 2; });
-                  image.attr("x", function(d){ return d.x + 3; })
-         			         .attr("y", function (d) {return d.y + 3;});
+                  label.attr("x", function(d) { return d.x - 15; })
+            			     .attr("y", function(d) { return d.y + 2; });
+                  image.attr("x", function(d) { return d.x + 3; })
+         			         .attr("y", function(d) { return d.y + 3;});
                   rect.attr("transform", function (d) {
                        return "translate(" + (d.source.x + d.target.x)/2 + ","
                                           + ((d.source.y + d.target.y)/2)+ ")"});
-
                 }
 
                 function dragstarted(d) {
                   // desired alpha (temperature) of the simulation: 1.5 in modo
                   // che non sia troppo lento . alpha puo' essere tra 0 e 1
-                  if (!newD3.event.active) simulation.alphaTarget(0.2).restart();
+                  if (!d3.event.active) simulation.alphaTarget(0.2).restart();
                   d.fx = d.x;
                   d.fy = d.y;
                 }
 
                 function dragged(d){
-                  d.fx = newD3.event.x;
-                  d.fy = newD3.event.y;
+                  d.fx = d3.event.x;
+                  d.fy = d3.event.y;
                 }
 
                 function dragended(d) {
                   // alla fine dell'interazione alpha a 0
                   // altrimenti il grafico continua a muoversi
-                  if (!newD3.event.active) simulation.alphaTarget(0);
+                  if (!d3.event.active) simulation.alphaTarget(0);
                   d.fx = null;
                   d.fy = null;
                 }
@@ -335,7 +330,7 @@ myAppd3view.directive('d3Graphvisualization',
                 function connectedNodes() {
                     if (toggle == 0) {
                         //Reduce the opacity of all but the neighbouring nodes
-                        var d = newD3.select(this).node().__data__;
+                        var d = d3.select(this).node().__data__;
                         node.style("opacity", function (o) {
                             return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
                         });
@@ -403,11 +398,11 @@ myAppd3view.directive('d3Graphvisualization',
               });
 
               function clearAll() {
-                newD3.selectAll(".links").remove();
-                newD3.selectAll(".nodes").remove();
-                newD3.selectAll(".label").remove();
-                newD3.selectAll(".image").remove();
-                newD3.selectAll(".rectLabel").remove();
+                d3.selectAll(".links").remove();
+                d3.selectAll(".nodes").remove();
+                d3.selectAll(".label").remove();
+                d3.selectAll(".image").remove();
+                d3.selectAll(".rectLabel").remove();
               }
             } // if(graph)
           }, true); // scope.$watch('graph', function (graph) { con  deep dirty checking

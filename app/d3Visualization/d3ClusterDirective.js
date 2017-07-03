@@ -2,8 +2,8 @@
 
 var myAppd3view = angular.module('myApp.d3view');
 
-myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window', '$parse', 'queryDatasetService',
-  function(d3ServiceVersion3, $window, $parse, queryDatasetService) {
+myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse', 'queryDatasetService',
+  function(d3Service, $window, $parse, queryDatasetService) {
     return{
 
       //restrict:'E' --> <d3-visualization></d3-visualization>
@@ -26,15 +26,14 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
       },        
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
-        d3ServiceVersion3.then(function(d3v3) {
-          var d3 = d3v3;
+        d3Service.then(function(d3) {
           // now you can use d3 as usual!
           // nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
         
-          var width = 1024,
-              height = 1000,
+          var width = 960,
+              height = 800,
               padding = 2, // separation between same-color nodes
-              clusterPadding = 150, // separation between different-color nodes
+              clusterPadding = 10, // separation between different-color nodes
               maxRadius = 20, //radius nodo cluster
               radius = 15;
 
@@ -70,7 +69,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 var m = unique.length; //10; // number of distinct clusters
                 var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
-                var color = d3.scale.category20().domain(d3.range(m)); // m colori
+                var color = d3.scaleOrdinal(d3.schemeCategory10)
+                  .domain(d3.range(m));
 
                 // The largest node for each cluster.
                 var clusters = new Array(m);  //Array di 10 elementi
@@ -137,8 +137,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 var m = unique.length; //10; // number of distinct clusters
                 var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
-                var color = d3.scale.category20().domain(d3.range(m)); // m colori
-
+                var color = d3.scaleOrdinal(d3.schemeCategory10)
+                    .domain(d3.range(m));
                 // The largest node for each cluster.
                 var clusters = new Array(m);  //Array di 10 elementi
 
@@ -211,14 +211,29 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                   return d;
                 });
 
+                /* directed force layout */
+                var force = d3.forceSimulation()
+                  .nodes(nodes)
+                  .force("center", d3.forceCenter(width / 2, height / 2))
+                  .force("collide", forceCollide)
+                  .force("cluster", forceCluster)
+                  .force("charge", d3.forceManyBody()) // replace force.charge
+                  .force("x", d3.forceX().strength(.01))
+                  .force("y", d3.forceY().strength(.01))
+                  .on("tick", tick);
 
-                var force = d3.layout.force()
-                    .nodes(nodes)
-                    .size([width, height])
-                    .gravity(.02)
-                    .charge(0)
-                    .on("tick", tick)
-                    .start();
+                function forceCluster2(alpha) {
+                  for (var i = 0, n = nodes.length, node, cluster, k = alpha * 1; i < n; ++i) {
+                    node = nodes[i];
+                    cluster = clusters[node.cluster];
+                    node.vx -= (node.x - cluster.x) * k;
+                    node.vy -= (node.y - cluster.y) * k;
+                  }
+                }
+
+                var forceCollide2 = d3.forceCollide()
+                    .radius(function(d) { return d.radius + 1.5; })
+                    .iterations(1);
 
                 var svg = d3.select(elem[0]).append("svg")
                     .attr("width", width)
@@ -266,7 +281,10 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                   .enter()
                   .append("circle")
                     .style("fill", function(d) { return color(d.cluster); })
-                    .call(force.drag);
+                    .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended))
 
                 node.append("title").text(function(d) { return d.value; });
                 /* label dei nodi */
@@ -286,30 +304,41 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                     });
 
                 function tick(e) {
-                  node.each(cluster(10 * e.alpha * e.alpha))
-                      .each(collide(.5))
-                      .attr("cx", function(d) { return d.x; })
+                  node.attr("cx", function(d) { return d.x; })
                       .attr("cy", function(d) { return d.y; });
                   label.attr("x", function(d) { return d.x; })
-                       .attr("y", function(d) {return d.y; });
+                       .attr("y", function(d) { return d.y; });
                   
-                  rect.attr("x", function(d){ return d.x - maxRadius - d.total*radius -d.total*padding; })
-                      .attr("y", function (d) {return d.y - maxRadius - d.total*radius -d.total*padding; });
-
-
-
-                  /*
-                  rectLabel.attr("x", function(d){ return d.x - maxRadius - d.total*radius - d.total*padding; })
-                           .attr("y", function (d) {return -15 + d.y - maxRadius - d.total*radius - d.total*padding; });
-                  */
+                  rect.attr("x", function(d) { return d.x - maxRadius - d.total*radius -d.total*padding; })
+                      .attr("y", function(d) { return d.y - maxRadius - d.total*radius -d.total*padding; });
                   rectLabel.attr("transform", function (d) {
                       return "translate(" + (d.x - maxRadius - d.total*radius - d.total*padding) + ","
                                          + (-15 + d.y - maxRadius - d.total*radius - d.total*padding)+ ")"});
+                }
 
+                function dragstarted(d) {
+                  // desired alpha (temperature) of the force: 1.5 in modo
+                  // che non sia troppo lento . alpha puo' essere tra 0 e 1
+                  if (!d3.event.active) force.alphaTarget(0.2).restart();
+                  d.fx = d.x;
+                  d.fy = d.y;
+                }
+
+                function dragged(d){
+                  d.fx = d3.event.x;
+                  d.fy = d3.event.y;
+                }
+
+                function dragended(d) {
+                  // alla fine dell'interazione alpha a 0
+                  // altrimenti il grafico continua a muoversi
+                  if (!d3.event.active) force.alphaTarget(0);
+                  d.fx = null;
+                  d.fy = null;
                 }
 
                 // Move d to be adjacent to the cluster node.
-                function cluster(alpha) {
+                function forceCluster(alpha) {
                   return function(d) {
                     var cluster = clusters[d.cluster];
                     if (cluster === d) return;
@@ -328,8 +357,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3ServiceVersion3', '$window',
                 }
 
                 // Resolves collisions between d and all other circles.
-                function collide(alpha) {
-                  var quadtree = d3.geom.quadtree(nodes);
+                function forceCollide(alpha) {
+                  var quadtree = d3.quadtree(nodes);
                   return function(d) {
                     var r = d.radius + maxRadius + Math.max(padding, clusterPadding),
                         nx1 = d.x - r,
