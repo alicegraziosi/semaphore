@@ -1,0 +1,27 @@
+[
+  {
+    "endpointUrl": "http://two.eelst.cs.unibo.it:8181/data/query",
+    "graphs": ["default"],
+    "endpointName": "Semantic Lancet"
+  },
+  {
+    "endpointUrl": "http://localhost:3030/semanticLancet/query",
+    "graphs": ["default"],
+    "endpointName": "Local Semantic Lancet"
+  },
+  {
+    "endpointUrl": "http://localhost:3030/spacin/query",
+    "graphs": ["default"],
+    "endpointName": "Local Springer"
+  },
+  {
+    "endpointUrl": "https://dbpedia.org/sparql",
+    "graphs": ["default", "https://dbpedia.org/"],
+    "endpointName": "DBpedia"
+  },
+  {
+    "endpointUrl": "http://localhost:8890/sparql",
+    "graphs": ["default"],
+    "endpointName": "Local DBpedia"
+  }
+]

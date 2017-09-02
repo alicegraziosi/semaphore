@@ -4,10 +4,14 @@
     attenzione!! se il controller è specificato nel config della route allora non bisogna
     scriverlo anche nel html altrimenti viene richiamato due volte!!
   -->
-  <div class="ui internally celled grid">
+  <div class="ui internally celled stackable grid">
     <div class="row" id="graph_box">
+
+    
       <div class="twelve wide column">
+
         <div ng-include="'d3Visualization/menuVisualization.html'"></div>
+
         <!-- d3-visualization = directive -->
         <d3-graphvisualization graph="graph"
                                selected-item="selected"
@@ -17,10 +21,8 @@
                                data-info="dataInfo">
         </d3-graphvisualization>
       </div>
+
       <div class="ui top aligned four wide column">
-        <button class="ui button" ng-click="exportJSON()">
-          <i class="download icon"></i>Export as JSON
-        </button>
 
         <div id="node_info">
           <p>Hover over node for node information<p>
@@ -31,48 +33,7 @@
           <img src="{{selected.photoUrl}}" style="width:300;height:300;">
         </div>
 
-        <div class="ui horizontal divider"></div>
-
-        <div id="data_info">
-          <p class="dataInfoLabel" ng-show="dataInfo.headClass.uri != ' '">Class<p>
-          <p>{{dataInfo.classe.uri}}</p>
-          <p>{{dataInfo.classe.label}}</p>
-
-          <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Literal Properties</p>
-          <div ng-model="dataInfo.litPropClasse" class="item"
-               ng-repeat="prop in dataInfo.litPropClasse">
-               <p>{{prop.label}}</p>
-               <p>{{prop.uri}}</p>
-          </div>
-          <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Properties</p>
-          <div ng-model="dataInfo.objPropClasse" class="item">
-               <p>{{objPropClasse.label}}</p>
-               <p>{{objPropClasse.uri}}</p>
-          </div>
-
-          <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Object Property Literal Properties</p>
-          <div ng-model="dataInfo.litPropObj" class="item"
-               ng-repeat="prop in dataInfo.litPropObj">
-               <p>{{prop.label}}</p>
-               <p>{{prop.uri}}</p>
-          </div>
-          <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Property Object Properties</p>
-          <div ng-model="dataInfo.objPropClasse" class="item">
-               <p>{{objPropObj.label}}</p>
-               <p>{{objPropObj.uri}}</p>
-          </div>
-        </div>
-
-        <div class="ui horizontal divider"></div>
-        <div>
-          <div class="ui list">
-            <div ng-repeat="prefixUrl in prefixes" class="item">
-              <div class="content">
-                <a class="header" href="{{prefixUrl.url}}" target="_blank">{{prefixUrl.prefix}}</a>
-                <div class="description">{{prefixUrl.url}}</div>
-              </div>
-            </div>
-          </div>
+        <div ng-include="'d3Visualization/infoDataAndEndpoint.html'"></div>
       </div>
     </div>
   </div>

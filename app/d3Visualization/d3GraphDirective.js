@@ -170,7 +170,7 @@ myAppd3view.directive('d3Graphvisualization',
                         {return document.createElementNS('http://www.w3.org/2000/svg', 'circle')}
                       if(d.shape=="rectangle")
                         {return document.createElementNS('http://www.w3.org/2000/svg', 'rect')}})
-                        .attr("width", 30) // if rect
+                        .attr("width", 50) // if rect
                         .attr("height", 8)  //if rect
                         .attr("r", function(d) { return d.radius; }) // i circle
                         .attr("fill", function(d) { return color(d.group); })
@@ -234,7 +234,7 @@ myAppd3view.directive('d3Graphvisualization',
                     .attr("id",function(d,i){return "linkId_" + i;})
                     .attr("x", "-8")
               	    .attr("y", "0")
-                    .attr("width", "20")
+                    .attr("width", "30")
               	    .attr("height", "5")
                     .attr("fill", "#9c6");
 
@@ -243,10 +243,11 @@ myAppd3view.directive('d3Graphvisualization',
                     .style("font-family", "Arial")
                     .style("font-size", 4)
                     .style("overflow", "hidden")
+                    .style("background-color", "#9c6")
                     .style("text-overflow", "ellipsis")
                     .style("white-space", "nowrap")
                     .attr("id",function(d,i){return "linkId_" + i;})
-                    .attr("fill", "#999")
+                    //.attr("fill", "#000")
                     .attr("x", "-7")
                     .attr("y", "+4")
                     .attr("text-anchor", "start")

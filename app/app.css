@@ -8,19 +8,23 @@ div.ui.top.fixed.menu{
 }
 
 /* logo */
-a.logo{
-  font-family: 'PT Sans', sans-serif;
+a.appName{
+  font-family: 'Kanit', sans-serif;
   font-weight: bold;
   font-size: 30px;
 }
 
-a.logo:hover {
+a.subtitle{
+  font-family: 'Kanit', sans-serif;
+  font-size: 18px;
+}
+
+a.appName:hover, a.subtitle:hover{
   color: rgba(0, 0, 0, 0.63);
 }
 
-.logo-icon{
-  margin-top: 12px;
-  margin-bottom: 12px;
+i.big.icon{
+  vertical-align: baseline;
 }
 
 /* colori icona e logo */
@@ -30,6 +34,10 @@ a.logo:hover {
 
 .darkRed{
   color: #b92b27;
+}
+
+.darkRedBorderTop {
+  border-top: 2px solid #b92b27 !important;
 }
 
 /* sidebar and pusher sotto al top menu */
@@ -82,7 +90,8 @@ div.pusher{
 
 /* info laterali nodo selezionato */
 #node_info p,
-#data_info p{
+#data_info p,
+#endpointInfo p{
   font-size: 12px;
   font-family: sans-serif;
   color: grey;
@@ -91,7 +100,8 @@ div.pusher{
   margin-bottom: 0px;
 }
 
-#data_info .dataInfoLabel{
+#data_info .dataInfoLabel,
+#endpointInfo .endpointInfoLabel{
   font-size: 12px;
   font-family: sans-serif;
   color: black;
@@ -158,11 +168,17 @@ span.limit-ellipsis {
   overflow: hidden;
 }
 
-
 .bottoni {
   padding: 1em 0em;
 }
 
-.messVisible{
-  display: none;
+/* per messaggi di ok e di errore */
+.hidden {
+  display: none !important;
+}
+
+#endpointInfo,
+#data_info,
+#prefixesBox {
+  word-break: break-all;
 }

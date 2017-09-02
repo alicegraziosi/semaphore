@@ -27,31 +27,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     });
 }])
 .controller('D3viewCtrl',
-  function($rootScope, $scope, $http, queryDatasetService, 
-    GetJSONfileService, $q, ContactSPARQLendpoint, d3ServiceVersion3, d3Service) {    
-    
-
-    var newD3;
-    d3ServiceVersion3.then(function(d3) {
-       console.log(d3);
-    }); // d3Service.then(function(d3) {
-    d3Service.then(function(d3v4) {
-      newD3 = d3v4;
-      console.log(d3v4);
-    }); // d3Service.then(function(d3) {
-      
-
-    /*
-    $http.get('../alicegraph.json').success(function (data) {
-      $scope.graph = data;
-      $scope.nodeLabels = [];
-      for (var i = 0; i < $scope.graph.nodes.length - 1; i++) {
-          $scope.nodeLabels.push($scope.graph.nodes[i].label);
-      }
-      $scope.nodeLabels = $scope.nodeLabels.sort();
-    });
-    */
-
+  function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
 
     // wait for all promises
     $q.all([

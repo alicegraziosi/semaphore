@@ -7,80 +7,50 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <meta name="keywords" content="semantic web technologies linked open dataset visualization">
+  <meta name="keywords" content="semantic web technologies linked open data LOD visualization">
   <meta name="description" content="semantic web technologies project">
   <meta name="author" content="Alice Graziosi">
 
   <!-- nome app web e icona -->
-  <title>{{appName}}</title>
+  <title>{{appName}} - {{subtitle}}</title>
   <link rel="shortcut icon" href="favicon.ico"/>
 
   <!-- Google font -->
-  <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet">
 
   <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-    crossorigin="anonymous"></script>
-
-  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!-- semantic-ui -->
   <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
   <script src="semantic/dist/semantic.min.js"></script>
-  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-  
-  <!-- d3v3 e d3v4
-
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="https://d3js.org/d3.v3.min.js"></script>
-  
-  -->
- 
   <!--
-  <script type="text/javascript">
-  
-    var script1 = document.createElement("script"),
-        script2 = document.createElement("script"),
-        newD3;
-
-    function noConflict() {
-        newD3 = d3;
-        console.log("loaded v4");
-        script2.type = 'text/javascript';
-        script2.src = "http://d3js.org/d3.v3.min.js";
-        script2.addEventListener("load", ready, false);
-        document.head.appendChild(script2);
-    }
-
-    function ready() {
-        console.log("loaded v3");
-        console.log(d3, newD3);
-    }
-
-    script1.type = 'text/javascript';
-    script1.src = "http://d3js.org/d3.v4.min.js";
-    script1.addEventListener("load", noConflict, false);
-    document.head.appendChild(script1);
-  </script>
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
   -->
-  
+
+  <!-- underscore.js -->
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
   <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
   <!-- Top Fixed Menu -->
-  <div class="ui top fixed menu" ng-app="myApp">
+  <div class="ui top fixed stackable menu" ng-app="myApp">
     <a class="item" id="left-sidebar-toggle">
       <i class="large content grey icon" style="margin: 0px;"></i>
     </a>
     <div class="ui container">
       <div style="margin-top: 10px; margin-left: 50px;" ng-controller="myAppCtrl">
         <i class="big darkRed share alternate icon"></i>
-        <a href="#" class="header darkGrey logo">{{appName}}</a>
+        <a href="#" class="header darkGrey appName">{{appName}}</a> - 
+        <a href="#" class="header darkGrey subtitle">{{subtitle}}</a>
       </div>
     </div>
     <a href="#!/about" class="item right" >
       about
+    </a>
+    <a href="#!/datasetsAndGraphs" class="item right" >
+      add Endpoint
     </a>
   </div>
 
@@ -92,6 +62,7 @@
         <i class="dropdown icon"></i>
         Select a SPARQL endpoint and a graph
       </div>
+
       <div class="active content" id="endpointandgraph">
 
         <div class="ui relaxed divided list">
@@ -100,11 +71,13 @@
             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
               <div class="default text">Select a SPARQL endpoint</div>
-              <div class="menu">
-                <div ng-model="endpointList" class="item"
-                     ng-click="selectEndpoint(endpoint)"
-                     ng-repeat="endpoint in endpointList">
-                     {{endpoint}}
+                  <div class="menu">
+                    <div ng-model="endpointList" class="item"
+                         ng-click="selectEndpoint(endpoint)"
+                         ng-repeat="endpoint in endpointList">
+                      <p>{{endpoint.name}}</p>
+                      <p>{{endpoint.url}}</p>
+                    </div>
                 </div>
               </div>
             </div>
@@ -125,20 +98,18 @@
             </div>
           </div>
 
-          <div ng-if="selectedEndpoint!='' && selectedGraph!=''" class="bottoni">
-          <button class="ui primary button" ng-click="contactSelectedEndpoint()">
-            Okay
-            <i class="icons">
-              <i class="database icon"></i>
-              <i class="corner search icon"></i>
-            </i>
-          </button>
-          <button class="ui button" ng-click="restoreToDefault()">
-            Discard
-          </button>
+          <div ng-if="selectedEndpointUrl!='' && selectedGraph!=''" class="bottoni">
+              <button class="ui primary button" ng-click="contactSelectedEndpoint()">
+                Okay
+                <i class="icons">
+                  <i class="database icon"></i>
+                  <i class="corner search icon"></i>
+                </i>
+              </button>
+              <button class="ui button" ng-click="restoreToDefault()">
+                Discard
+              </button>
           </div>
-        </div>
-
         
         <div class="ui hidden success message">
           <div class="header">
@@ -153,9 +124,8 @@
           </div>
           <p>Try again later or choose another one</p>
         </div>
-        
 
-      </div> <!-- chiude <div class="content active">-->
+      </div> <!-- chiude <div class="active content" id="endpointandgraph">-->
 
       <div class="title">
         <i class="dropdown icon"></i>
@@ -294,20 +264,10 @@
         </div>
 
       </div>
+
       <div class="title">
         <i class="dropdown icon"></i>
-        ABox or TBox
-      </div>
-      <div class="content">
-        <div class="ui buttons">
-          <button class="ui button">ABox</button>
-          <div class="or"></div>
-          <button class="ui button">TBox</button>
-        </div>
-      </div>
-      <div class="title">
-        <i class="dropdown icon"></i>
-        Select a JSON file
+        Select data from JSON file
       </div>
       <div class="content" ng-controller="JsonCtrl">
         <div class="ui fluid action input">
@@ -321,8 +281,8 @@
         </div>
       </div>
     </div>
-
   </div>
+
   <!-- Site content -->
   <div class="pusher">
       <!--
@@ -331,10 +291,26 @@
         <li><a href="#!/about">about</a></li>
         <li><a href="#!/graphvis">graphvis</a></li>
       </ul>-->
+    <div class="ui internally celled grid">
+      <div class="row">
+        <div class="twelve wide column">
+
+      <div class="ui secondary pointing compact menu">
+        <a href="#!/graph" class="item active">
+          Graph InfoViz
+        </a>
+        <a href="#!/cluster" class="item">
+          Cluster InfoViz
+        </a>
+      </div>
+        </div>
+      </div>
+    </div>
+
       <div ng-view></div>
       <!--
       <div ng-include="'d3Visualization/d3view.html'"></div>-->
-    </div>
+  </div>
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
@@ -349,6 +325,8 @@
       chiusura dei messaggi 'dismissable'
       sia success che negative
       */
+
+      $('.message').transition('fade');
 
       $('.message .close')
         .on('click', function() {
@@ -379,17 +357,21 @@
 
       $('.ui.accordion').accordion('refresh');
 
-      $('.ui.compact.menu')
-      .on('click', '.item', function() {
+      
+      //
+      $('.ui.secondary.pointing.menu')
+        .on('click', 'a', function() { if(!$(this).hasClass('dropdown browse')) {
           $(this)
-            .addClass('active')
-            .siblings('.item')
-            .removeClass('active');
+              .addClass('active')
+              .closest('.ui.secondary.pointing.menu')
+              .find('a')
+              .not($(this))
+              .removeClass('active');
+          }
       });
-
+      
 
     });
-
    
 
     /*
@@ -400,8 +382,10 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="app.js"></script>
+  <script src="menu.js"></script>
   <script src="view1/view1.js"></script>
   <script src="about/about.js"></script>
+  <script src="datasetsAndGraphs/datasetsAndGraphs.js"></script>
   <script src="version/version.js"></script>
   <script src="version/version-directive.js"></script>
   <script src="version/interpolate-filter.js"></script>

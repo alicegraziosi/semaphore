@@ -40,4 +40,5 @@ $http will not respect default setting for timeout set it in httpProvider
 
 .controller('myAppCtrl', function($rootScope){
   $rootScope.appName = "GIG";
+  $rootScope.subtitle = "generating interfaces for RDF graphs"
 });

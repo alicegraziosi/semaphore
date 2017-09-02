@@ -41,6 +41,13 @@ d3Module.provider('d3Service', function() {
       return deferred.promise;
     }];
 })
+
+/*
+
+No longer used.
+
+Service provider for d3 v.3
+*/
 .provider('d3ServiceVersion3', function() {
   function createScript($document, callback, success) {
     var scriptTag = $document.createElement('script');
@@ -65,3 +72,5 @@ d3Module.provider('d3Service', function() {
       return deferred.promise;
     }];
 });
+
+

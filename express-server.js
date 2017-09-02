@@ -24,7 +24,7 @@ var mkdirp = require('mkdirp');
 var getDirName = require('path').dirname;
 
 var port = process.env.NODE_PORT || 8080;  // set our port, 9092
-var host = process.env.NODE_HOST || '127.0.0.1';  // set our port, 130.136.131.42
+var host = process.env.NODE_HOST || '127.0.0.1';  // set our host, 130.136.131.42
 
 const cors = require('cors');
 const corsOptions = {

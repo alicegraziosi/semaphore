@@ -3,16 +3,33 @@
 var contactEndpointModule = angular.module('contactEndpointModule');
 
 contactEndpointModule.controller('contactEndpointCtrl',
-  function($scope, $rootScope, ContactSPARQLendpoint, queryDatasetService, GetJSONfileService) {
+  function($http, $scope, $rootScope, ContactSPARQLendpoint, queryDatasetService, GetJSONfileService) {
 
-    $scope.selectedEndpoint = "";
-    $scope.endpointList = ["http://dbpedia.org/sparql", 
-                           "http://localhost:3030/spacin/query", 
-                           "http://localhost:3030/semanticlancet/query",
-                           "http://two.eelst.cs.unibo.it:8181/data/query"]
+    $scope.datasetsAndGraphs = []; // dati dal file datasetsAndGraphs.json
+    $scope.endpointList = [];
+    $scope.graphList = [];
+    $rootScope.selectedEndpointUrl = "https://dbpedia.org/sparql";
+    $rootScope.selectedEndpointName = "DBpedia";
+    $rootScope.selectedGraph = "default";
 
-    $scope.selectedGraph = "";
-    $scope.graphList = ["http://dbpedia.org", "default"];
+    // clear selected graph and endpoint
+    $scope.restoreToDefault = function(){
+      $('#endpointandgraph .ui.dropdown').dropdown('restore placeholder text');
+        $rootScope.selectedEndpointUrl = "";
+        $rootScope.selectedEndpointName = "";
+        $rootScope.selectedGraph = "";
+
+        $('.message').transition('fade');
+    };
+
+    $scope.restoreToDefault();
+
+    $http.get('../datasetsAndGraphs.json').then(function (response) {
+      $scope.datasetsAndGraphs = response.data;
+      $scope.datasetsAndGraphs.forEach(function(endpoint){
+        $scope.endpointList.push({'url': endpoint.endpointUrl, 'name': endpoint.endpointName});
+      });
+    });
 
     $scope.classes = [];
     $scope.selectedClass = {};
@@ -22,8 +39,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     $scope.classDatatypeProperties = [];
     $scope.selectedClassDatatypeProperties = [];
-
-    var obj = [];
 
     $scope.objObjectProperties = [];
     $scope.selectedObjObjectProperties = [];
@@ -39,33 +54,30 @@ contactEndpointModule.controller('contactEndpointCtrl',
     };
 
     $scope.selectEndpoint = function (endpoint) {
-       $scope.selectedEndpoint = endpoint;
+        $rootScope.selectedEndpointUrl = endpoint.url;
+        $rootScope.selectedEndpointName = endpoint.name;
+
+      $scope.datasetsAndGraphs.forEach(function(endpoint){
+        if(endpoint.endpointUrl === $rootScope.selectedEndpointUrl){
+          $scope.graphList = endpoint.graphs;
+        }
+      });
     };
 
     $scope.selectGraph = function (graph) {
-       $scope.selectedGraph = graph;
-    };
-
-    // clear selected graph and endpoint
-    $scope.restoreToDefault = function(){
-      $('#endpointandgraph .ui.dropdown').dropdown('restore placeholder text');
-      $scope.selectedEndpoint = "";
-      $scope.selectedGraph = "";
-      
-      $(".success.message").addClass("hidden");
-      $(".negative.message").addClass("hidden");
+       $rootScope.selectedGraph = graph;
     };
 
     // ask for endpoint
     $scope.contactSelectedEndpoint = function () {
       $(".success.message").addClass("hidden");
       $(".negative.message").addClass("hidden");
-      ContactSPARQLendpoint.contactSelectedEndpoint($scope.selectedEndpoint, $scope.selectedGraph)
+      ContactSPARQLendpoint.contactSelectedEndpoint($rootScope.selectedEndpointUrl, $rootScope.selectedGraph)
         .success(function(data, status, headers, config){
-          $scope.contacted = $scope.selectedEndpoint + " reached";
+          $scope.contacted = $rootScope.selectedEndpointUrl + " reached";
         })
         .error(function(data, status, headers, config){
-          $scope.contacted = $scope.selectedEndpoint + " unreachable";
+          $scope.contacted = $rootScope.selectedEndpointUrl + " unreachable";
         });
       $scope.queryDatasetClass();
     };
@@ -105,9 +117,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // classi del dataset
     $scope.queryDatasetClass = function(){
-      var promise = queryDatasetService.queryDatasetClass($scope.selectedEndpoint, $scope.selectedGraph);
+      var promise = queryDatasetService.queryDatasetClass($rootScope.selectedEndpointUrl, $rootScope.selectedGraph);
       promise.then(function(response) {
-        console.log("num res: "+response.data.results.bindings.length);
         //for(var i=0; i<response.data.results.bindings.length; i++){
         for(var i=0; i<response.data.results.bindings.length; i++){
           // La label della classe potrebbe non esserci, classLabel nella query è OPZIONALE
@@ -152,7 +163,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // object properties della classe selezionata
     $scope.queryDatasetClassObjectProperty = function(){
-      var promise = queryDatasetService.queryDatasetClassObjectProperty($scope.selectedEndpoint, $scope.selectedGraph, $scope.selectedClass.uri);
+      var promise = queryDatasetService.queryDatasetClassObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri);
       promise.then(function(response) {
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.classObjectProperties.push({
@@ -165,7 +176,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // datatype (=literal) properties della classe selezionata
     $scope.queryDatasetClassDatatypeProperty = function(){
-      var promise = queryDatasetService.queryDatasetClassDatatypeProperty($scope.selectedEndpoint, $scope.selectedGraph, $scope.selectedClass.uri);
+      var promise = queryDatasetService.queryDatasetClassDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri);
       promise.then(function(response) {
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.classDatatypeProperties.push({
@@ -179,7 +190,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     // object properties della object properties della classe selezionata 
     /*
     $scope.queryDatasetObjDatatypeProperty = function(objClass){
-      var promise = queryDatasetService.queryDatasetClassDatatypeProperty($scope.selectedEndpoint, $scope.selectedGraph, objClass);
+      var promise = queryDatasetService.queryDatasetClassDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, objClass);
       promise.then(function(response) {
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.objDatatypeProperties.push({
@@ -194,7 +205,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     // datatype properties della object properties della classe selezionata
     /*
     $scope.queryDatasetObjObjectProperty = function(objClass){
-      var promise = queryDatasetService.queryDatasetClassObjectProperty($scope.selectedEndpoint, $scope.selectedGraph, objClass);
+      var promise = queryDatasetService.queryDatasetClassObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, objClass);
       promise.then(function(response) {
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.objObjectProperties.push({
@@ -208,7 +219,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // datatype properties della object properties della classe selezionata
     $scope.queryDatasetValuesObjDatatypeProperty = function(obj){
-      var promise = queryDatasetService.queryDatasetValuesObjDatatypeProperty($scope.selectedEndpoint, $scope.selectedGraph, obj);
+      var promise = queryDatasetService.queryDatasetValuesObjDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, obj);
       promise.then(function(response) {
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.objDatatypeProperties.push({
@@ -221,7 +232,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // object properties della object properties della classe selezionata
     $scope.queryDatasetValuesObjObjectProperty = function(obj){
-      var promise = queryDatasetService.queryDatasetValuesObjObjectProperty($scope.selectedEndpoint, $scope.selectedGraph, obj);
+      var promise = queryDatasetService.queryDatasetValuesObjObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, obj);
       promise.then(function(response) {
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.objObjectProperties.push({
@@ -278,7 +289,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
         var index = $scope.selectedClassObjectProperties.indexOf(index);
         $scope.selectedClassObjectProperties.splice(index, 1);
       });
-      console.log($scope.selectedClassObjectProperties);
     }
 
     $scope.queryEndpointClassProperties = function(){
@@ -292,7 +302,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
   
       if($scope.selectedClassDatatypeProperties.length != 0){
 
-        var promise = queryDatasetService.queryEndpointForLiteral($scope.selectedEndpoint, $scope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassDatatypeProperties);
+        var promise = queryDatasetService.queryEndpointForLiteral($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassDatatypeProperties);
         promise.then(function(response) {
           // nodi, literalNode e linkstoliterals della classe scelta
           var graph = GetJSONfileService.createNodeLiteral(response.data.results.bindings, "soggPropUri0");
@@ -306,7 +316,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
    
       if($scope.selectedClassObjectProperties.length != 0){
-        var promise = queryDatasetService.queryEndpointForObject($scope.selectedEndpoint, $scope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassObjectProperties);
+        var promise = queryDatasetService.queryEndpointForObject($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassObjectProperties);
         promise.then(function(response) {
 
           response.data.results.bindings.forEach(function(ob){
@@ -341,8 +351,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
       //$rootScope.$digest(); // $apply è già in corso, quindi non si può usare $digest
       if($scope.selectedObjDatatypeProperties.length != 0){
 
-        var promise = queryDatasetService.queryEndpointForObjLiteralVAL($scope.selectedEndpoint,
-                                                                  $scope.selectedGraph,
+        var promise = queryDatasetService.queryEndpointForObjLiteralVAL($rootScope.selectedEndpointUrl,
+                                                                  $rootScope.selectedGraph,
                                                                   $scope.selectedClassObjectProperties[0].uri,
                                                                   $scope.selectedObjDatatypeProperties, obj);
         promise.then(function(response) {
@@ -359,8 +369,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
       };
 
       if($scope.selectedObjObjectProperties.length != 0){
-        var promise = queryDatasetService.queryEndpointForObjObjectVAL($scope.selectedEndpoint,
-                                                                 $scope.selectedGraph,
+        var promise = queryDatasetService.queryEndpointForObjObjectVAL($rootScope.selectedEndpointUrl,
+                                                                 $rootScope.selectedGraph,
                                                                  $scope.selectedClassObjectProperties[0].uri,
                                                                  $scope.selectedObjObjectProperties, obj);
         promise.then(function(response) {

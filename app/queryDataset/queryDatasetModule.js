@@ -25,38 +25,8 @@ angular.module('queryDatasetModule', [])
         var endpoint = "http://dbpedia.org/sparql";
         var query = `SELECT DISTINCT * WHERE{
         { ?sogg a dbo:Band;
-          rdfs:label ?soggLabel;
-          rdfs:label "The Beatles"@en;
-              ?p ?oo.
-              dbo:Band rdfs:label ?soggType.
-         ?p rdfs:label ?pLabel;
-            rdfs:label "former band member"@en.
-            ?oo rdfs:label ?ooLabel;
-                dbp:yearsActive ?ooPropUri0;
-                dbo:birthPlace ?ooPropUri1.
-                dbp:yearsActive rdfs:label ?ooPropType0.
-          ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
-          <http://dbpedia.org/property/genre> rdfs:label ?propType.
-            OPTIONAL{
-            ?soggPropUri0 rdfs:label ?soggPropLabel0.
-            FILTER(lang(?soggPropLabel0) = "en")
-            }
-         ?ooPropUri1 rdfs:label ?ooPropLabel1.
-         dbp:yearsActive rdfs:label ?ooPropLabel0.
-         OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
-         OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
-        FILTER (lang(?soggLabel) = "en")
-        FILTER (lang(?pLabel) = "en")
-        FILTER (lang(?ooLabel) = "en")
-        FILTER (lang(?ooPropLabel1) = "en")
-        FILTER (lang(?ooPropLabel0) = "en")
-
-        FILTER (lang(?soggType) = "en")
-        FILTER (lang(?ooPropType0) = "en")
-        } UNION {
-          ?sogg a dbo:Band;
                 rdfs:label ?soggLabel;
-                rdfs:label "Paul McCartney and Wings"@en;
+                rdfs:label "U2"@en;
                 ?p ?oo.
                 dbo:Band rdfs:label ?soggType.
            ?p rdfs:label ?pLabel;
@@ -65,7 +35,36 @@ angular.module('queryDatasetModule', [])
                 dbp:yearsActive ?ooPropUri0;
                 dbo:birthPlace ?ooPropUri1.
                 dbp:yearsActive rdfs:label ?ooPropType0.
-                ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
+                ?sogg dbo:genre ?soggPropUri0.
+                <http://dbpedia.org/property/genre> rdfs:label ?propType.
+                OPTIONAL{
+                ?soggPropUri0 rdfs:label ?soggPropLabel0.
+                FILTER(lang(?soggPropLabel0) = "en")
+                }
+           ?ooPropUri1 rdfs:label ?ooPropLabel1.
+           dbp:yearsActive rdfs:label ?ooPropLabel0.
+           OPTIONAL{?sogg <http://dbpedia.org/ontology/thumbnail> ?photoSogg}
+           OPTIONAL{?oo <http://dbpedia.org/ontology/thumbnail> ?photoOO}
+           FILTER (lang(?soggLabel) = "en")
+           FILTER (lang(?pLabel) = "en")
+           FILTER (lang(?ooLabel) = "en")
+          FILTER (lang(?ooPropLabel1) = "en")
+          FILTER (lang(?ooPropLabel0) = "en")
+          FILTER (lang(?ooPropType0) = "en")
+          FILTER (lang(?soggType) = "en")
+        } UNION {
+          ?sogg a dbo:Band;
+                rdfs:label ?soggLabel;
+                rdfs:label "Pink Floyd"@en;
+                ?p ?oo.
+                dbo:Band rdfs:label ?soggType.
+           ?p rdfs:label ?pLabel;
+              rdfs:label "former band member"@en.
+              ?oo rdfs:label ?ooLabel;
+                dbp:yearsActive ?ooPropUri0;
+                dbo:birthPlace ?ooPropUri1.
+                dbp:yearsActive rdfs:label ?ooPropType0.
+                ?sogg dbo:genre ?soggPropUri0.
                 <http://dbpedia.org/property/genre> rdfs:label ?propType.
                 OPTIONAL{
                 ?soggPropUri0 rdfs:label ?soggPropLabel0.
@@ -89,12 +88,12 @@ angular.module('queryDatasetModule', [])
                 ?p ?oo.
                 dbo:Band rdfs:label ?soggType.
            ?p rdfs:label ?pLabel;
-              rdfs:label "band member"@en.
+              rdfs:label "former band member"@en.
               ?oo rdfs:label ?ooLabel;
                 dbp:yearsActive ?ooPropUri0;
                 dbo:birthPlace ?ooPropUri1.
                 dbp:yearsActive rdfs:label ?ooPropType0.
-                ?sogg <http://dbpedia.org/property/genre> ?soggPropUri0.
+                ?sogg dbo:genre ?soggPropUri0.
                 <http://dbpedia.org/property/genre> rdfs:label ?propType.
                 OPTIONAL{
                 ?soggPropUri0 rdfs:label ?soggPropLabel0.
@@ -107,11 +106,10 @@ angular.module('queryDatasetModule', [])
            FILTER (lang(?soggLabel) = "en")
            FILTER (lang(?pLabel) = "en")
            FILTER (lang(?ooLabel) = "en")
-            FILTER (lang(?ooPropLabel1) = "en")
-            FILTER (lang(?ooPropLabel0) = "en")
-            FILTER (lang(?ooPropType0) = "en")
-
-            FILTER (lang(?soggType) = "en")
+          FILTER (lang(?ooPropLabel1) = "en")
+          FILTER (lang(?ooPropLabel0) = "en")
+          FILTER (lang(?ooPropType0) = "en")
+          FILTER (lang(?soggType) = "en")
         }
         } limit 1000`;
 
@@ -135,7 +133,7 @@ angular.module('queryDatasetModule', [])
                 ?sogg a dbo:Band;
                   rdfs:label ?soggLabel;
                   rdfs:label "The Beatles"@en;
-                  <http://dbpedia.org/property/genre> ?soggPropUri0.
+                  dbo:genre ?soggPropUri0.
         dbo:Band rdfs:label ?soggType.
          <http://dbpedia.org/property/genre> rdfs:label ?propType.
                  OPTIONAL{ ?soggPropUri0 rdfs:label ?soggPropLabel0.
@@ -149,8 +147,8 @@ angular.module('queryDatasetModule', [])
          ?sogg a dbo:Band;
                   rdfs:label ?soggLabel;
                   rdfs:label "Foo Fighters"@en;
-                  <http://dbpedia.org/property/genre> ?soggPropUri0.
-                   <http://dbpedia.org/property/genre> rdfs:label ?propType.
+                  dbo:genre ?soggPropUri0.
+                  <http://dbpedia.org/property/genre> rdfs:label ?propType.
         dbo:Band rdfs:label ?soggType.
                  OPTIONAL{ ?soggPropUri0 rdfs:label ?soggPropLabel0.
                   FILTER(lang(?soggPropLabel0) = "en")}
@@ -165,8 +163,8 @@ angular.module('queryDatasetModule', [])
 
          ?sogg a dbo:Band;
                   rdfs:label ?soggLabel;
-                  rdfs:label "Paul McCartney and Wings"@en;
-                  <http://dbpedia.org/property/genre> ?soggPropUri0.
+                  rdfs:label "Pink Floyd"@en;
+                  dbo:genre ?soggPropUri0.
         dbo:Band rdfs:label ?soggType.
          <http://dbpedia.org/property/genre> rdfs:label ?propType.
                  OPTIONAL{ ?soggPropUri0 rdfs:label ?soggPropLabel0.
@@ -181,8 +179,8 @@ angular.module('queryDatasetModule', [])
 
          ?sogg a dbo:Band;
                   rdfs:label ?soggLabel;
-                  rdfs:label "Paul McCartney and Wings"@en;
-                  <http://dbpedia.org/property/genre> ?soggPropUri0.
+                  rdfs:label "U2"@en;
+                  dbo:genre ?soggPropUri0.
         dbo:Band rdfs:label ?soggType.
          <http://dbpedia.org/property/genre> rdfs:label ?propType.
                  OPTIONAL{ ?soggPropUri0 rdfs:label ?soggPropLabel0.
@@ -230,6 +228,13 @@ angular.module('queryDatasetModule', [])
       // NEW query
       // non si chiedono le owl:class ma gli rdf:type
       
+      /*
+      SELECT DISTINCT ?classUri {
+        ?classe a ?classUri.
+      } LIMIT 1500
+
+      */
+
       var query = 'SELECT DISTINCT ?classUri ';
       if(graph != "default"){
         query += ' FROM <' + graph + '> ';
@@ -240,7 +245,7 @@ angular.module('queryDatasetModule', [])
       
       //Va bene sia per dbpedia che per semanticLancet
 
-
+      console.log(query);
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);

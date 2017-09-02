@@ -1,0 +1,63 @@
+<div class="ui darkRedBorderTop segment">
+    <div class="ui blue right ribbon label">Current endpoint</div>
+
+    <div id="endpointInfo" class="ui list">
+        <div class="item" ng-if='selectedEndpointName!=""'>
+            <div class="endpointInfoLabel">Dataset Name</div>
+            <p>{{selectedEndpointName}}</p>
+        </div>
+        <div class="item">
+            <div class="endpointInfoLabel">Dataset Url</div>
+            <p>{{selectedEndpointUrl}}</p>
+        </div>
+        <div class="item" ng-if='selectedGraph!=""'>
+            <div class="endpointInfoLabel">Graph</div>
+            <p>{{selectedGraph}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="ui darkRedBorderTop segment">
+    <div class="ui blue right ribbon label">Current data</div>
+    <div id="data_info">
+        <p class="dataInfoLabel">Class<p>
+        <p>{{dataInfo.classe.uri}}</p>
+        <p>{{dataInfo.classe.label}}</p>
+
+        <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Literal Properties</p>
+        <div ng-model="dataInfo.litPropClasse" class="item"
+             ng-repeat="prop in dataInfo.litPropClasse">
+            <p>{{prop.label}}</p>
+            <p>{{prop.uri}}</p>
+        </div>
+        <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Properties</p>
+        <div ng-model="dataInfo.objPropClasse" class="item">
+            <p>{{objPropClasse.label}}</p>
+            <p>{{objPropClasse.uri}}</p>
+        </div>
+
+        <p class="dataInfoLabel" ng-show="dataInfo.litPropHeadClass.length != 0">Class Object Property Literal Properties</p>
+        <div ng-model="dataInfo.litPropObj" class="item"
+             ng-repeat="prop in dataInfo.litPropObj">
+            <p>{{prop.label}}</p>
+            <p>{{prop.uri}}</p>
+        </div>
+        <p class="dataInfoLabel" ng-show="dataInfo.objPropHeadClass.length != 0">Class Object Property Object Properties</p>
+        <div ng-model="dataInfo.objPropClasse" class="item">
+            <p>{{objPropObj.label}}</p>
+            <p>{{objPropObj.uri}}</p>
+        </div>
+    </div>
+</div>
+
+<div id="prefixesBox" class="ui darkRedBorderTop segment">
+    <div class="ui blue right ribbon label">Prefixes</div>
+    <div class="ui list">
+        <div ng-repeat="prefixUrl in prefixes" class="item">
+            <div class="content">
+                <a class="header" href="{{prefixUrl.url}}" target="_blank">{{prefixUrl.prefix}}</a>
+                <div class="description">{{prefixUrl.url}}</div>
+            </div>
+        </div>
+    </div>
+</div>
