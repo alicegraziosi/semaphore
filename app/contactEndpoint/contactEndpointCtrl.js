@@ -54,8 +54,9 @@ contactEndpointModule.controller('contactEndpointCtrl',
     };
 
     $scope.selectEndpoint = function (endpoint) {
-        $rootScope.selectedEndpointUrl = endpoint.url;
-        $rootScope.selectedEndpointName = endpoint.name;
+      $rootScope.selectedEndpointUrl = endpoint.url;
+      $rootScope.selectedEndpointName = endpoint.name;
+      $rootScope.selectedGraph = "";
 
       $scope.datasetsAndGraphs.forEach(function(endpoint){
         if(endpoint.endpointUrl === $rootScope.selectedEndpointUrl){

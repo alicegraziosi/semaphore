@@ -29,6 +29,11 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
 
+    $rootScope.selectedEndpointUrl = "https://dbpedia.org/sparql";
+    $rootScope.selectedEndpointName = "DBpedia";
+    $rootScope.selectedGraph = "default";
+
+
     // wait for all promises
     $q.all([
       queryDatasetService.queryDataset(),
