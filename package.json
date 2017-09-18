@@ -22,6 +22,8 @@
     "postupdate-deps": "bower update",
     "prestart": "npm install",
     "start": "http-server -a localhost -p 8000 -c-1 ./app",
+    "start-dev": "http-server -a localhost -p 8000 -c-1 ./app",
+    "start-prod": "http-server http://eelst.cs.unibo.it -p 8092 --silent ./app",
     "pretest": "npm install",
     "test": "karma start karma.conf.js",
     "test-single-run": "karma start karma.conf.js --single-run",
@@ -38,10 +40,10 @@
     "http-proxy": "^1.16.2",
     "ng2-semantic-ui": "^0.4.7",
     "semantic-ui": "^2.2.13",
-    "body-parser":"^1.17.2",
+    "body-parser": "^1.17.2",
     "follow-redirects": "^1.2.4",
     "path": "^0.12.7",
     "cors": "^2.8.3",
-    "mkdirp":"^0.5.1"
+    "mkdirp": "^0.5.1"
   }
 }

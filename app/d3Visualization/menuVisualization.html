@@ -1,6 +1,4 @@
-
-  <div class="ui compact menu">
-
+<div class="ui small vertical menu">
     <div class="ui floating search selection dropdown item">
       <div class="text" ng-click="dropdown();">Search nodes...</div>
       <i class="dropdown icon" ng-click="dropdown();"></i>
@@ -12,12 +10,17 @@
     </div>
 
     <div class="item">
-      <button class="ui button" ng-click="exportJSON()">
+      <div class="ui button" ng-click="exportJSON()">
         <i class="download icon"></i>Export data as JSON
-      </button>
+      </div>
     </div>
 
-  </div>
+    <div class="item">
+      <div class="ui button" ng-click="exportPNG()">
+        <i class="download icon"></i>Export InfoViz as PNG
+      </div>
+    </div>
+</div>
 
 
 <!--

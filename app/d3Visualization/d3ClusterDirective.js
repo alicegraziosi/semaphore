@@ -244,6 +244,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     //.call(d3.behavior.zoom().on("zoom", function () {
                                       //  svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
                                     //}))
+                               $scope.svg = svg;
 
 
                               /*un rettangolo contenitore per ogni nodo cluster*/

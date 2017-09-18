@@ -2,7 +2,7 @@
 
 var myAppd3view = angular.module('myApp.d3view');
 
-myAppd3view.directive('d3Graphvisualization', 
+myAppd3view.directive('d3Graphvisualization',
   ['d3Service', '$window', '$parse', 'queryDatasetService', '$rootScope', 'ContactSPARQLendpoint',
   function(d3Service, $window, $parse, queryDatasetService, $rootScope, ContactSPARQLendpoint) {
     return{
@@ -16,21 +16,21 @@ myAppd3view.directive('d3Graphvisualization',
 
       //The @ symbol tells angular that this is a one-way bound value
       //The = symbol tells angular that this is a two-way bound value
-      
+
       scope: {
           graph: "=",
           model: "=",
           selectedNodeLabel: "=",  // nella view: selected-node-label
           objectShape: "=",  // nella view: object-shape
           datatypeShape: "=",  // nella view: datatype-shape
-          datainfo: "="
+          dataInfo: "="
 
       },
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3) {
           // now you can use d3 as usual!
-       
+
           var width = "900";
           var height = "500";
 
@@ -64,9 +64,12 @@ myAppd3view.directive('d3Graphvisualization',
           var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 
-          scope.$watch('datainfo', function (dataInfo) {
+          scope.$watch('dataInfo', function (dataInfo) {
             if(dataInfo){
               console.log("changed datainfo" + dataInfo);
+
+                    dataInfo.classe.color = '2';
+
             }
           }, true); // deep object dirty checking
 
@@ -110,7 +113,9 @@ myAppd3view.directive('d3Graphvisualization',
                       shape: "circle",
                       radius: radius
                     });
+
                   });
+
 
                   graph.nodeLiteral.forEach(function(n) {
                     nodes.push({
@@ -123,12 +128,13 @@ myAppd3view.directive('d3Graphvisualization',
                     });
                   });
 
+
                   /* directed force layout */
                   var simulation = d3.forceSimulation()
                     // replace force.linkStrength in d3v3
-                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100)) 
+                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100))
                     // replace force.charge of d3v3
-                    .force("charge", d3.forceManyBody()) 
+                    .force("charge", d3.forceManyBody())
                     .force("center", d3.forceCenter(width / 2, height / 2));
 
                   simulation.nodes(nodes).on("tick", ticked);
@@ -172,8 +178,10 @@ myAppd3view.directive('d3Graphvisualization',
                         {return document.createElementNS('http://www.w3.org/2000/svg', 'rect')}})
                         .attr("width", 50) // if rect
                         .attr("height", 8)  //if rect
-                        .attr("r", function(d) { return d.radius; }) // i circle
-                        .attr("fill", function(d) { return color(d.group); })
+                        .attr("r", function(d) { return d.radius; }) // if circle
+                        .attr("fill", function(d) {
+                          console.log(d.group);console.log(color(d.group));
+                          return color(d.group); })
                         .call(d3.drag()
                             .on("start", dragstarted)
                             .on("drag", dragged)
@@ -254,7 +262,7 @@ myAppd3view.directive('d3Graphvisualization',
                     .append("title")
                       .text(function(d){return d.label;});
 
-                  /* frecce dei nodo link nodo - markers to indicate that this is a directed graph 
+                  /* frecce dei nodo link nodo - markers to indicate that this is a directed graph
                   gzoom.append("defs")
                     .selectAll("marker")
                     .data(links) //.data(graph.links)

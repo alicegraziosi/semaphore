@@ -42,6 +42,7 @@ i.big.icon{
 
 /* sidebar and pusher sotto al top menu */
 div.ui.left.sidebar.vertical.menu,
+div.ui.right.sidebar.vertical.menu,
 div.pusher{
   top: 49px;
 }
@@ -88,30 +89,11 @@ div.pusher{
   fill: #999;
 }
 
-/* info laterali nodo selezionato */
+
 #node_info p,
 #data_info p,
 #endpointInfo p{
-  font-size: 12px;
-  font-family: sans-serif;
-  color: grey;
-  opacity: 0.9;
-  word-break: break-all;
   margin-bottom: 0px;
-}
-
-#data_info .dataInfoLabel,
-#endpointInfo .endpointInfoLabel{
-  font-size: 12px;
-  font-family: sans-serif;
-  color: black;
-}
-
-#node_info a{
-  font-size: 12px;
-  font-family: sans-serif;
-  color: grey;
-  word-break: break-all;
 }
 
 /* pagina about */

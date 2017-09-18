@@ -4,13 +4,12 @@
     attenzione!! se il controller è specificato nel config della route allora non bisogna
     scriverlo anche nel html altrimenti viene richiamato due volte!!
   -->
-  <div class="ui internally celled stackable grid">
+  <div class="ui stackable grid">
     <div class="row" id="graph_box">
+      <div ng-include="'d3Visualization/menuVisualization.html'"></div>
 
-    
-      <div class="twelve wide column">
+      <div class="ui twelve wide column">
 
-        <div ng-include="'d3Visualization/menuVisualization.html'"></div>
 
         <!-- d3-visualization = directive -->
         <d3-graphvisualization graph="graph"
@@ -22,18 +21,21 @@
         </d3-graphvisualization>
       </div>
 
-      <div class="ui top aligned four wide column">
 
-        <div id="node_info">
-          <p>Hover over node for node information<p>
-            <a ng-href="{{selected.id}}" target=”_blank”>{{selected.id}}
-              <i ng-show="selected != ' '" class="external link icon"></i>
-            </a>
-          <p>{{selected.label}}</p>
-          <img src="{{selected.photoUrl}}" style="width:300;height:300;">
+        <div class="ui top aligned four wide column">
+
+          <div id="node_info">
+            <p>Hover over node for node information<p>
+              <a ng-href="{{selected.id}}" target=”_blank”>{{selected.id}}
+                <i ng-show="selected != ' '" class="external link icon"></i>
+              </a>
+            <p>{{selected.label}}</p>
+            <img src="{{selected.photoUrl}}" style="width:300;height:300;">
+          </div>
+
+          <div ng-include="'d3Visualization/infoDataAndEndpoint.html'"></div>
         </div>
 
-        <div ng-include="'d3Visualization/infoDataAndEndpoint.html'"></div>
       </div>
     </div>
   </div>

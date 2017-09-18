@@ -12,6 +12,13 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $rootScope.selectedEndpointName = "DBpedia";
     $rootScope.selectedGraph = "default";
 
+    $rootScope.successMessageToAppear = false;
+    $rootScope.negativeMessageToAppear = false;
+
+    $scope.dismissMessage = function(){
+      $('.message').transition('fade');
+    };
+
     // clear selected graph and endpoint
     $scope.restoreToDefault = function(){
       $('#endpointandgraph .ui.dropdown').dropdown('restore placeholder text');
@@ -19,7 +26,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
         $rootScope.selectedEndpointName = "";
         $rootScope.selectedGraph = "";
 
-        $('.message').transition('fade');
+        $rootScope.successMessageToAppear = false;
+        $rootScope.negativeMessageToAppear = false;
     };
 
     $scope.restoreToDefault();
@@ -54,6 +62,10 @@ contactEndpointModule.controller('contactEndpointCtrl',
     };
 
     $scope.selectEndpoint = function (endpoint) {
+
+      $rootScope.successMessageToAppear = false;
+      $rootScope.negativeMessageToAppear = false;
+
       $rootScope.selectedEndpointUrl = endpoint.url;
       $rootScope.selectedEndpointName = endpoint.name;
       $rootScope.selectedGraph = "";
@@ -71,14 +83,16 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // ask for endpoint
     $scope.contactSelectedEndpoint = function () {
-      $(".success.message").addClass("hidden");
-      $(".negative.message").addClass("hidden");
       ContactSPARQLendpoint.contactSelectedEndpoint($rootScope.selectedEndpointUrl, $rootScope.selectedGraph)
         .success(function(data, status, headers, config){
           $scope.contacted = $rootScope.selectedEndpointUrl + " reached";
+
+              $rootScope.successMessageToAppear = true;
         })
         .error(function(data, status, headers, config){
           $scope.contacted = $rootScope.selectedEndpointUrl + " unreachable";
+
+              $rootScope.negativeMessageToAppear = true;
         });
       $scope.queryDatasetClass();
     };
@@ -123,9 +137,9 @@ contactEndpointModule.controller('contactEndpointCtrl',
         //for(var i=0; i<response.data.results.bindings.length; i++){
         for(var i=0; i<response.data.results.bindings.length; i++){
           // La label della classe potrebbe non esserci, classLabel nella query è OPZIONALE
-          // Alla fine si è scelto di non chiedere la label della classe nella query, 
+          // Alla fine si è scelto di non chiedere la label della classe nella query,
           // ma si sceglie il rdf:type, e per la label si fa richiesta a prefix.cc
-          
+
           var classUri = response.data.results.bindings[i].classUri.value;
           var lastSlash = classUri.lastIndexOf('/');
           var lastHash = classUri.lastIndexOf('#');
@@ -139,7 +153,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
             name = classUri.substring(lastSlash+1, classUri.length);
             uriToFind = classUri.substring(0, lastSlash+1);
           }
-          
+
           // cerco uriToFind in $scope.prefixes
           var found = false;
           for(var k = 0; k < $rootScope.prefixes.length; k++) {
@@ -153,7 +167,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
                   break;
               }
           }
-          
+
           // se non c'è, richiedo il prefisso
           if(!found) {
             $scope.convertUriToPrefixProxy(classUri, uriToFind, name);
@@ -188,7 +202,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
       });
     }
 
-    // object properties della object properties della classe selezionata 
+    // object properties della object properties della classe selezionata
     /*
     $scope.queryDatasetObjDatatypeProperty = function(objClass){
       var promise = queryDatasetService.queryDatasetClassDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, objClass);
@@ -244,7 +258,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
       });
     }
 
-    // 
+    //
     $scope.selectClass = function(selectedClass){
       //nuova classe corrente
       $scope.selectedClass = selectedClass;
@@ -300,7 +314,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
       }
       $scope.dataInfo.litPropClasse = [];
       $scope.dataInfo.objPropClasse = {};
-  
+
       if($scope.selectedClassDatatypeProperties.length != 0){
 
         var promise = queryDatasetService.queryEndpointForLiteral($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassDatatypeProperties);
@@ -315,7 +329,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
         });
       };
 
-   
+
       if($scope.selectedClassObjectProperties.length != 0){
         var promise = queryDatasetService.queryEndpointForObject($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassObjectProperties);
         promise.then(function(response) {
@@ -348,7 +362,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     }
 
     $scope.queryEndpoint = function(){
-      
+
       //$rootScope.$digest(); // $apply è già in corso, quindi non si può usare $digest
       if($scope.selectedObjDatatypeProperties.length != 0){
 

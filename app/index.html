@@ -34,28 +34,17 @@
   <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
-  <!-- Top Fixed Menu -->
-  <div class="ui top fixed stackable menu" ng-app="myApp">
-    <a class="item" id="left-sidebar-toggle">
-      <i class="large content grey icon" style="margin: 0px;"></i>
-    </a>
-    <div class="ui container">
-      <div style="margin-top: 10px; margin-left: 50px;" ng-controller="myAppCtrl">
-        <i class="big darkRed share alternate icon"></i>
-        <a href="#" class="header darkGrey appName">{{appName}}</a> - 
-        <a href="#" class="header darkGrey subtitle">{{subtitle}}</a>
-      </div>
-    </div>
-    <a href="#!/about" class="item right" >
-      about
-    </a>
-    <a href="#!/datasetsAndGraphs" class="item right" >
-      add Endpoint
+
+
+  <!-- Rigth Sidebar -->
+  <div class="ui right sidebar overlay vertical menu">
+    <a class="item">
+      Item 1
     </a>
   </div>
 
   <!-- Left Sidebar -->
-  <div class="ui wide left sidebar vertical menu">
+  <div class="ui wide left overlay sidebar vertical menu">
     <!-- Accordion -->
     <div class="ui styled fluid accordion" ng-controller="contactEndpointCtrl">
       <div class="title">
@@ -98,7 +87,7 @@
             </div>
           </div>
 
-          <div ng-if="selectedEndpointUrl!='' && selectedGraph!=''" class="bottoni">
+          <div class="bottoni">
               <button class="ui primary button" ng-click="contactSelectedEndpoint()">
                 Okay
                 <i class="icons">
@@ -110,19 +99,21 @@
                 Discard
               </button>
           </div>
-        
-        <div class="ui hidden success message">
+
+        <div ng-if="successMessageToAppear" class="ui tiny success message">
+          <i class="close icon"></i>
           <div class="header">
             SPARQL endpoint succesfully reached!
           </div>
-          <p>You may now start query the dataset</p>
+          <p>You may now query the dataset.</p>
         </div>
 
-        <div class="ui negative hidden message">
+        <div ng-if="negativeMessageToAppear" class="ui tiny negative message">
+          <i ng-click="dismissMessage" class="close icon"></i>
           <div class="header">
             SPARQL endpoint unreachable :(
           </div>
-          <p>Try again later or choose another one</p>
+          <p>Retry later or choose another one.</p>
         </div>
 
       </div> <!-- chiude <div class="active content" id="endpointandgraph">-->
@@ -174,8 +165,8 @@
             </div>
           </div>
         </div>
-        
-        
+
+
         <div ng-show="classObjectProperties.length!=0" class="ui divider"></div>
         <h5 ng-show="classObjectProperties.length!=0">Select class object properties</h5>
         <div ng-show="classObjectProperties.length!=0" class="ui menu">
@@ -209,7 +200,7 @@
             Clear
           </button>
         </div>
-        
+
           <h5 ng-model="selectedClassObjectProperties"
               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
               Datatype property of {{selectedClassObjectProperty.label}}
@@ -244,7 +235,7 @@
                   ng-repeat="prop in objObjectProperties | limitTo:totalDisplayed">
                   {{prop.label}}
               </div>
-              <div ng-show="objObjectProperties.length>totalDisplayed" 
+              <div ng-show="objObjectProperties.length>totalDisplayed"
                   class="ui center aligned segment">
                 <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
               </div>
@@ -283,6 +274,33 @@
     </div>
   </div>
 
+  <!-- Top Fixed Menu -->
+  <div class="ui top fixed stackable menu" ng-app="myApp">
+    <a class="item" id="left-sidebar-toggle">
+      <i class="large content grey icon" style="margin: 0px;"></i>
+    </a>
+    <div class="ui container">
+      <div style="margin-top: 10px; margin-left: 50px;" ng-controller="myAppCtrl">
+        <i class="big darkRed share alternate icon"></i>
+        <a href="#" class="header darkGrey appName">{{appName}}</a> -
+        <a href="#" class="header darkGrey subtitle">{{subtitle}}</a>
+      </div>
+    </div>
+
+    <a href="#!/datasetsAndGraphs" class="item right" >
+      add Endpoint
+    </a>
+
+    <a href="#!/about" class="item right" >
+      about
+    </a>
+
+    <div class="item right" id="toggleRightSidebar">
+      <i class="ellipsis vertical medium icon"></i>
+    </div>
+
+  </div>
+
   <!-- Site content -->
   <div class="pusher">
       <!--
@@ -291,21 +309,22 @@
         <li><a href="#!/about">about</a></li>
         <li><a href="#!/graphvis">graphvis</a></li>
       </ul>-->
-    <div class="ui internally celled grid">
-      <div class="row">
-        <div class="twelve wide column">
 
-      <div class="ui secondary pointing compact menu">
-        <a href="#!/graph" class="item active">
-          Graph InfoViz
-        </a>
-        <a href="#!/cluster" class="item">
-          Cluster InfoViz
-        </a>
-      </div>
+      <div ng-if="showSection" class="ui internally celled grid">
+        <div class="row">
+          <div class="twelve wide column">
+
+        <div class="ui secondary pointing compact menu">
+          <a href="#!/graph" class="item active">
+            Graph InfoViz
+          </a>
+          <a href="#!/cluster" class="item">
+            Cluster InfoViz
+          </a>
+        </div>
+          </div>
         </div>
       </div>
-    </div>
 
       <div ng-view></div>
       <!--
@@ -320,21 +339,6 @@
 
   <script type="text/javascript">
     $(document).ready(function() {
-
-      /*
-      chiusura dei messaggi 'dismissable'
-      sia success che negative
-      */
-
-      $('.message').transition('fade');
-
-      $('.message .close')
-        .on('click', function() {
-          $(this)
-            .closest('.message')
-            .transition('fade')
-          ;
-        });
 
       $('.accordion')
         .accordion({
@@ -351,14 +355,17 @@
         closable: false
       });
 
-      $('.ui.left.sidebar').sidebar('attach events', '#left-sidebar-toggle');
+      $('.ui.right.sidebar').sidebar({
+        dimPage: false,
+        transition: 'push',
+        exclusive: false,
+        closable: false
+      });
 
       $('.ui.dropdown').dropdown();
 
       $('.ui.accordion').accordion('refresh');
 
-      
-      //
       $('.ui.secondary.pointing.menu')
         .on('click', 'a', function() { if(!$(this).hasClass('dropdown browse')) {
           $(this)
@@ -369,13 +376,15 @@
               .removeClass('active');
           }
       });
-      
 
+      // 	Attaches sidebar action to given selector. Default event if none specified is toggle
+      $('.ui.left.sidebar').sidebar('attach events', '#left-sidebar-toggle', 'toggle');
+      $('.ui.right.sidebar').sidebar('attach events', '#toggleRightSidebar', 'toggle');
     });
-   
+
 
     /*
-    The <script src=...> blocks the browser while 
+    The <script src=...> blocks the browser while
     document.createElement('script') loads the JavaScript asynchronously
     */
   </script>
@@ -400,5 +409,8 @@
   <script src="jsonFile/getJSONfileModule.js"></script>
   <script src="queryDataset/queryDatasetModule.js"></script>
   <script src="queryDataset/queryDatasetCtrl.js"></script>
+  <!-- export a svg d3 visualisation to png  -->
+  <script src="https://cdn.rawgit.com/eligrey/canvas-toBlob.js/f1a01896135ab378aa5c0118eadd81da55e698d8/canvas-toBlob.js"></script>
+	<script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
 </body>
 </html>

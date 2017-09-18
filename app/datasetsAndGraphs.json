@@ -23,5 +23,10 @@
     "endpointUrl": "http://localhost:8890/sparql",
     "graphs": ["default"],
     "endpointName": "Local DBpedia"
+  },
+  {
+    "endpointUrl": "http://dati.senato.it/sparql",
+    "graphs": ["default"],
+    "endpointName": "dati.senato.it"
   }
 ]

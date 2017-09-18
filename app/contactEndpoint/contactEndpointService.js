@@ -30,13 +30,9 @@ angular.module('contactEndpointModule', [])
 				})
 				.success(function(data, status, headers, config){
 					console.log("Selected endpoint " + selectedEndpoint + " succesfully reached!!!");
-          $(".success.message").removeClass("hidden");
-          $(".negative.message").addClass("hidden");    
         })
 				.error(function(data, status, headers, config){
 					console.log("Selected endpoint " + selectedEndpoint + " unreachable :(");
-          $(".negative.message").removeClass("hidden");
-          $(".success.message").addClass("hidden"); 
         });
     },
     // non usato
@@ -50,14 +46,14 @@ angular.module('contactEndpointModule', [])
         var deferred = $q.defer();
         //Do not return  here
         //you need to return the deferred.promise
-          
 
-        //Inside then() callback you simply resolve or reject deferred promise. 
+
+        //Inside then() callback you simply resolve or reject deferred promise.
         //.then(successCallback, errorCallback)
         $http.get("https://prefix.cc/?q="+uri)
         .then(function(response, status, headers, config) {
           //resolving the deferred promise here
-          
+
           deferred.resolve(response);
         });
 
@@ -68,7 +64,7 @@ angular.module('contactEndpointModule', [])
         //url da cui è partita la richiesta http preso dagli headers della response
         //non funziona in caso di redirect, in caso di redirect restituisce comunque l'url iniziale
         //console.log(headers.location); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
-          
+
         //url da cui è partita la richiesta http preso dagli header della request
         //console.log(config.url); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
     },
@@ -83,14 +79,14 @@ angular.module('contactEndpointModule', [])
         var deferred = $q.defer();
         //Do not return  here
         //you need to return the deferred.promise
-          
 
-        //Inside then() callback you simply resolve or reject deferred promise. 
+
+        //Inside then() callback you simply resolve or reject deferred promise.
         //.then(successCallback, errorCallback)
 
         var prefixApiUrl = "http://eelst.cs.unibo.it:9092/";
         //var prefixApiUrl = "http://localhost:8080/";
-        
+
         $http({
           method: 'GET',
           url: prefixApiUrl+"api/label?label="+uri
@@ -124,7 +120,7 @@ angular.module('contactEndpointModule', [])
         //url da cui è partita la richiesta http preso dagli headers della response
         //non funziona in caso di redirect, in caso di redirect restituisce comunque l'url iniziale
         //console.log(headers.location); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
-          
+
         //url da cui è partita la richiesta http preso dagli header della request
         //console.log(config.url); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
     }
