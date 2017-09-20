@@ -180,7 +180,7 @@ myAppd3view.directive('d3Graphvisualization',
                         .attr("height", 8)  //if rect
                         .attr("r", function(d) { return d.radius; }) // if circle
                         .attr("fill", function(d) {
-                          console.log(d.group);console.log(color(d.group));
+                          //console.log(d.group);console.log(color(d.group));
                           return color(d.group); })
                         .call(d3.drag()
                             .on("start", dragstarted)

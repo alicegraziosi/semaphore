@@ -15,6 +15,14 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $rootScope.successMessageToAppear = false;
     $rootScope.negativeMessageToAppear = false;
 
+    // numeri per label info da cui si può selezionare
+    $rootScope.numClasses = 0;
+    $rootScope.numClassObjectProperties = 0;
+    $rootScope.numClassDatatypeProperties = 0;
+    $rootScope.numObjObjectProperties = 0;
+    $rootScope.numObjDatatypeProperties = 0;
+
+
     $scope.dismissMessage = function(){
       $('.message').transition('fade');
     };
@@ -134,6 +142,9 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.queryDatasetClass = function(){
       var promise = queryDatasetService.queryDatasetClass($rootScope.selectedEndpointUrl, $rootScope.selectedGraph);
       promise.then(function(response) {
+
+        $rootScope.numClasses = response.data.results.bindings.length;
+
         //for(var i=0; i<response.data.results.bindings.length; i++){
         for(var i=0; i<response.data.results.bindings.length; i++){
           // La label della classe potrebbe non esserci, classLabel nella query è OPZIONALE
@@ -180,6 +191,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.queryDatasetClassObjectProperty = function(){
       var promise = queryDatasetService.queryDatasetClassObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri);
       promise.then(function(response) {
+        $rootScope.numClassObjectProperties = response.data.results.bindings.length;
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.classObjectProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
@@ -193,6 +205,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.queryDatasetClassDatatypeProperty = function(){
       var promise = queryDatasetService.queryDatasetClassDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri);
       promise.then(function(response) {
+        $rootScope.numClassDatatypeProperties = response.data.results.bindings.length;
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.classDatatypeProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
@@ -236,6 +249,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.queryDatasetValuesObjDatatypeProperty = function(obj){
       var promise = queryDatasetService.queryDatasetValuesObjDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, obj);
       promise.then(function(response) {
+        $rootScope.numObjDatatypeProperties = response.data.results.bindings.length;
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.objDatatypeProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
@@ -248,6 +262,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     // object properties della object properties della classe selezionata
     $scope.queryDatasetValuesObjObjectProperty = function(obj){
       var promise = queryDatasetService.queryDatasetValuesObjObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, obj);
+      $rootScope.numObjObjectProperties = response.data.results.bindings.length;
       promise.then(function(response) {
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.objObjectProperties.push({
@@ -263,6 +278,14 @@ contactEndpointModule.controller('contactEndpointCtrl',
       //nuova classe corrente
       $scope.selectedClass = selectedClass;
 
+      $rootScope.dataInfoTemporaneo = {};
+      $rootScope.dataInfoTemporaneo.classe = {
+        uri : $scope.selectedClass.uri,
+        label : $scope.selectedClass.label,
+        type : "obj",
+        color : '1'
+      }
+
       //eliminate le proprietà della classe precedente
       $scope.classObjectProperties.splice(0, $scope.classObjectProperties.length);
       $scope.classDatatypeProperties.splice(0, $scope.classDatatypeProperties.length);
@@ -271,7 +294,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.selectedClassObjectProperties.splice(0, $scope.selectedClassObjectProperties.length);
       $scope.selectedClassDatatypeProperties.splice(0, $scope.selectedClassDatatypeProperties.length);
 
-      $('.ui.label.transition.visible').remove();
+      //$('.ui.label.transition.visible').remove();
 
       //ricerca delle proprietà della nuova classe corrente
       $scope.queryDatasetClassObjectProperty();
@@ -311,6 +334,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $rootScope.dataInfo.classe = {
         uri : $scope.selectedClass.uri,
         label : $scope.selectedClass.label,
+        type : "obj",
+        color : '1'
       }
       $scope.dataInfo.litPropClasse = [];
       $scope.dataInfo.objPropClasse = {};

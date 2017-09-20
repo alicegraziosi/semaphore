@@ -55,7 +55,7 @@
       <div class="active content" id="endpointandgraph">
 
         <div class="ui relaxed divided list">
-          <h5>Select a SPARQL endpoint</h5>
+          <h5 class="ui header">Select a SPARQL endpoint</h5>
           <div class="ui menu">
             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
@@ -72,7 +72,7 @@
             </div>
           </div>
 
-          <h5>Select a graph for the selected SPARQL endpoint</h5>
+          <h5>Select a graph for the selected SPARQL endpoint   </h5>
           <div class="ui menu">
             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
@@ -124,7 +124,8 @@
       </div>
       <div class="content active" id="datasetInfoRichieste">
 
-        <h5 ng-show="classes.length!=0">1) Select a Class</h5>
+        <h5 ng-show="classes.length!=0">1) Select a Class <div class="ui tiny label">classes.length</div> </h5>
+
         <div ng-show="classes.length!=0" class="ui menu">
           <div class="ui fluid search selection dropdown" ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
@@ -309,19 +310,26 @@
         <li><a href="#!/about">about</a></li>
         <li><a href="#!/graphvis">graphvis</a></li>
       </ul>-->
+      <div class="ui sixteen column centered grid" id="menuSwitch">
+        <div ng-if="showSection" class="ui grid" id="menuSwitch">
+          <div class="row">
+            <!--
+            <div class="three wide column">
+              <div class="ui buttons">
+                <button class="mini compact ui button"><i class="mini share alternate icon"></i>Graph InfoViz</button>
+                <div class="or" data-text="or"></div>
+                <button class="mini compact ui button"><i class="mini block layout icon"></i>Clusters InfoViz</button>
+              </div>
+            -->
 
-      <div ng-if="showSection" class="ui internally celled grid">
-        <div class="row">
-          <div class="twelve wide column">
-
-        <div class="ui secondary pointing compact menu">
-          <a href="#!/graph" class="item active">
-            Graph InfoViz
-          </a>
-          <a href="#!/cluster" class="item">
-            Cluster InfoViz
-          </a>
-        </div>
+            <div class="ui secondary pointing compact menu">
+              <a href="#!/graph" class="item active">
+                Graph InfoViz
+              </a>
+              <a href="#!/cluster" class="item">
+                Cluster InfoViz
+              </a>
+            </div>
           </div>
         </div>
       </div>

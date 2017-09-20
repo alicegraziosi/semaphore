@@ -219,15 +219,15 @@ angular.module('queryDatasetModule', [])
         query += ' FROM <' + graph + '> ';
       }
       query += `{ ?classUri a owl:Class;
-                      rdfs:label ?classLabel 
+                      rdfs:label ?classLabel
                       FILTER (lang(?classLabel) = "en")
                     } LIMIT 10000`;
       */
- 
-    
+
+
       // NEW query
       // non si chiedono le owl:class ma gli rdf:type
-      
+
       /*
       SELECT DISTINCT ?classUri {
         ?classe a ?classUri.
@@ -241,11 +241,12 @@ angular.module('queryDatasetModule', [])
       }
       query += `{
         ?classe a ?classUri.
-      } LIMIT 1500`;
-      
+      } LIMIT 300`;
+
       //Va bene sia per dbpedia che per semanticLancet
 
-      console.log(query);
+      console.log("Quert classi: " + query);
+
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
@@ -406,7 +407,7 @@ angular.module('queryDatasetModule', [])
                           'rdfs:label ?soggLabel; ' +
                           '?p ?oo. ?p rdfs:label ?pLabel. ' +
                     '?oo rdfs:label ?ooLabel. ' +
-                    '<' + selectedClass + '> rdfs:label ?soggType. '+ 
+                    '<' + selectedClass + '> rdfs:label ?soggType. '+
                     'FILTER(lang(?soggLabel) = "en") ' +
                     'FILTER(lang(?pLabel) = "en") ' +
                     'FILTER(lang(?ooLabel) = "en") ' +

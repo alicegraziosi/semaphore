@@ -4,13 +4,17 @@
     attenzione!! se il controller è specificato nel config della route allora non bisogna
     scriverlo anche nel html altrimenti viene richiamato due volte!!
   -->
-  <div class="ui stackable grid">
+  <div class="ui stackable divided grid">
+
     <div class="row" id="graph_box">
-      <div ng-include="'d3Visualization/menuVisualization.html'"></div>
 
-      <div class="ui twelve wide column">
+      <div class="ui three wide column">
+        <div ng-include="'d3Visualization/menuVisualization.html'"></div>
+      </div>
 
 
+      <!--  Semantic's default theme uses 16 columns.-->
+      <div class="ui ten wide column">
         <!-- d3-visualization = directive -->
         <d3-graphvisualization graph="graph"
                                selected-item="selected"
@@ -22,7 +26,7 @@
       </div>
 
 
-        <div class="ui top aligned four wide column">
+        <div class="ui top aligned three wide column">
 
           <div id="node_info">
             <p>Hover over node for node information<p>

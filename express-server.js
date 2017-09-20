@@ -23,16 +23,20 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var getDirName = require('path').dirname;
 
-var port = process.env.NODE_PORT || 8080;  // set our port, su eelst: 9092
-var host = process.env.NODE_HOST || '127.0.0.1';  // set our host, 130.136.131.42
+var port = process.env.NODE_PORT  || 8080;  // set our port, locale: 8080;  su eelst: 9092
+var host = process.env.NODE_HOST || '127.0.0.1';  // set our host, locale: 127.0.0.1; su eelst: 130.136.131.42
 
+
+// CORS is a node.js package for providing a Connect/Express middleware that
+// can be used to enable CORS with various options.
 const cors = require('cors');
+
+// forse non serve
 const corsOptions = {
   origin: 'http://localhost:8000',
 }
 
-app.use(cors(corsOptions));
-
+app.use(cors());
 
 // ROUTES FOR OUR API
 var router = express.Router();  // get an instance of the express Router
@@ -132,7 +136,7 @@ router.get("/download", function (req, res) {
 
 // in realtà è già host:port/api
 router.get('/', function(request, response) {
-  response.send('it works! \n  try: /api/label?label=http://xmlns.com/foaf/0.1/');
+  response.send('It works! \n\n\n try URL: /api/label?label=http://xmlns.com/foaf/0.1/');
 });
 
 
@@ -148,12 +152,29 @@ app.use('/api', router);
 app.use('/public', express.static('/public'));
 app.use(express.static('/public'));
 
+// su linux
+// NODE_ENV=production
+// node express-server.js
+if(process.env.NODE_ENV === 'production') {
+  app.set('port', 9092);
+  app.set('host', "130.136.131.42");
+}
+
+// su windows
+// set NODE_ENV=development
+// node express-server.js
+if(process.env.NODE_ENV === 'development') {
+  app.set('port', 8080);
+  app.set('host', "127.0.0.1");
+}
+
+
 
 // START THE SERVER
 // =============================================================================
 
 var server = app.listen(port, host);
-console.log('Express.js server listening on: '+host+":"+port+"/api");
+console.log('Express.js server for prefix proxy service listening on: '+host+":"+port+"/api");
 
 
 /*

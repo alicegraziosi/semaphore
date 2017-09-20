@@ -1,0 +1,32 @@
+PuTTY Configuration
+
+Host Name: eelst.cs.unibo.it
+IP address: 130.136.131.42
+Port: 22
+Connection type: SSH
+Login as: graziosi
+graziosi@eelst.cs.unibo.it's password: ---
+Directory spazio web: /var/www/graziosi/
+Directory  BEX: cd /var/www/graziosi/
+Directory  GIG: cd /var/www/graziosi/garrproject/semaphore
+
+Per fare deploy dell'applicazione:
+da Directory  GIG
+nohup http-server -a 130.136.131.42 -p 8092 -s
+
+
+Per lanciare il prefix service in locale (su windows):
+set NODE_ENV=development
+node express-server.js
+
+
+Per lanciare il prefix service su eelst (su linux):
+nohup NODE_PORT=9092 NODE_HOST=130.136.131.42 node express-server.js
+
+oppure 
+
+NODE_ENV=pruduction
+nohup node express-server.js
+
+
+

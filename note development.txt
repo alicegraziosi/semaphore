@@ -1,0 +1,72 @@
+ACCOUNT GITHUB
+
+https://github.com/
+
+alice.graziosi@gmail.com
+
+Pass: ---
+
+
+
+ACCOUNT NPMJS
+
+https://www.npmjs.com
+
+alice.graziosi@studio.unibo.it
+
+Pass: ---
+
+
+
+Clone or download the repository
+
+git clone https://github.com/alicegraziosi/semaphore.git
+
+
+Prerequisites
+
+Ma prima:
+1) download GIT
+https://git-scm.com/downloads
+
+2) download npm (is installed with Node.js)
+
+https://www.npmjs.com/get-npm
+
+npm is distributed with Node.js- which means that when you download Node.js, 
+you automatically get npm installed on your computer.
+https://nodejs.org/en/
+
+
+2) download npm (is installed with Node.js) withot admin rights
+
+http://theshravan.net/blog/how-to-use-node-and-npm-without-installation-or-admin-rights/
+
+- go to https://nodejs.org/en/download/
+
+- download binaries and extract in a folder
+
+- add folder path to PATH environment variable
+
+
+
+npm start / npm start-dev / npm start-prod
+
+Behind the scenes this will also call bower install.
+
+
+
+
+**********************************************************
+
+http://eelst.cs.unibo.it:8092/
+
+
+
+**********************************************************
+OPENLINK VIRTUOSO OPEN SOURCE EDITION
+http://vos.openlinksw.com/owiki/wiki/VOS/VOSDownload
+
+
+
+

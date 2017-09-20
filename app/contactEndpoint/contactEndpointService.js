@@ -21,6 +21,7 @@ angular.module('contactEndpointModule', [])
 
     //var selectedEndpoint = "http://localhost:3030/semanticLancet/query";  //endpoint di esempio
     contactSelectedEndpoint: function(selectedEndpoint){  //selectedEndpoint è variabile di scope
+
         var query = "ASK{?s ?p ?o}";
 				return $http({
 					method:"GET",
@@ -29,9 +30,11 @@ angular.module('contactEndpointModule', [])
 					timeout: 3000
 				})
 				.success(function(data, status, headers, config){
+          console.log(data);
 					console.log("Selected endpoint " + selectedEndpoint + " succesfully reached!!!");
         })
 				.error(function(data, status, headers, config){
+          console.log(data);
 					console.log("Selected endpoint " + selectedEndpoint + " unreachable :(");
         });
     },
@@ -84,12 +87,12 @@ angular.module('contactEndpointModule', [])
         //Inside then() callback you simply resolve or reject deferred promise.
         //.then(successCallback, errorCallback)
 
-        var prefixApiUrl = "http://eelst.cs.unibo.it:9092/";
-        //var prefixApiUrl = "http://localhost:8080/";
+        //var prefixApiUrl = "http://eelst.cs.unibo.it:9092/";
+        var prefixApiUrl = "http://localhost:8080/api/";
 
         $http({
           method: 'GET',
-          url: prefixApiUrl+"api/label?label="+uri
+          url: prefixApiUrl+"label?label="+uri
         })
         .then(function successCallback(response) { //response status code between 200 and 299
 

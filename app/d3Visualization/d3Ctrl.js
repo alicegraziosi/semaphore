@@ -33,6 +33,15 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     $rootScope.selectedEndpointName = "DBpedia";
     $rootScope.selectedGraph = "default";
 
+    console.log("numeri per le label: " + $rootScope.numClasses +
+    $rootScope.numClassObjectProperties +
+    $rootScope.numClassDatatypeProperties +
+    $rootScope.numObjObjectProperties +
+    $rootScope.numObjDatatypeProperties);
+
+
+
+
     // wait for all promises
     $q.all([
       queryDatasetService.queryDataset(),
@@ -83,6 +92,14 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
           ]
         }*/
 
+        $scope.dataInfoTemporaneo = {};
+        $rootScope.$watch(function() {
+            return $rootScope.dataInfoTemporaneo;
+          }, function() {
+            $scope.dataInfoTemporaneo = $rootScope.dataInfoTemporaneo;
+            console.log("class: " + $scope.dataInfoTemporaneo.class.label);
+            console.log("class: " + $rootScope.dataInfoTemporaneo.class.label);
+          }, true);
 
 
         $rootScope.dataInfo = {
