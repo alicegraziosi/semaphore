@@ -1,0 +1,42 @@
+<div class="ui text container" style="margin-top: 5em;">
+  <form class="ui form">
+    <h4 class="ui dividing header">Add a SPARQL endpoint and a graph</h4>
+    <div class="required field">
+      <label>Insert a SPARQL enpoint name</label>
+      <div class="ui input">
+        <input ng-model="endpointName"
+          type="text" placeholder="Name...">
+      </div>
+    </div>
+    <div class="required field">
+      <label>Insert a SPARQL endpoint URL</label>
+      <div class="ui labeled input">
+        <div class="ui label">
+          http://
+        </div>
+        <input ng-model="endpointURL"
+          type="text" placeholder="mysite.com/sparql">
+      </div>
+    </div>
+    <div class="required field">
+      <label>Insert a graph</label>
+      <div class="ui input">
+        <input ng-model="endpointGraph" 
+          type="text" placeholder="Graph...">
+      </div>
+    </div>
+      <!--  pingendpoint() al posto di addenpoint() -->
+      <button ng-if="endpointName != ''
+                  && endpointURL != '' 
+                  && endpointGraph != ''"
+              class="ui primary button" 
+              ng-click="addEndpoint()">
+        Add endpoint
+        <i class="icons">
+          <i class="database icon"></i>
+          <i class="corner search icon"></i>
+        </i>
+      </button>
+    </div>
+  </form>
+</div>

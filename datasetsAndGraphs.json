@@ -5,7 +5,7 @@
     "endpointName": "Semantic Lancet"
   },
   {
-    "endpointUrl": "http://localhost:3030/semanticLancet/query",
+    "endpointUrl": "http://localhost:3030/springer/query",
     "graphs": ["default"],
     "endpointName": "Local Semantic Lancet"
   },

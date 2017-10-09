@@ -1,0 +1,67 @@
+<div class="ui modal" ng-controller="customiseCtrl">
+  <div class="header">Customise view</div>
+    <div class="content">
+           
+      <h4 class="ui dividing header">Customise color</h4>
+
+        <div class="ui items">
+          <div class="item">
+            <h5 class="ui header">Class</h5>
+            <div class="ui input">
+              <input ng-model="dataInfo.classe.color"
+              type="text" placeholder="Search...">
+            </div>
+          </div>
+          <div class="item">
+            <h5 class="ui header">Class Literal Property</h5>
+            <div class="ui input">
+              <input ng-model="dataInfo.litPropClasse[0].color"
+              type="text" placeholder="Search...">
+            </div>
+          </div>
+          <div class="item">
+            <h5 class="ui header">Class Object Property</h5>
+            <div class="ui input">
+              <input ng-model="dataInfo.objPropClasse.color"
+              type="text" placeholder="Search...">
+            </div>
+          </div>
+          <div class="item">
+            <h5 class="ui header">Class Object Property Literal Property</h5>
+            <div class="ui input">
+              <input ng-model="dataInfo.litPropObj[0].color"
+              type="text" placeholder="Search...">
+            </div>
+          </div>
+          <div class="item">
+            <h5 class="ui header">Class Object Property Object Property</h5>
+            <div class="ui input">
+              <input ng-model="dataInfo.objPropObj[0].color"
+              type="text" placeholder="Search...">
+            </div>
+          </div>
+        </div>
+
+
+          <button ng-click="apply()"
+            class="ui primary button">
+            Apply
+          </button>
+          <button ng-click="restoreDefault()"
+            class="ui button">
+            Restore default
+          </button>
+        </div>
+        </div>
+        <div class="eight wide column"></div>
+  </div>
+  <!--
+  	<customise-directive
+  		data-info="dataInfo">
+  	</customise-directive>
+    <p></p>
+    <p></p>
+    <p></p>
+  </div>
+  -->
+</div>

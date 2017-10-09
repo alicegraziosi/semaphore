@@ -8,7 +8,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     attenzione!! se il controller è specificato nel config della route allora non bisogna
     scriverlo anche nel html altrimenti viene richiamato due volte!!
   */
-
   $routeProvider
     .when(
       '/graph', {
@@ -29,18 +28,48 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
 
-    $rootScope.selectedEndpointUrl = "https://dbpedia.org/sparql";
-    $rootScope.selectedEndpointName = "DBpedia";
-    $rootScope.selectedGraph = "default";
+    $scope.selectedEndpointUrl = "https://dbpedia.org/sparql";
+    $scope.selectedEndpointName = "DBpedia";
+    $scope.selectedGraph = "default";
 
-    console.log("numeri per le label: " + $rootScope.numClasses +
+    $scope.showPhoto = {
+       value: 'true'
+    };  
+
+    $scope.customise = function(){
+      $('.ui.modal').modal('show');
+    };
+
+    $rootScope.$watch(function() {
+      return $rootScope.selectedEndpointUrl;
+    }, function() {
+      if($rootScope.selectedEndpointUrl != ""){
+        $scope.selectedEndpointUrl = $rootScope.selectedEndpointUrl;
+      }
+    });
+
+    $rootScope.$watch(function() {
+      return $rootScope.selectedEndpointName;
+    }, function() {
+      if($rootScope.selectedEndpointName != ""){
+        $scope.selectedEndpointName = $rootScope.selectedEndpointName;
+      }
+    });
+
+    $rootScope.$watch(function() {
+      return $rootScope.selectedGraph;
+    }, function() {
+      if($rootScope.selectedGraph != ""){
+        $scope.selectedGraph = $rootScope.selectedGraph;
+      }
+    });
+
+    console.log("numeri per le label: " + 
+    $rootScope.numClasses +
     $rootScope.numClassObjectProperties +
     $rootScope.numClassDatatypeProperties +
     $rootScope.numObjObjectProperties +
     $rootScope.numObjDatatypeProperties);
-
-
-
 
     // wait for all promises
     $q.all([
@@ -52,6 +81,15 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
         $rootScope.nodeLabels = [];
         graph2.nodes.forEach(function(node){
+          // photo
+          var promise = queryDatasetService.queryPhotoFromDB($scope.selectedEndpointUrl, $scope.selectedGraph, node.id);
+          promise.then(function(response) {
+            var photoUrl = "";
+            if(response.data.results.bindings[0] != undefined){
+              photoUrl = response.data.results.bindings[0].photoUrl.value;
+            }
+            node.customProperties[0].value = photoUrl;
+          });
           graph.nodes.push(node);
           $rootScope.nodeLabels.push(node.label)
         });
@@ -67,75 +105,55 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $rootScope.graph = graph;
         $rootScope.nodeLabels = $rootScope.nodeLabels.sort();
 
-        /*
-        $rootScope.dataInfo = {
-          headClass : {
-            uri : 'http://dbpedia.org/ontology/Band',
-            label : 'Band',
-            type: "obj"
-          },
-          litPropHeadClass: [
-            {uri : 'http://dbpedia.org/property/genre',
-             label : 'genre',
-             type : 'lit'},
-            {uri : 'http://dbpedia.org/property/yearsActive',
-             label : 'years active',
-             type : 'lit'}
-          ],
-          objPropHeadClass: [
-            {uri: 'http://dbpedia.org/ontology/formerBandMember',
-             label : 'former band member',
-             type : 'obj'},
-            {uri: 'http://dbpedia.org/ontology/bandMember',
-             label : 'band member',
-             type : 'obj'}
-          ]
-        }*/
+        d3Service.then(function(d3) {
 
-        $scope.dataInfoTemporaneo = {};
-        $rootScope.$watch(function() {
-            return $rootScope.dataInfoTemporaneo;
-          }, function() {
-            $scope.dataInfoTemporaneo = $rootScope.dataInfoTemporaneo;
-            console.log("class: " + $scope.dataInfoTemporaneo.class.label);
-            console.log("class: " + $rootScope.dataInfoTemporaneo.class.label);
-          }, true);
+          var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-
+        // INFORMAZIONI TBox
         $rootScope.dataInfo = {
           classe : {
             uri : 'http://dbpedia.org/ontology/Band',
             label : 'Band',
             type : "obj",
-            color : '1'
+            group: 1,
+            color : color(1)
           },
           litPropClasse: [
             {
               uri : 'http://dbpedia.org/property/genre',
               label : 'genre',
               type : 'lit',
-              color : ''
+              group: 2,
+              color : color(2)
             }
           ],
-          objPropClasse:
-            {uri : 'http://dbpedia.org/ontology/bandMember',
-             label : 'band member',
-             type : 'obj'}
-          ,
+          objPropClasse: {
+            uri : 'http://dbpedia.org/ontology/bandMember',
+            label : 'band member',
+            type : 'obj',
+            group: 3,
+            color : color(3)
+          },
           litPropObj: [
-            {uri : 'http://dbpedia.org/property/yearsActive',
-             label : 'years active',
-             type : 'lit'}
+            {
+              uri : 'http://dbpedia.org/property/yearsActive',
+              label : 'years active',
+              type : 'lit',
+              group: 4,
+              color : color(4)
+            }
           ],
           objPropObj: [
             {
               uri : '',
               label : '',
               type : '',
-              color : ''
+              group: 5,
+              color : color(5)
             }
           ]
         };
+        });
 
         $scope.dataInfo = $rootScope.dataInfo;
         $scope.info = $rootScope.info;
@@ -145,28 +163,33 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
         $scope.litPropObj = $rootScope.dataInfo.litPropObj;
         $scope.objPropObj = $rootScope.dataInfo.objPropObj;
-
-        /*
-        $scope.selectedClusterOption =
-          {uri : 'http://dbpedia.org/property/genre',
-             label : 'genre',
-             type : 'lit'};
-        */
-
     });
 
 
     $rootScope.$watch('graph', function(graph, graphold) {
-      $scope.graph = $rootScope.graph;
-
-      $rootScope.nodeLabels = [];
-      if($scope.graph != undefined){
+      if(graph){
+        $scope.graph = $rootScope.graph;
+        // photo
         $scope.graph.nodes.forEach(function(node){
-          $rootScope.nodeLabels.push(node.label)
+          var promise = queryDatasetService.queryPhotoFromDB($scope.selectedEndpointUrl, $scope.selectedGraph, node.id);
+          promise.then(function(response) {
+            var photoUrl = "";
+            if(response.data.results.bindings[0] != undefined){
+              photoUrl = response.data.results.bindings[0].photoUrl.value;
+            }
+            node.customProperties[0].value = photoUrl;
+          });
         });
-        $scope.nodeLabels = $scope.nodeLabels.sort();
+
+        $rootScope.nodeLabels = [];
+        if($scope.graph != undefined){
+          $scope.graph.nodes.forEach(function(node){
+            $rootScope.nodeLabels.push(node.label)
+          });
+          $scope.nodeLabels = $scope.nodeLabels.sort();
+        }
+        $scope.nodeLabels = $rootScope.nodeLabels;
       }
-      $scope.nodeLabels = $rootScope.nodeLabels;
     }, true);
 
 
@@ -187,41 +210,19 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     });
 
     $scope.exportJSON = function () {
-      console.log('"Export as JSON" button clicked');
-      console.log($rootScope.graph);
-
-      // In an HTTP POST request, the parameters are not sent along with the URI.
-      $http({
-          method: 'POST',
-          url: 'http://localhost:8080/api/savetofile',
-          // url: 'http://eelst.cs.unibo.it:8092/api/savetofile',
-          // use $.param jQuery function to serialize data from JSON
-          data: $.param($rootScope.graph),
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-      }).then(
-        function(response){
-          // success callback
-          var filename = response.data;
-          window.open('http://localhost:8080/api/download?filename='+filename);
-        },
-        function(response){
-          // failure callback
-          console.log('ERROR: could not download file');
-        }
-      );
+        getJSONfileModule.exportJSON($rootScope.graph);
     };
 
     $scope.exportPNG = function(){
       d3Service.then(function(d3) {
         var svg = d3.select("svg");
 
-    	var svgString = getSVGString(svg.node());
-    	svgString2Image( svgString, 2*960, 2*800, 'png', save ); // passes Blob and filesize String to the callback
+      	var svgString = getSVGString(svg.node());
+      	svgString2Image( svgString, 2*960, 2*800, 'png', save ); // passes Blob and filesize String to the callback
 
-    	function save( dataBlob, filesize ){
-    		saveAs( dataBlob, 'gigVisualisation.png' ); // FileSaver.js function
-    	};
+      	function save( dataBlob, filesize ){
+      		saveAs( dataBlob, 'gigVisualisation.png' ); // FileSaver.js function
+      	};
 
       });
     };
@@ -327,6 +328,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     }
 
     // fine download png
+
 
     $scope.selectNodeLabel = function(label) {
         $scope.selectedNodeLabel = label;

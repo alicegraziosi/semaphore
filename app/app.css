@@ -44,7 +44,7 @@ i.big.icon{
 div.ui.left.sidebar.vertical.menu,
 div.ui.right.sidebar.vertical.menu,
 div.pusher{
-  top: 49px;
+  top: 48px;
 }
 
 /* accordion all'interno della sidebar */
@@ -66,7 +66,8 @@ div.pusher{
 #graph_box{
   background-color: rgb(251, 251, 251);
   opacity: 1;
-  padding: 20px;
+  padding: 10px;
+  padding-top: 0;
 }
 
 #menuSwitch{
@@ -169,4 +170,139 @@ span.limit-ellipsis {
 #data_info,
 #prefixesBox {
   word-break: break-all;
+}
+
+.ui.vertical.text.menu .item{
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* label */
+.label-overrided{
+    display: inline-block;
+    line-height: 1;
+    vertical-align: baseline;
+    margin: 0 .14285714em;
+    background-color: #e8e8e8;
+    background-image: none;
+    padding: .5833em .833em;
+    color: rgba(0,0,0,.6);
+    text-transform: none;
+    font-weight: 700;
+    border: 0 solid transparent;
+    border-radius: .28571429rem;
+    -webkit-transition: background .1s ease;
+    transition: background .1s ease;
+}
+
+.ribbon-label-overrided{
+    display: inline-block;
+    line-height: 1;
+    vertical-align: baseline;
+    margin: 0 .14285714em;
+    background-color: #e8e8e8;
+    background-image: none;
+    padding: .5833em .833em;
+    color: rgba(0,0,0,.6);
+    text-transform: none;
+    font-weight: 700;
+    border: 0 solid transparent;
+    border-radius: .28571429rem;
+    -webkit-transition: background .1s ease;
+    transition: background .1s ease;
+    background-color: #2185d0!important;
+    border-color: #2185d0!important;
+    color: #fff!important;
+    
+    border-color: #1a69a4!important;
+    text-align: left;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+    border-radius: .28571429rem 0 0 .28571429rem;
+    left: calc(100% + 1rem + 1.2em);
+    padding-left: 1.2em;
+    padding-right: calc(1rem + 1.2em);
+    position: relative;
+    margin: 0;
+    min-width: -webkit-max-content;
+    min-width: -moz-max-content;
+    min-width: max-content;
+    border-radius: 0 .28571429rem .28571429rem 0;
+    border-color: rgba(0,0,0,.15);
+    font-size: .85714286rem;
+    margin-bottom: 5px;
+}
+
+.ribbon-label-overrided:after {
+    position: absolute;
+    content: '';
+    top: 100%;
+    left: 0;
+    background-color: transparent!important;
+    border-style: solid;
+    border-width: 0 1.2em 1.2em 0;
+    border-color: transparent;
+    border-right-color: inherit;
+    width: 0;
+    height: 0;
+    left: auto;
+    right: 0;
+    border-style: solid;
+    border-width: 1.2em 1.2em 0 0;
+    border-color: transparent;
+    border-top-color: inherit;
+
+}
+
+.horizontal-mini-label{
+    display: inline-block;
+    line-height: 1;
+    vertical-align: baseline;
+    margin: 0 .14285714em;
+    background-color: #e8e8e8;
+    background-image: none;
+    padding: .5833em .833em;
+    color: rgba(0,0,0,.6);
+    text-transform: none;
+    font-weight: 700;
+    border: 0 solid transparent;
+    border-radius: .28571429rem;
+    -webkit-transition: background .1s ease;
+    transition: background .1s ease;
+    position: relative;
+    margin: 0;
+    min-width: -webkit-max-content;
+    min-width: -moz-max-content;
+    min-width: max-content;
+    border-color: rgba(0,0,0,.15);
+    margin: 0 .5em 0 0;
+    padding: .4em .833em;
+    min-width: 3em;
+    text-align: center;
+    font-size: .71428571rem;
+}
+
+/* item in dropdown menu scelta entpoint*/
+.compact{
+  margin: 0px;
+  padding: 0px;
+}
+
+.ui.menu .ui.dropdown .menu>.item{
+  padding: 8px !important;
+  padding-left: 12px !important;
+}
+
+/* tooltip nodi*/
+div.tooltip { 
+    position: absolute;     
+    text-align: center;     
+    min-width: 200px;          
+    min-height: 150px;         
+    padding: 2px;       
+    font: 12px sans-serif;    
+    background: lightsteelblue; 
+    border: 0px;    
+    border-radius: 8px;     
+    pointer-events: none;     
 }

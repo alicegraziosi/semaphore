@@ -32,8 +32,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
 
                     var width = 960,
                         height = 800,
-                        padding = 1.5, // separation between same-color nodes
-                        clusterPadding = 120, // separation between different-color nodes
+                        padding = 10, // separation between same-color nodes
+                        clusterPadding = 10, // separation between different-color nodes
                         maxRadius = 5, //radius nodo cluster
                         radius = 15;
 
@@ -215,7 +215,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                 var force = d3.forceSimulation()
                                     .nodes(nodes)
                                     .force("center", d3.forceCenter(width / 2, height / 2)) //d3.forceCenter()
-                                    .force("collide", forceCollide2)
+                                    .force("collide", forceCollide)
                                     .force("cluster", forceCluster2)
                                     .force("charge", d3.forceManyBody()) // d3.forceManyBody(30), replace force.charge
                                     .force("x", d3.forceX().strength(.007))
@@ -244,7 +244,6 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     //.call(d3.behavior.zoom().on("zoom", function () {
                                       //  svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
                                     //}))
-                               $scope.svg = svg;
 
 
                               /*un rettangolo contenitore per ogni nodo cluster*/

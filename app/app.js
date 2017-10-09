@@ -6,6 +6,9 @@ angular.module('myApp', [
   'contactEndpointModule',
   'getJSONfileModule',
   'queryDatasetModule',
+  'menuModule',
+  'customiseModule',
+  'addEndpointModule',
   'd3Module',
   'myApp.view1',
   'myApp.about',
@@ -22,6 +25,7 @@ angular.module('myApp', [
 .run(function($rootScope, $location) {
   $rootScope.$on('$routeChangeSuccess', function() {
       $rootScope.showSection = $location.path() !== "/about";
+      //$rootScope.showSection = $location.path() !== "/addEndpoint";
   });
 })
 
@@ -42,5 +46,13 @@ $http will not respect default setting for timeout set it in httpProvider
 
 .controller('myAppCtrl', function($rootScope){
   $rootScope.appName = "GIG";
-  $rootScope.subtitle = "generating interfaces for RDF graphs"
+  $rootScope.subtitle = "generating interfaces for RDF graphs";
+
+  // development mode
+  $rootScope.prefixApiUrl = "http://localhost:8080/api/";
+  $rootScope.jsonFileServiceUrl = "http://localhost:8080/api/";
+
+  // production mode
+  // $rootScope.prefixApiUrl = "http://eelst.cs.unibo.it:9092/api/";
+  // $rootScope.jsonFileServiceUrl = "http://eelst.cs.unibo.it:9092/api/";
 });

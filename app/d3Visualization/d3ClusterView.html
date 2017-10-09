@@ -8,7 +8,7 @@
     <div class="row" id="graph_box">
 
       <div class="three wide column">
-        <div ng-include="'d3Visualization/menuVisualization.html'"></div>
+        <div ng-include="'d3Visualization/infoDatiVisualisation.html'"></div>
       </div>
 
       <div class="ten wide column">
@@ -23,43 +23,48 @@
       </div>
       <div class="top aligned three wide column">
         <div class="ui form">
-          <div class="grouped fields">
 
-            <label>Cluster</label>
-            <div class="ui horizontal label">{{clusterClasse.label}}</div>
-            <label>by</label>
+          <div class="ui darkRedBorderTop segment">
+            <div class="ribbon-label-overrided">Cluster data</div>
+                <div class="grouped fields">
 
-            <div class="field" data-value="{{litPropClasse}}" ng-repeat="clusterOption in litPropClasse">
-              <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
-                <label>{{clusterOption.label}}</label>
+                  <label>Cluster</label>
+                  <div class="ui horizontal label">{{clusterClasse.label}}</div>
+                  <label>by</label>
+
+                  <div class="field" data-value="{{litPropClasse}}" ng-repeat="clusterOption in litPropClasse">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
+                      <label>{{clusterOption.label}}</label>
+                    </div>
+                  </div>
+
+                  <div class="ui horizontal divider">
+                    Or
+                  </div>
+
+                  <label>Cluster</label>
+                  <div class="ui horizontal label">{{clusterObj.label}}</div>
+                  <label>by</label>
+
+                  <div class="field" data-value="{{litPropObj}}" ng-repeat="clusterOption in litPropObj">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
+                      <label>{{clusterOption.label}}</label>
+                    </div>
+                  </div>
+
+                <div class="field" data-value="{{objPropObj}}" ng-repeat="clusterOption in objPropObj">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
+                      <label>{{clusterOption.label}}</label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="ui horizontal divider">
-              Or
-            </div>
-
-            <label>Cluster</label>
-            <div class="ui horizontal label">{{clusterObj.label}}</div>
-            <label>by</label>
-
-            <div class="field" data-value="{{litPropObj}}" ng-repeat="clusterOption in litPropObj">
-              <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
-                <label>{{clusterOption.label}}</label>
-              </div>
-            </div>
-
-          <div class="field" data-value="{{objPropObj}}" ng-repeat="clusterOption in objPropObj">
-              <div class="ui radio checkbox">
-                <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
-                <label>{{clusterOption.label}}</label>
-              </div>
-            </div>
-          </div>
-
-            <div ng-include="'d3Visualization/infoDataAndEndpoint.html'"></div>
+            <div ng-include="'d3Visualization/customiseView.html'"></div>
 
         </div>
       </div>

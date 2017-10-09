@@ -20,9 +20,9 @@ angular.module('contactEndpointModule', [])
   return{
 
     //var selectedEndpoint = "http://localhost:3030/semanticLancet/query";  //endpoint di esempio
-    contactSelectedEndpoint: function(selectedEndpoint){  //selectedEndpoint è variabile di scope
+    contactSelectedEndpoint: function(selectedEndpoint, selectedGraph){  //selectedEndpoint è variabile di scope
 
-        var query = "ASK{?s ?p ?o}";
+        var query = 'ASK WHERE { GRAPH <'+ selectedGraph + '> { ?s ?p ?o } }';
 				return $http({
 					method:"GET",
           // http://localhost:3030/semanticlancet/query?format=json&query=ASK{?s ?p ?o}
@@ -31,11 +31,11 @@ angular.module('contactEndpointModule', [])
 				})
 				.success(function(data, status, headers, config){
           console.log(data);
-					console.log("Selected endpoint " + selectedEndpoint + " succesfully reached!!!");
+					console.log("Selected endpoint named " + selectedEndpoint + " - graph " + selectedGraph + " succesfully reached!!!");
         })
 				.error(function(data, status, headers, config){
           console.log(data);
-					console.log("Selected endpoint " + selectedEndpoint + " unreachable :(");
+					console.log("Selected endpoint named " + selectedEndpoint + " - graph " + selectedGraph + " unreachable :(");
         });
     },
     // non usato
@@ -88,7 +88,8 @@ angular.module('contactEndpointModule', [])
         //.then(successCallback, errorCallback)
 
         //var prefixApiUrl = "http://eelst.cs.unibo.it:9092/";
-        var prefixApiUrl = "http://localhost:8080/api/";
+        //var prefixApiUrl = "http://localhost:8080/api/";
+        var prefixApiUrl = $rootScope.prefixApiUrl;  //in app.js
 
         $http({
           method: 'GET',

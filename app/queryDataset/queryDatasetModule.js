@@ -239,21 +239,30 @@ angular.module('queryDatasetModule', [])
       if(graph != "default"){
         query += ' FROM <' + graph + '> ';
       }
-      query += `{
-        ?classe a ?classUri.
-      } LIMIT 300`;
+
+      query += `
+        {
+          ?classUri a owl:Class.
+        } 
+      
+      LIMIT 500`;
 
       //Va bene sia per dbpedia che per semanticLancet
+      // 
 
-      console.log("Quert classi: " + query);
+      console.log("Query classi: " + query);
 
       var encodedquery = encodeURIComponent(prefixes + " " + query);
+      // https://www.w3.org/TR/sparql11-results-json/
+      // 
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery, {timeout: 60000})
+      //$http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery, {timeout: 60000})
+      // per le http get non deve essere specificato il format
+      $http.get(endpoint+"?query="+encodedquery, {timeout: 60000})
         .then(function(data) {
           defer.resolve(data);
         });
@@ -271,12 +280,13 @@ angular.module('queryDatasetModule', [])
                   'FILTER(!isLiteral(?propertyUri)) ' +
                   '}';
       var encodedquery = encodeURIComponent(prefixes + " " + query);
-      var format = "application/sparql-results+json";
-      var endcodedformat = encodeURIComponent(format);
+      //var format = "application/sparql-results+json";
+      //var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      //$http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      $http.get(endpoint+"?query="+encodedquery)
         .then(function(data) {
           defer.resolve(data);
         });
@@ -297,12 +307,13 @@ angular.module('queryDatasetModule', [])
                   'FILTER (lang(?propertyLabel) = "en")'+
                   '}';
       var encodedquery = encodeURIComponent(prefixes + " " + query);
-      var format = "application/sparql-results+json";
-      var endcodedformat = encodeURIComponent(format);
+      //var format = "application/sparql-results+json";
+      //var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      //$http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      $http.get(endpoint+"?query="+encodedquery)
         .then(function(data) {
           defer.resolve(data);
         });
@@ -327,7 +338,8 @@ angular.module('queryDatasetModule', [])
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      //$http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      $http.get(endpoint+"?query="+encodedquery)
         .then(function(data) {
           defer.resolve(data);
         });
@@ -355,7 +367,8 @@ angular.module('queryDatasetModule', [])
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+     //$http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      $http.get(endpoint+"?query="+encodedquery)
         .then(function(data) {
           defer.resolve(data);
         });
@@ -390,7 +403,8 @@ angular.module('queryDatasetModule', [])
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      //$http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      $http.get(endpoint+"?query="+encodedquery)
         .then(function(data) {
           defer.resolve(data);
         });
@@ -587,6 +601,26 @@ angular.module('queryDatasetModule', [])
         return defer.promise;
     }*/
 
+    var queryPhotoFromDB = function(endpoint, graph, selectedItem){
+      var query = 'SELECT DISTINCT ?photoUrl ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += 'WHERE { <' + selectedItem + '> <http://dbpedia.org/ontology/thumbnail> ?photoUrl.}';
+
+      var encodedquery = encodeURIComponent(prefixes + " " + query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.post(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
     return{
       queryDataset: queryDataset,
       queryDatasetLiteralBand: queryDatasetLiteralBand,
@@ -601,6 +635,8 @@ angular.module('queryDatasetModule', [])
       queryDatasetObjectPropertyRange: queryDatasetObjectPropertyRange,
       */
       queryDatasetValuesObjObjectProperty: queryDatasetValuesObjObjectProperty,
-      queryDatasetValuesObjDatatypeProperty: queryDatasetValuesObjDatatypeProperty
+      queryDatasetValuesObjDatatypeProperty: queryDatasetValuesObjDatatypeProperty,
+      queryPhotoFromDB: queryPhotoFromDB
+
     };
 }]);

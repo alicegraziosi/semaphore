@@ -23,13 +23,18 @@ myAppd3view.directive('d3Graphvisualization',
           selectedNodeLabel: "=",  // nella view: selected-node-label
           objectShape: "=",  // nella view: object-shape
           datatypeShape: "=",  // nella view: datatype-shape
-          dataInfo: "="
+          dataInfo: "=",
+          showPhoto: "="
 
       },
       link: function(scope, elem, attrs){
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3) {
           // now you can use d3 as usual!
+
+          scope.$watch('showPhoto', function (showPhoto) {
+             console.log(showPhoto.value);
+          }, true);
 
           var width = "900";
           var height = "500";
@@ -61,17 +66,8 @@ myAppd3view.directive('d3Graphvisualization',
             .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
           }
 
-          var color = d3.scaleOrdinal(d3.schemeCategory20);
-
-
-          scope.$watch('dataInfo', function (dataInfo) {
-            if(dataInfo){
-              console.log("changed datainfo" + dataInfo);
-
-                    dataInfo.classe.color = '2';
-
-            }
-          }, true); // deep object dirty checking
+          var color = d3.scaleOrdinal(d3.schemeCategory10);
+          
 
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph) {
@@ -180,23 +176,40 @@ myAppd3view.directive('d3Graphvisualization',
                         .attr("height", 8)  //if rect
                         .attr("r", function(d) { return d.radius; }) // if circle
                         .attr("fill", function(d) {
-                          //console.log(d.group);console.log(color(d.group));
                           return color(d.group); })
                         .call(d3.drag()
                             .on("start", dragstarted)
                             .on("drag", dragged)
                             .on("end", dragended))
                         .on("mouseover", function(d){
-                          d3.selectAll("circle").style("stroke", '#ffffff')
+                          d3.selectAll("circle").style("stroke", '#ffffff');
+                          d3.select(this).style("cursor", "pointer"); 
                           d3.select(this).style("stroke", color(d.group));
                           scope.$apply(function () {
                             $parse(attrs.selectedItem).assign(scope.$parent, d);
                           });
+
+                          div.transition()   
+                              .duration(200)    
+                              .style("opacity", .9);
+
+                          div.style("left", d3.select(this).attr('cx') + "50px")    
+                             .style("top",  d3.select(this).attr('cy') + "50px");  
                         })
                         .on("mouseout", function(d){
-                          d3.selectAll("circle").style("stroke", '#ffffff')
+                          d3.selectAll("circle").style("stroke", '#ffffff');
+                          d3.select(this).style("cursor", "default");
+
+                          div.transition()    
+                            .duration(500)    
+                            .style("opacity", 0);  
                         })
                         .on('dblclick', connectedNodes);
+
+
+                  var div =  d3.select(elem[0]).append("div")
+                      .attr("class", "tooltip")       
+                      .style("opacity", 0); 
 
                   /* label dei nodi */
                   var label = gzoom.append("g")
@@ -209,27 +222,33 @@ myAppd3view.directive('d3Graphvisualization',
                       .style("font-family", "Arial")
                       .style("font-size", 5);
 
-                  /* iconcine dei nodi */
-                  var image = gzoom.selectAll("image")
+                  /* immagini dbpedia relative ai nodi */
+                  var image = gzoom.append("g")
+                    .attr("class", "nodes")
+                    .selectAll("g")
                     .data(nodes) //.data(graph.nodes)
-                    .enter().append("image")
+                    .enter().append("g")
+                      .append("image")
                       .attr("xlink:href", function (d) { return d.photoUrl; })
                       .attr("width", 12)
                       .attr("height", 12)
+                      .attr("visibility", function(showPhoto){ if(showPhoto.value == "false" ) return "hidden"})
                       .call(d3.drag()
                           .on("start", dragstarted)
                           .on("drag", dragged)
                           .on("end", dragended))
                       .on("mouseover", function(d){
-                        d3.selectAll("circle").style("stroke", '#ffffff')
+                        d3.selectAll("circle").style("stroke", '#ffffff');
                         d3.select(this).style("stroke", color(d.group));
+                        d3.select(this).style("cursor", "pointer"); 
                         scope.$apply(function () {
                           $parse(attrs.selectedItem).assign(scope.$parent, d);
                         });
                       })
                       .on("mouseout", function(d){
-                        d3.selectAll("circle").style("stroke", '#ffffff')
-                      });
+                        d3.selectAll("circle").style("stroke", '#ffffff');
+                        d3.select(this).style("cursor", "default"); 
+                      }); 
 
                   /*rect e label */
                   var rect = gzoom.append("g")

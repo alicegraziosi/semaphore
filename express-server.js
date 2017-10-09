@@ -32,9 +32,9 @@ var host = process.env.NODE_HOST || '127.0.0.1';  // set our host, locale: 127.0
 const cors = require('cors');
 
 // forse non serve
-const corsOptions = {
-  origin: 'http://localhost:8000',
-}
+//const corsOptions = {
+  //origin: 'http://localhost:8000',
+//}
 
 app.use(cors());
 
@@ -105,9 +105,9 @@ router.get('/label', function(request, response) {
 function writeFile(path, contents) {
   mkdirp(getDirName(path), function (err) {
     if (err) {
-    	return console.log(err);
+    	return console.log("error while writing file" + err);
   	}
-
+  	console.log(path);
     fs.writeFile(path, contents);
   });
 }
@@ -116,15 +116,16 @@ function writeFile(path, contents) {
 router.post('/savetofile', function(request, response) {
     filename = 'rdfGraphData.json';
     response.send(filename);
-    writeFile('files/rdfGraphData.json', JSON.stringify(request.body));
+    writeFile('rdfGraphData.json', JSON.stringify(request.body));
 });
 
 // Return the generated file for download
 router.get("/download", function (req, res) {
     var filename = req.query.filename;
-    var path = __dirname + "/" + filename;
+    var path = __dirname + "\\" + filename;
     console.log("file richiesto : " + filename + "...");
     res.download(path, filename, function(err){
+      console.log(path + " " + filename);	
 	  if (err) {
 	    console.log("...errore :(");
 	  } else {

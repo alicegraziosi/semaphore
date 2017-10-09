@@ -34,7 +34,7 @@ angular.module('getJSONfileModule', [])
             id: d.oo.value,
             label: d.ooLabel.value,
             type: d.p.value,//type: d.ooLabel.value,
-            group: 2,
+            group: 3,
             customProperties : [
               {
                 type: "photoUrl",
@@ -70,7 +70,7 @@ angular.module('getJSONfileModule', [])
             id: "ooPropUri0"+index,
             label: ooproplabel,
             type: d.ooPropType0.value,
-            group: 3
+            group: 4
           }
           literalNodesObj.push(literalNode);
 
@@ -98,6 +98,7 @@ angular.module('getJSONfileModule', [])
     // nodi
     var nodesObj = [];
     var nodesArray = [];
+    // classi
     data.forEach(function(d){
       if (nodesArray.indexOf(d.sogg.value)==-1){
         nodesArray.push(d.sogg.value);
@@ -105,6 +106,7 @@ angular.module('getJSONfileModule', [])
           id: d.sogg.value,
           label: d.soggLabel.value,
           type: d.soggType.value,
+          group: 1,
           customProperties : [
             {
               type: "photoUrl",
@@ -115,7 +117,7 @@ angular.module('getJSONfileModule', [])
         nodesObj.push(node);
       }
     });
-    // node literal e link to node literal
+    // node literal della classe e link to node literal
     var literalNodesObj = [];
     var linksToLiteralsObj = [];
     data.forEach(function(d, index){
@@ -126,7 +128,8 @@ angular.module('getJSONfileModule', [])
       var literalNode = {
         id: label+index, // soggPropUri0
         label: soggproplabel0,
-        type: d.propType.value
+        type: d.propType.value,
+        group: 2
       }
       literalNodesObj.push(literalNode);
 
@@ -149,7 +152,7 @@ angular.module('getJSONfileModule', [])
   }
 
   var createNodeObject = function(data){
-    // nodi
+    // nodi classe scelta
     var nodesObj = [];
     var nodesArray = [];
     data.forEach(function(d){
@@ -159,6 +162,7 @@ angular.module('getJSONfileModule', [])
           id: d.sogg.value,
           label: d.soggLabel.value,
           type: d.soggType.value,
+          group: 3,
           customProperties : [
             {
               type: "photoUrl",
@@ -169,12 +173,13 @@ angular.module('getJSONfileModule', [])
         nodesObj.push(node);
       }
       if (nodesArray.indexOf(d.oo.value)==-1){
-        // nod object property della classe scelta
+        // nodi object property della classe scelta
         nodesArray.push(d.oo.value);
         var node = {
           id: d.oo.value,
           label: d.ooLabel.value,
           type: d.ooLabel.value,
+          group: 1,
           customProperties : [
             {
               type: "photoUrl",
@@ -209,11 +214,34 @@ angular.module('getJSONfileModule', [])
     return jsonData;
   }
 
+  var exportJSON = function(jsonData) {
+    // In an HTTP POST request, the parameters are not sent along with the URI.
+    $http({
+        method: 'POST',
+        url: $rootScope.jsonFileServiceUrl+"savetofile",
+        // use $.param jQuery function to serialize data from JSON
+        data: $.param(jsonData),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+
+    }).then(
+      function(response){
+        // success callback
+        var filename = response.data;
+        window.open($rootScope.jsonFileServiceUrl+"download?filename="+filename);
+      },
+      function(response){
+        // failure callback
+        console.log('ERROR: could not download file');
+      }
+    );
+  }
+
   return {
     get: get,
     createJsonFile: createJsonFile,
     createNodeLiteral: createNodeLiteral,
-    createNodeObject: createNodeObject
+    createNodeObject: createNodeObject,
+    exportJSON: exportJSON
   };
 }])
 

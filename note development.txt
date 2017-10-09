@@ -1,72 +1,106 @@
 ACCOUNT GITHUB
-
 https://github.com/
-
 alice.graziosi@gmail.com
-
 Pass: ---
-
-
 
 ACCOUNT NPMJS
-
 https://www.npmjs.com
-
 alice.graziosi@studio.unibo.it
-
 Pass: ---
 
 
-
-Clone or download the repository
-
+***
+Clone or download the repository:
 git clone https://github.com/alicegraziosi/semaphore.git
 
-
-Prerequisites
-
-Ma prima:
+***
+Prerequisites:
 1) download GIT
 https://git-scm.com/downloads
 
 2) download npm (is installed with Node.js)
-
 https://www.npmjs.com/get-npm
 
 npm is distributed with Node.js- which means that when you download Node.js, 
 you automatically get npm installed on your computer.
 https://nodejs.org/en/
 
-
-2) download npm (is installed with Node.js) withot admin rights
-
-http://theshravan.net/blog/how-to-use-node-and-npm-without-installation-or-admin-rights/
-
-- go to https://nodejs.org/en/download/
-
-- download binaries and extract in a folder
-
-- add folder path to PATH environment variable
-
-
-
 npm start / npm start-dev / npm start-prod
 
 Behind the scenes this will also call bower install.
 
+***
+Deploy app in development mode:
+from Directory GIG: 
+first time:
+> npm start
 
+> npm install http-server -g
+then:
+> http-server -a localhost -p 8000 -c-1 ./app
+
+App online on:
+http://localhost:8000/
+
+***
+Run prefix service:
+Run prefix service on eelst in development mode (Windows):
+> NODE_ENV=development
+> node express-server.js
 
 
 **********************************************************
-
-http://eelst.cs.unibo.it:8092/
-
-
-
-**********************************************************
-OPENLINK VIRTUOSO OPEN SOURCE EDITION
+SPARQL endpoint for DBpedia dump:  (SPARQL 1.1)
+Openlink Virtuoso Open Source Edition (supportig SPARQL 1.1)
 http://vos.openlinksw.com/owiki/wiki/VOS/VOSDownload
+http://vos.openlinksw.com/owiki/wiki/VOS/VOSUsageWindows
+
+Commands from admin cmd:
+virtuoso-t -? 
+virtuoso-t +service create +instance dbpediadump +configfile demo.ini
+virtuoso-t +service list 
+virtuoso-t -I dbpediadump +service start
+virtuoso-t -I dbpediadump +service stop
+virtuoso-t +service delete +instance dbpediadump 
+
+By default, the Virtuoso server will listen for HTTP connections at TCP port 8890.
+http://localhost:8890/conductor
+http://localhost:8890/sparql
+The default administrator username and password are both dba
+
+Trouble Shooting
+If unable to open the service control manager:
+copy  database/virtuoso.ini  as  demo.ini  in virtuoso-opensource
+remove in file demo.ini  all character ../
+virtuoso-t.exe -c demo -I Demo -S create 
+
+Nota:
+Serialization format for RDF:
+N-Triples(.nt) < subset of Turtle (.ttl) < subset of Notation3 -or N3- (.n3)
 
 
+
+**********************************************************
+SPARQL endpoint for Springer dataset:
+Apache Jena Fuseki2
+https://jena.apache.org/documentation/fuseki2/
+
+Run as a standalone server
+> fuseki-server
+By default, the Fuseki server will listen for HTTP connections at TCP port 3030.
+
+Note:
+Jena requires Java8
+https://www.java.com/it/download/
+
+Set JAVA_HOME system variable and add to %PATH user variable
+https://www.mkyong.com/java/how-to-set-java_home-on-windows-10/
+Open a command promp and test: 
+> java -version
+
+Springer spacin dataset in springer.zip
+
+Nota:
+in springer.zip there is an instance of Fuseki1 (v1 is deprecated)
 
 

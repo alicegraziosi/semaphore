@@ -1,0 +1,76 @@
+<h5 class="ui header">Search item</h5>
+<div class="ui small vertical fluid compact menu">
+  <div class="ui floating search selection dropdown item">
+    <div class="text" ng-click="dropdown();">Search item...</div>
+    <i class="dropdown icon" ng-click="dropdown();"></i>
+    <div class="menu">
+      <div data-value="{{nodeLabels}}" class="item" ng-repeat="label in nodeLabels track by $index" ng-click="selectNodeLabel(label)">
+        {{label}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui darkRedBorderTop segment">
+  <div class="ribbon-label-overrided left">Export data</div>
+    <div class="ui mini button" ng-click="exportJSON(); exportPNG();">
+      <i class="small download icon"></i>Export data as JSON and visualisation as PNG
+    </div>
+</div>
+
+<div class="ui darkRedBorderTop segment">
+  <div class="ribbon-label-overrided left">Current endpoint</div>
+
+  <div id="endpointInfo" class="ui list">
+      <div class="item">
+          <h5 class="header">SPARQL endpoint name</h5>
+          <p>{{selectedEndpointName}}</p>
+      </div>
+      <div class="item">
+          <h5 class="header">SPARQL endpoint URL</h5>
+          <p>{{selectedEndpointUrl}}</p>
+      </div>
+      <div class="item">
+          <h5 class="header">Graph</h5>
+          <p>{{selectedGraph}}</p>
+      </div>
+  </div>
+</div>
+
+<div id="prefixesBox" class="ui darkRedBorderTop segment">
+    <div class="ribbon-label-overrided left">Prefixes</div>
+    <div class="ui list">
+        <div ng-repeat="prefixUrl in prefixes" class="item">
+            <div class="content">
+                <a class="header" href="{{prefixUrl.url}}" target="_blank">{{prefixUrl.prefix}}</a>
+                <div class="description">{{prefixUrl.url}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--
+<div class="ui secondary vertical menu">
+  <div class="ui dropdown item" ng-click="dropdown();">
+    <i class="dropdown icon" ng-click="dropdown();"></i>
+    Entity Display Options
+    <div class="menu">
+      <div class="header">Entity shape</div>
+      <a class="item" ng-click="selectObjectShape('circle');" >Circle</a>
+      <a class="item" ng-click="selectObjectShape('rect');">Rectangule</a>
+      <a class="item" ng-click="selectObjectShape('ellipsis');">Ellipsis</a>
+    </div>
+  </div>
+  <div class="ui dropdown item" ng-click="dropdown();">
+    <i class="dropdown icon" ng-click="dropdown();"></i>
+    DataType property Display Options
+    <div class="menu">
+      <div class="header">DataType property shape</div>
+      <a class="item" ng-click="selectDataTypeShape('circle');">Circle</a>
+      <a class="item" ng-click="selectDataTypeShape('rect');">Rectangule</a>
+      <a class="item" ng-click="selectDataTypeShape('ellipsis');">Ellipsis</a>
+    </div>
+  </div>
+</div>
+-->

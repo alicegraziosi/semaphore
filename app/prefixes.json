@@ -1,0 +1,53 @@
+[	{	
+     	"prefix" : "dbo",
+      	"url" : "http://dbpedia.org/ontology/"
+    },
+    {
+     	 "prefix" : "owl",
+     	 "url" : "http://www.w3.org/2002/07/owl#"
+    },
+    {
+    	"prefix": "wd", 
+    	"url": "http://www.wikidata.org/entity/"
+    },
+    {	
+    	"prefix": "rdfs", 
+    	"url": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    {	
+    	"prefix": "openlinks", 
+    	"url": "http://www.openlinksw.com/schemas/virtrdf#"
+    },
+    {   
+    	"prefix": "sd", 
+    	"url": "http://www.w3.org/ns/sparql-service-description#"
+    },
+    {	
+    	"prefix": "openlinks", 
+    	"url": "http://www.openlinksw.com/schemas/virtrdf#"
+    },
+    {   
+    	"prefix": "rdf", 
+    	"url": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    },
+    {   
+        "prefix": "fabio", 
+        "url": "http://purl.org/spar/fabio/"
+    },
+    {   
+        "prefix": "biro", 
+        "url": "http://purl.org/spar/biro/"
+    },
+    {   
+        "prefix": "dcite", 
+        "url": "http://purl.org/spar/datacite/"
+    },
+    {   
+        "prefix": "foaf", 
+        "url": "http://xmlns.com/foaf/0.1/"
+    },
+    {
+        "prefix": "doco", 
+        "url": "http://purl.org/spar/doco/"
+    }
+]

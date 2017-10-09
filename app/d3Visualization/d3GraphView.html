@@ -5,11 +5,10 @@
     scriverlo anche nel html altrimenti viene richiamato due volte!!
   -->
   <div class="ui stackable divided grid">
-
     <div class="row" id="graph_box">
 
       <div class="ui three wide column">
-        <div ng-include="'d3Visualization/menuVisualization.html'"></div>
+        <div ng-include="'d3Visualization/infoDatiVisualisation.html'"></div>
       </div>
 
 
@@ -21,7 +20,8 @@
                                selected-node-label="selectedNodeLabel"
                                object-shape="objectShape"
                                datatype-shape="datatypeShape"
-                               data-info="dataInfo">
+                               data-info="dataInfo"
+                               show-photo="showPhoto">
         </d3-graphvisualization>
       </div>
 
@@ -29,15 +29,24 @@
         <div class="ui top aligned three wide column">
 
           <div id="node_info">
-            <p>Hover over node for node information<p>
+
+            <h5 class="ui header">
+            <input type="checkbox" ng-model="showPhoto.value"
+                   ng-true-value="'true'" ng-false-value="'false'">
+            Show photograph
+           </h5>
+
+            <h5 class="ui header">Hover over node for item information</h5>
               <a ng-href="{{selected.id}}" target=”_blank”>{{selected.id}}
                 <i ng-show="selected != ' '" class="external link icon"></i>
               </a>
             <p>{{selected.label}}</p>
-            <img src="{{selected.photoUrl}}" style="width:300;height:300;">
+            <p>{{selected.group}}</p>
+            <img ng-if="selected.photoUrl!=''"
+              src="{{selected.photoUrl}}" style="min-width:200; width: inherit; min-height:300;">
           </div>
 
-          <div ng-include="'d3Visualization/infoDataAndEndpoint.html'"></div>
+          <div ng-include="'d3Visualization/customiseView.html'"></div>
         </div>
 
       </div>

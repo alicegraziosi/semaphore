@@ -8,12 +8,19 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.datasetsAndGraphs = []; // dati dal file datasetsAndGraphs.json
     $scope.endpointList = [];
     $scope.graphList = [];
-    $rootScope.selectedEndpointUrl = "https://dbpedia.org/sparql";
-    $rootScope.selectedEndpointName = "DBpedia";
-    $rootScope.selectedGraph = "default";
+    
+    $scope.selectedEndpointUrl = "";
+    $scope.selectedEndpointName = "";
+    $scope.selectedGraph = "";
 
-    $rootScope.successMessageToAppear = false;
-    $rootScope.negativeMessageToAppear = false;
+    $rootScope.selectedEndpointUrl = "";
+    $rootScope.selectedEndpointName = "";
+    $rootScope.selectedGraph = "";
+
+    $scope.successMessageToAppear = false;
+    $scope.negativeMessageToAppear = false;
+    $scope.attentionMessageToAppear = false;
+    $scope.fetchingMessageToAppear = false;
 
     // numeri per label info da cui si può selezionare
     $rootScope.numClasses = 0;
@@ -22,7 +29,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $rootScope.numObjObjectProperties = 0;
     $rootScope.numObjDatatypeProperties = 0;
 
-
     $scope.dismissMessage = function(){
       $('.message').transition('fade');
     };
@@ -30,12 +36,37 @@ contactEndpointModule.controller('contactEndpointCtrl',
     // clear selected graph and endpoint
     $scope.restoreToDefault = function(){
       $('#endpointandgraph .ui.dropdown').dropdown('restore placeholder text');
+        $scope.selectedEndpointUrl = "";
+        $scope.selectedEndpointName = "";
+        $scope.selectedGraph = "";
+
         $rootScope.selectedEndpointUrl = "";
         $rootScope.selectedEndpointName = "";
         $rootScope.selectedGraph = "";
 
-        $rootScope.successMessageToAppear = false;
-        $rootScope.negativeMessageToAppear = false;
+        $scope.successMessageToAppear = false;
+        $scope.negativeMessageToAppear = false;
+        $scope.attentionMessageToAppear = false;
+        $scope.fetchingMessageToAppear = false;
+
+        $rootScope.numClasses = 0;
+        $rootScope.numClassObjectProperties = 0;
+        $rootScope.numClassDatatypeProperties = 0;
+        $rootScope.numObjObjectProperties = 0;
+        $rootScope.numObjDatatypeProperties = 0;
+
+        $scope.selectClass = "";
+        $scope.selectedClassObjectProperties = [];
+        $scope.selectedClassDatatypeProperties = [];
+        $scope.selectedObjDatatypeProperties = [];
+        $scope.selectedObjDatatypeProperties = [];
+
+        $scope.classes = [];
+        $scope.classDatatypeProperties = []; 
+        $scope.classObjectProperties = [];
+        $scope.objDatatypeProperties = [];
+        $scope.objObjectProperties = [];
+
     };
 
     $scope.restoreToDefault();
@@ -45,6 +76,12 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.datasetsAndGraphs.forEach(function(endpoint){
         $scope.endpointList.push({'url': endpoint.endpointUrl, 'name': endpoint.endpointName});
       });
+      $rootScope.datasetsAndGraphs = $scope.datasetsAndGraphs;
+    });
+
+    $rootScope.prefixes = [];
+    $http.get('../prefixes.json').then(function (response) {
+      $rootScope.prefixes = response.data;
     });
 
     $scope.classes = [];
@@ -71,50 +108,69 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     $scope.selectEndpoint = function (endpoint) {
 
-      $rootScope.successMessageToAppear = false;
-      $rootScope.negativeMessageToAppear = false;
+      $scope.successMessageToAppear = false;
+      $scope.negativeMessageToAppear = false;
+      $scope.attentionMessageToAppear = false;
+      $scope.fetchingMessageToAppear = false;
 
-      $rootScope.selectedEndpointUrl = endpoint.url;
-      $rootScope.selectedEndpointName = endpoint.name;
-      $rootScope.selectedGraph = "";
+      $scope.selectedEndpointUrl = endpoint.url;
+      $scope.selectedEndpointName = endpoint.name;
+      $scope.selectedGraph = "";
 
       $scope.datasetsAndGraphs.forEach(function(endpoint){
-        if(endpoint.endpointUrl === $rootScope.selectedEndpointUrl){
+        if(endpoint.endpointUrl === $scope.selectedEndpointUrl){
           $scope.graphList = endpoint.graphs;
         }
       });
+
+      $rootScope.numClasses = 0;
+      $rootScope.numClassObjectProperties = 0;
+      $rootScope.numClassDatatypeProperties = 0;
+      $rootScope.numObjObjectProperties = 0;
+      $rootScope.numObjDatatypeProperties = 0;
+
     };
 
     $scope.selectGraph = function (graph) {
-       $rootScope.selectedGraph = graph;
+       $scope.selectedGraph = graph;
     };
 
     // ask for endpoint
     $scope.contactSelectedEndpoint = function () {
-      ContactSPARQLendpoint.contactSelectedEndpoint($rootScope.selectedEndpointUrl, $rootScope.selectedGraph)
-        .success(function(data, status, headers, config){
-          $scope.contacted = $rootScope.selectedEndpointUrl + " reached";
+      if ($scope.selectedEndpointUrl != "" && $scope.selectedGraph != "") {
+        ContactSPARQLendpoint.contactSelectedEndpoint($scope.selectedEndpointUrl, $scope.selectedGraph)
+          .success(function(data, status, headers, config){
+            $scope.contacted = $rootScope.selectedEndpointUrl + " reached";
 
-              $rootScope.successMessageToAppear = true;
-        })
-        .error(function(data, status, headers, config){
-          $scope.contacted = $rootScope.selectedEndpointUrl + " unreachable";
+                $scope.successMessageToAppear = true;
+                $scope.queryDatasetClass();
+                $('#datasetInfoRichieste').addClass("active");
+          })
+          .error(function(data, status, headers, config){
+            $scope.contacted = $rootScope.selectedEndpointUrl + " unreachable";
 
-              $rootScope.negativeMessageToAppear = true;
-        });
-      $scope.queryDatasetClass();
+                $scope.negativeMessageToAppear = true;
+          });
+        } else {
+          $scope.attentionMessageToAppear = true;
+        }
+
+      $rootScope.numClasses = 0;
+      $rootScope.numClassObjectProperties = 0;
+      $rootScope.numClassDatatypeProperties = 0;
+      $rootScope.numObjObjectProperties = 0;
+      $rootScope.numObjDatatypeProperties = 0;
+
+      $scope.classes.splice(0, $scope.classObjectProperties.length);
+      $scope.classObjectProperties.splice(0, $scope.classObjectProperties.length);
+      $scope.classDatatypeProperties.splice(0, $scope.classDatatypeProperties.length);
+
+      //vuotato l'array delle proprietà selezionate della classe corrente
+      $scope.selectedClassObjectProperties.splice(0, $scope.selectedClassObjectProperties.length);
+      $scope.selectedClassDatatypeProperties.splice(0, $scope.selectedClassDatatypeProperties.length);
     };
 
-    $rootScope.prefixes = [];
-    $rootScope.prefixes.push(
-    {
-      'prefix' : 'dbo',
-      'url' : 'http://dbpedia.org/ontology/'
-    },
-    {
-      'prefix' : 'owl',
-      'url' : 'http://www.w3.org/2002/07/owl#'
-    });
+ 
 
     $scope.convertUriToPrefixProxy = function(classUri, uriToFind, name){  // uri="http://xmlns.com/foaf/0.1/"
       var promise = ContactSPARQLendpoint.convertUriToPrefixProxy(uriToFind);
@@ -125,6 +181,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
           'prefix' : prefix,
           'url' : url
         };
+        console.log(prefixUrl);
         if (_.findWhere($rootScope.prefixes, prefixUrl) == null) {
             $rootScope.prefixes.push(prefixUrl);
         };
@@ -132,6 +189,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
             uri: classUri,
             label: prefix + ":" + name
           });
+        $rootScope.numClasses++;
       }, function (error) {
           console.error(error);
       });
@@ -140,13 +198,25 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // classi del dataset
     $scope.queryDatasetClass = function(){
-      var promise = queryDatasetService.queryDatasetClass($rootScope.selectedEndpointUrl, $rootScope.selectedGraph);
+      $scope.fetchingMessageToAppear = true;
+
+      var promise = queryDatasetService.queryDatasetClass($scope.selectedEndpointUrl, $scope.selectedGraph);
+      
       promise.then(function(response) {
 
-        $rootScope.numClasses = response.data.results.bindings.length;
+        $rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
+        $rootScope.selectedEndpointName = $scope.selectedEndpointName;
+        $rootScope.selectedGraph = $scope.selectedGraph;
+      
 
-        //for(var i=0; i<response.data.results.bindings.length; i++){
+        $rootScope.numClasses = 0;
+        if(response.data.results.bindings.length == 0){
+          $scope.fetchingMessageToAppear = false;
+        }
+
         for(var i=0; i<response.data.results.bindings.length; i++){
+          $scope.fetchingMessageToAppear = false;
+
           // La label della classe potrebbe non esserci, classLabel nella query è OPZIONALE
           // Alla fine si è scelto di non chiedere la label della classe nella query,
           // ma si sceglie il rdf:type, e per la label si fa richiesta a prefix.cc
@@ -160,7 +230,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
           if(lastHash>lastSlash){
             name = classUri.substring(lastHash+1, classUri.length);
             uriToFind = classUri.substring(0, lastHash+1);
-          }else{
+          } else {
             name = classUri.substring(lastSlash+1, classUri.length);
             uriToFind = classUri.substring(0, lastSlash+1);
           }
@@ -177,11 +247,14 @@ contactEndpointModule.controller('contactEndpointCtrl',
                   });
                   break;
               }
+              
           }
 
           // se non c'è, richiedo il prefisso
           if(!found) {
             $scope.convertUriToPrefixProxy(classUri, uriToFind, name);
+          } else {
+            $rootScope.numClasses++;
           }
         };
       });
@@ -191,12 +264,14 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.queryDatasetClassObjectProperty = function(){
       var promise = queryDatasetService.queryDatasetClassObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri);
       promise.then(function(response) {
-        $rootScope.numClassObjectProperties = response.data.results.bindings.length;
+
+        console.log("num: " + response.data.results.bindings.length);
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.classObjectProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
             label: response.data.results.bindings[i].propertyLabel.value
           });
+          $rootScope.numClassObjectProperties++;
         };
       });
     }
@@ -205,12 +280,15 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.queryDatasetClassDatatypeProperty = function(){
       var promise = queryDatasetService.queryDatasetClassDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri);
       promise.then(function(response) {
-        $rootScope.numClassDatatypeProperties = response.data.results.bindings.length;
+
+        
+        console.log("num: " + response.data.results.bindings.length);
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.classDatatypeProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
             label: response.data.results.bindings[i].propertyLabel.value
           });
+          $rootScope.numClassDatatypeProperties++;
         };
       });
     }
@@ -249,12 +327,13 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.queryDatasetValuesObjDatatypeProperty = function(obj){
       var promise = queryDatasetService.queryDatasetValuesObjDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, obj);
       promise.then(function(response) {
-        $rootScope.numObjDatatypeProperties = response.data.results.bindings.length;
+        console.log("num: " + response.data.results.bindings.length);
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.objDatatypeProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
             label: response.data.results.bindings[i].propertyLabel.value
           });
+          $rootScope.numObjDatatypeProperties++;
         };
       });
     }
@@ -262,29 +341,30 @@ contactEndpointModule.controller('contactEndpointCtrl',
     // object properties della object properties della classe selezionata
     $scope.queryDatasetValuesObjObjectProperty = function(obj){
       var promise = queryDatasetService.queryDatasetValuesObjObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, obj);
-      $rootScope.numObjObjectProperties = response.data.results.bindings.length;
       promise.then(function(response) {
+        console.log("num: " + response.data.results.bindings.length);
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.objObjectProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
             label: response.data.results.bindings[i].propertyLabel.value
           });
+          $rootScope.numObjObjectProperties++;
         };
       });
     }
 
     //
     $scope.selectClass = function(selectedClass){
+
+      $rootScope.numClassObjectProperties = 0;
+      $rootScope.numClassDatatypeProperties = 0;
+      $rootScope.numObjObjectProperties = 0;
+      $rootScope.numObjDatatypeProperties = 0;
+
       //nuova classe corrente
       $scope.selectedClass = selectedClass;
 
-      $rootScope.dataInfoTemporaneo = {};
-      $rootScope.dataInfoTemporaneo.classe = {
-        uri : $scope.selectedClass.uri,
-        label : $scope.selectedClass.label,
-        type : "obj",
-        color : '1'
-      }
+      // se lo elimino poi non partono le query
 
       //eliminate le proprietà della classe precedente
       $scope.classObjectProperties.splice(0, $scope.classObjectProperties.length);
@@ -294,12 +374,10 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.selectedClassObjectProperties.splice(0, $scope.selectedClassObjectProperties.length);
       $scope.selectedClassDatatypeProperties.splice(0, $scope.selectedClassDatatypeProperties.length);
 
-      //$('.ui.label.transition.visible').remove();
-
       //ricerca delle proprietà della nuova classe corrente
       $scope.queryDatasetClassObjectProperty();
       $scope.queryDatasetClassDatatypeProperty();
-    }
+    };
 
     $scope.selectClassDatatypeProperty = function(selectedClassProperty){
       //aggiornate proprietà selezionate (aggiunte) della classe corrente
@@ -312,10 +390,12 @@ contactEndpointModule.controller('contactEndpointCtrl',
     }
 
     $scope.selectObjDatatypeProperty = function(selectedClassProperty){
+      $scope.selectedObjDatatypeProperties.splice(0, $scope.selectedObjDatatypeProperties);
       $scope.selectedObjDatatypeProperties.push(selectedClassProperty);
     }
 
     $scope.selectObjObjectProperty = function(selectedClassProperty){
+      $scope.selectedObjObjectProperties.splice(0, $scope.selectedObjObjectProperties);
       $scope.selectedObjObjectProperties.push(selectedClassProperty);
     }
 
@@ -335,10 +415,11 @@ contactEndpointModule.controller('contactEndpointCtrl',
         uri : $scope.selectedClass.uri,
         label : $scope.selectedClass.label,
         type : "obj",
-        color : '1'
+        group: 1,
+        color : '#f53453'
       }
-      $scope.dataInfo.litPropClasse = [];
-      $scope.dataInfo.objPropClasse = {};
+      $rootScope.dataInfo.litPropClasse = [];
+      $rootScope.dataInfo.objPropClasse = {};
 
       if($scope.selectedClassDatatypeProperties.length != 0){
 
@@ -374,12 +455,13 @@ contactEndpointModule.controller('contactEndpointCtrl',
             $rootScope.graph.links.push(l);
           });
 
-          //
           $scope.selectedClassObjectProperties.forEach(function(prop){
             $rootScope.dataInfo.objPropClasse =  {
               uri: prop.uri,
               label : prop.label,
-              type : 'obj'
+              type : 'obj',
+              group: 5,
+              color : '#f53453'
             }
           });
         });
