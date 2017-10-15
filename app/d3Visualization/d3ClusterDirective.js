@@ -17,14 +17,21 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
             //Use isolated scope
             //and two-way data binding ( "=" )
             //<d3-visualization graph="graph"></d3-visualization> --> $scope.graph
+            // prefixes:
+            // 1. "@"   (  Text binding / one-way binding )
+            // "="   ( Direct model binding / two-way binding )
+            //"&"   ( Behaviour binding / Method binding  )
             scope: {
                 graph: "=",
                 model: "=",
                 selectedNodeLabel: "=",  // nella view: selected-node-label
                 selectedClusterOption: "=",  // nella view: selected-cluster-option
-                info: "="  //two-way data binding
+                info: "=",
+                dataInfo: "=",  //two-way data binding
+                showPhoto: "="
             },
             link: function(scope, elem, attrs){
+              
                 // quando invoco il provider d3Service viene richiamato this.$get
                 d3Service.then(function(d3) {
                     // now you can use d3 as usual!
@@ -37,8 +44,6 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                         maxRadius = 5, //radius nodo cluster
                         radius = 15;
 
-                    var dataInfo = scope.info;
-
                     scope.$watch('graph', function (graph) {  //Scope.$watch accepts as first parameter expression or function
                         if(graph){ //Checking if the given value is not undefined;
                             console.log("changed graph " + graph);
@@ -47,11 +52,13 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                             scope.$watch('selectedClusterOption', function(selectedClusterOption) {
                                 if(selectedClusterOption){
                                     $("svg").remove();
+                                    console.log("cluster by" + selectedClusterOption.type);
                                     clusterBy(selectedClusterOption);
                                 } // if (selectedClusterOption)
                             }); // scope.$watch('selectedClusterOption', function(selectedClusterOption) {
 
                             function clusterBy(selectedClusterOption){
+                                // membri in base alla band (todo)
                                 if(selectedClusterOption.type=="obj"){
 
                                     var nodi_cluster = [];
@@ -69,8 +76,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     var m = unique.length; //10; // number of distinct clusters
                                     var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
-                                    var color = d3.scaleOrdinal(d3.schemeCategory10)
-                                        .domain(d3.range(m));
+                                    var color = d3.scaleOrdinal(d3.schemeCategory10);
+                                        
 
                                     // The largest node for each cluster.
                                     var clusters = new Array(m);  //Array di 10 elementi
@@ -92,7 +99,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
 
                                         graph.links.forEach(function(la){
 
-                                            dataInfo.objPropHeadClass.forEach(function(prop){
+                                            dataInformation.objPropHeadClass.forEach(function(prop){
 
                                                 if(la.source == n.id && la.type==prop.uri){
 
@@ -122,12 +129,11 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                         }
                                     });
                                 } else {
-
+                                    // e.g. band in base al genere
 
                                     var nodi_cluster = [];
                                     graph.nodeLiteral.forEach(function(n) {
                                         if(n.type==selectedClusterOption.label && n.label !="") nodi_cluster.push(n.label);
-
                                     });
 
                                     var unique = nodi_cluster.filter(function(elem, index, self) {
@@ -137,8 +143,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     var m = unique.length; //10; // number of distinct clusters
                                     var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
-                                    var color = d3.scaleOrdinal(d3.schemeCategory10)
-                                        .domain(d3.range(m));
+                                    var color = d3.scaleOrdinal(d3.schemeCategory10);
+                                    
                                     // The largest node for each cluster.
                                     var clusters = new Array(m);  //Array di 10 elementi
 
@@ -202,6 +208,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                             value: n.value,
                                             type: n.type,
                                             cluster: i,
+                                            color: selectedClusterOption.color,
                                             radius: r,
                                             total: n.total,
                                             x: Math.cos(i / m * 2 * Math.PI) * 200 + width / 2 + Math.random(),
@@ -246,7 +253,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     //}))
 
 
-                              /*un rettangolo contenitore per ogni nodo cluster*/
+                                /*un rettangolo contenitore per ogni nodo cluster*/
                                 var nodirect = nodes.filter(function(elem, index, self) {
                                     return elem.type=="cluster";
                                 });
@@ -255,10 +262,10 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     .data(nodirect)
                                     .enter()
                                     .append("rect")
-                                    .style("fill", function(d) { return color(d.cluster); })
-                                    .attr("opacity", "0.6")
-                                    .attr("width", function(d) { return 2*maxRadius + d.total*2*radius })
-                                    .attr("height", function(d) { return 2*maxRadius + d.total*2*radius; });
+                                    .style("fill", "#fff")
+                                    .style("stroke", selectedClusterOption.color)
+                                    .style("stroke-width", 2)
+                                    .attr("opacity", "1");
 
                                 var rectLabel = svg.append("g")
                                     .attr("class", "rectLable")
@@ -266,24 +273,40 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     .data(nodirect)
                                     .enter().append("g");
 
-                                rectLabel.append("rect")
+                                var rl = rectLabel.append("rect")
                                     .attr("id",function(d,i){return "rectLabelId" + i;})
-                                    .style("fill", function(d) { return color(d.cluster); })
+                                    .style("fill", "white")
+                                    .attr("x", "0")
+                                    .attr("y", "0")
+                                    .style("stroke", selectedClusterOption.color)
+                                    .style("stroke-width", 2)
                                     .attr("opacity", "1")
-                                    .attr("width", function(d) { return 2*maxRadius + d.total*2*radius; })
-                                    .attr("height", "15");
+                                    .attr("height", "20");
 
                                 rectLabel.append("text")
+                                    .text(function(d) { return d.label; })
                                     .style("font-family", "Arial")
-                                    .style("fill", "#000")
-                                    .attr("y", "12")
-                                    .text(function(d) { return d.label; });
+                                    .style("font-size", 12)
+                                    .style("overflow", "hidden")
+                                    .style("text-overflow", "ellipsis")
+                                    .style("white-space", "nowrap")
+                                    .attr("x", "+2")
+                                    .attr("y", "+15")
+                                    .attr("text-anchor", "start")
+                                    .each(function(d) {
+                                        var thisWidth = this.getBBox().width;
+                                        d.thisWidth = thisWidth;
+                                    });
+
+                                rl.attr("width", function(d){return  Math.max(150, d.thisWidth) + 1});
+                                rect.attr("width", function(d){return Math.max(150, d.thisWidth) + 1});
+                                rect.attr("height", function(d){return Math.max(150, d.thisWidth) + 1});
 
                                 var node = svg.selectAll("circle")
                                     .data(nodes)
                                     .enter()
                                     .append("circle")
-                                    .style("fill", function(d) { return color(d.cluster); })
+                                    .style("fill", function(d) { return color(d.group); })
                                     .call(d3.drag()
                                         .on("start", dragstarted)
                                         .on("drag", dragged)
@@ -294,7 +317,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                 var label = svg.selectAll("nodeText")
                                     .data(nodes) //.data(graph.nodes)
                                     .enter().append("text")
-                                    .attr("text-anchor", "middle")
+                                    .attr("text-anchor", "start")
                                     .style("font-family", "Arial")
                                     .text(function(d) { if(d.type=="node") return d.label;});
 

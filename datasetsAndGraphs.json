@@ -5,6 +5,11 @@
     "endpointName": "Semantic Lancet"
   },
   {
+    "endpointUrl": "http://opencitations.net/sparql",
+    "graphs": ["default"],
+    "endpointName": "OpenCitation Corpus"
+  },
+  {
     "endpointUrl": "http://localhost:3030/springer/query",
     "graphs": ["default"],
     "endpointName": "Local Semantic Lancet"
@@ -16,12 +21,17 @@
   },
   {
     "endpointUrl": "https://dbpedia.org/sparql",
-    "graphs": ["default", "https://dbpedia.org/"],
+    "graphs": ["http://dbpedia.org", "default", "http://wikidata.dbpedia.org"],
     "endpointName": "DBpedia"
   },
   {
-    "endpointUrl": "http://localhost:8890/sparql",
+    "endpointUrl": "http://localhost:8890/sparql", 
+    "graphs": ["default", "http://localhost:8890/dbpediadump"],
+    "endpointName": "Local DBpedia dump"
+  },
+  {
+    "endpointUrl": "http://dati.senato.it/sparql",
     "graphs": ["default"],
-    "endpointName": "Local DBpedia"
+    "endpointName": "dati.senato.it"
   }
 ]

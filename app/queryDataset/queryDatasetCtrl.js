@@ -35,5 +35,8 @@ queryDatasetModule.controller('queryDatasetCtrl', function($scope, queryDatasetS
 	PREFIX literal: <http://www.essepuntato.it/2010/06/literalreification/>
 	PREFIX biro:    <http://purl.org/spar/biro/>
 	PREFIX frbr:    <http://purl.org/vocab/frbr/core#>
-	PREFIX c4o:     <http://purl.org/spar/c4o/>`
+	PREFIX c4o:     <http://purl.org/spar/c4o/>
+	PREFIX   ex:    <http://www.example.org/resources#>
+	PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+	PREFIX text:    <http://jena.apache.org/text#>`
 });

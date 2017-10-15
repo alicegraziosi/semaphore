@@ -15,7 +15,7 @@
 */
 angular.module('contactEndpointModule', [])
 
-.factory('ContactSPARQLendpoint', ['$http', '$q', function($http, $q){
+.factory('ContactSPARQLendpoint', ['$http', '$q', '$rootScope', function($http, $q, $rootScope){
 
   return{
 
@@ -89,11 +89,10 @@ angular.module('contactEndpointModule', [])
 
         //var prefixApiUrl = "http://eelst.cs.unibo.it:9092/";
         //var prefixApiUrl = "http://localhost:8080/api/";
-        var prefixApiUrl = $rootScope.prefixApiUrl;  //in app.js
 
         $http({
           method: 'GET',
-          url: prefixApiUrl+"label?label="+uri
+          url: $rootScope.prefixApiUrl+"label?label="+uri
         })
         .then(function successCallback(response) { //response status code between 200 and 299
 

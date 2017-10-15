@@ -2,7 +2,7 @@
   <form class="ui form">
     <h4 class="ui dividing header">Add a SPARQL endpoint and a graph</h4>
     <div class="required field">
-      <label>Insert a SPARQL enpoint name</label>
+      <label>Insert a SPARQL endpoint name</label>
       <div class="ui input">
         <input ng-model="endpointName"
           type="text" placeholder="Name...">
@@ -25,18 +25,43 @@
           type="text" placeholder="Graph...">
       </div>
     </div>
-      <!--  pingendpoint() al posto di addenpoint() -->
-      <button ng-if="endpointName != ''
-                  && endpointURL != '' 
-                  && endpointGraph != ''"
-              class="ui primary button" 
-              ng-click="addEndpoint()">
-        Add endpoint
-        <i class="icons">
-          <i class="database icon"></i>
-          <i class="corner search icon"></i>
-        </i>
-      </button>
-    </div>
+    <!--  pingendpoint() al posto di addenpoint() -->
+    <button ng-if="endpointName != ''
+                && endpointURL != '' 
+                && endpointGraph != ''"
+            class="ui primary button" 
+            ng-click="addEndpoint()">
+      Add endpoint
+      <i class="icons">
+        <i class="database icon"></i>
+        <i class="corner search icon"></i>
+      </i>
+    </button>
+    <button class="ui button" ng-click="restoreToDefault()">
+      Clear
+    </button>
   </form>
+  <div ng-if="successMessageToAppear" class="ui tiny success message">
+      <i class="close icon" ng-click="dismissMessage()"></i>
+      <div class="header">
+        SPARQL endpoint succesfully added!
+      </div>
+      <p>You may now query the dataset.</p>
+    </div>
+
+    <div ng-if="negativeMessageToAppear" class="ui tiny negative message">
+      <i ng-click="dismissMessage()" class="close icon"></i>
+      <div class="header">SPARQL endpoint unreachable :(
+      </div>
+      <p>Retry later or choose another one.</p>
+    </div>
+
+
+    <div ng-if="attentionMessageToAppear" class="ui tiny yellow message">
+      <i class="close icon" ng-click="dismissMessage()"></i>
+      <div class="header">
+        Endpoint altready in list.
+      </div>
+    </div>
+
 </div>

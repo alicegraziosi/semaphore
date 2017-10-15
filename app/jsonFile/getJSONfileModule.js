@@ -32,6 +32,7 @@ angular.module('getJSONfileModule', [])
           // node object property della classe scelta
           var node = {
             id: d.oo.value,
+            url: d.oo.value,
             label: d.ooLabel.value,
             type: d.p.value,//type: d.ooLabel.value,
             group: 3,
@@ -105,6 +106,7 @@ angular.module('getJSONfileModule', [])
         var node = {
           id: d.sogg.value,
           label: d.soggLabel.value,
+          url: d.sogg.value,
           type: d.soggType.value,
           group: 1,
           customProperties : [
@@ -127,6 +129,7 @@ angular.module('getJSONfileModule', [])
       }
       var literalNode = {
         id: label+index, // soggPropUri0
+        url: d.soggPropUri0.value,
         label: soggproplabel0,
         type: d.propType.value,
         group: 2

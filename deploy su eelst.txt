@@ -17,7 +17,7 @@ from Directory GIG:
 first time:
 > npm start
 then:
-> nohup http-server -a 130.136.131.42 -p 8092 -s
+> nohup http-server -a 130.136.131.42 -p 8092 -s ./app
 
 App online on:
 http://eelst.cs.unibo.it:8092/

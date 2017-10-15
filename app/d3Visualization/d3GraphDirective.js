@@ -70,8 +70,8 @@ myAppd3view.directive('d3Graphvisualization',
           
 
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
-          scope.$watch('graph', function (graph) {
-            if(graph){ //Checking if the given value is not undefined
+          scope.$watch('graph', function (graph, graphold) {
+            if(graph != graphold){ //Checking if the given value is not undefined
 
                 clearAll();
                 update();
@@ -79,7 +79,7 @@ myAppd3view.directive('d3Graphvisualization',
                 function update(){
                   var links = [];
                   var nodes = [];
-                  var radius = 16;
+                  var radius = 20;
 
                   graph.links.forEach(function(l) {
                     links.push({
@@ -104,6 +104,7 @@ myAppd3view.directive('d3Graphvisualization',
                       id: n.id,
                       label: n.label,
                       type: n.type,
+                      url: n.url,
                       group: n.group,
                       photoUrl: n.customProperties[0].value,
                       shape: "circle",
@@ -118,6 +119,7 @@ myAppd3view.directive('d3Graphvisualization',
                       id: n.id,
                       label: n.label,
                       type: n.type,
+                      url: n.url,
                       group: n.group,
                       photoUrl: " ",
                       shape: "rectangle"
@@ -128,7 +130,7 @@ myAppd3view.directive('d3Graphvisualization',
                   /* directed force layout */
                   var simulation = d3.forceSimulation()
                     // replace force.linkStrength in d3v3
-                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100))
+                    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100).strength(1))
                     // replace force.charge of d3v3
                     .force("charge", d3.forceManyBody())
                     .force("center", d3.forceCenter(width / 2, height / 2));
@@ -172,7 +174,6 @@ myAppd3view.directive('d3Graphvisualization',
                         {return document.createElementNS('http://www.w3.org/2000/svg', 'circle')}
                       if(d.shape=="rectangle")
                         {return document.createElementNS('http://www.w3.org/2000/svg', 'rect')}})
-                        .attr("width", 50) // if rect
                         .attr("height", 8)  //if rect
                         .attr("r", function(d) { return d.radius; }) // if circle
                         .attr("fill", function(d) {
@@ -182,7 +183,7 @@ myAppd3view.directive('d3Graphvisualization',
                             .on("drag", dragged)
                             .on("end", dragended))
                         .on("mouseover", function(d){
-                          d3.selectAll("circle").style("stroke", '#ffffff');
+                          d3.select(this).style("stroke", '#ffffff');
                           d3.select(this).style("cursor", "pointer"); 
                           d3.select(this).style("stroke", color(d.group));
                           scope.$apply(function () {
@@ -193,11 +194,11 @@ myAppd3view.directive('d3Graphvisualization',
                               .duration(200)    
                               .style("opacity", .9);
 
-                          div.style("left", d3.select(this).attr('cx') + "50px")    
+                          div.style("left", d3.select(this).attr('cx') + "100px")    
                              .style("top",  d3.select(this).attr('cy') + "50px");  
                         })
                         .on("mouseout", function(d){
-                          d3.selectAll("circle").style("stroke", '#ffffff');
+                          d3.select(this).style("stroke", '#ffffff');
                           d3.select(this).style("cursor", "default");
 
                           div.transition()    
@@ -220,7 +221,15 @@ myAppd3view.directive('d3Graphvisualization',
                       .append("text")
                       .text(function (d) { return d.label; })
                       .style("font-family", "Arial")
-                      .style("font-size", 5);
+                      .style("font-size", 5)
+                      .attr("x", "+2")
+                      .attr("y", "0")
+                      .each(function(d) {
+                          var thisWidth = this.getBBox().width;
+                          d.thisWidth = thisWidth;
+                      });
+
+                  node.attr("width", function(d){return d.thisWidth + 1});
 
                   /* immagini dbpedia relative ai nodi */
                   var image = gzoom.append("g")
@@ -257,29 +266,35 @@ myAppd3view.directive('d3Graphvisualization',
                     .data(links) //.data(graph.links)
                     .enter().append("g");
 
-                  rect.append("rect")
-                    .attr("id",function(d,i){return "linkId_" + i;})
-                    .attr("x", "-8")
-              	    .attr("y", "0")
-                    .attr("width", "30")
-              	    .attr("height", "5")
+                 var rects = rect.append("rect")
+                    .attr("id", function(d,i){return "linkId_" + i;})
+                    .attr("x", "-9")
+                    .attr("y", "-5")
+                    .attr("height", "8")
                     .attr("fill", "#9c6");
+            
 
-                  rect.append("text")
+                  var text = rect.append("text")
                     .text(function (d) { return d.label; })
                     .style("font-family", "Arial")
                     .style("font-size", 4)
                     .style("overflow", "hidden")
-                    .style("background-color", "#9c6")
                     .style("text-overflow", "ellipsis")
                     .style("white-space", "nowrap")
-                    .attr("id",function(d,i){return "linkId_" + i;})
-                    //.attr("fill", "#000")
-                    .attr("x", "-7")
-                    .attr("y", "+4")
+                    .attr("id", function(d,i){return "linkId_" + i;})
+                    .attr("x", "-8")
+                    .attr("y", "0")
                     .attr("text-anchor", "start")
-                    .append("title")
-                      .text(function(d){return d.label;});
+                    .each(function(d) {
+                        var thisWidth = this.getBBox().width;
+                        d.thisWidth = thisWidth;
+                    })
+                    .append("title");
+
+                rects.attr("width", function(d){return d.thisWidth + 1});
+                  
+                    
+                //text.text(function(d){return d.label;});
 
                   /* frecce dei nodo link nodo - markers to indicate that this is a directed graph
                   gzoom.append("defs")

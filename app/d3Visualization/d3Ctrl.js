@@ -28,9 +28,59 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
 
+      d3Service.then(function(d3) {
+
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        // INFORMAZIONI TBox
+        $rootScope.dataInfo = {
+          classe : {
+            uri : 'http://dbpedia.org/ontology/Band',
+            label : 'Band',
+            type : "obj",
+            group: 1,
+            color : color(1)
+          },
+          litPropClasse: [
+            {
+              uri : 'http://dbpedia.org/property/genre',
+              label : 'genre',
+              type : 'lit',
+              group: 2,
+              color : color(2)
+            }
+          ],
+          objPropClasse: {
+            uri : 'http://dbpedia.org/ontology/bandMember',
+            label : 'band member',
+            type : 'obj',
+            group: 3,
+            color : color(3)
+          },
+          litPropObj: [
+            {
+              uri : 'http://dbpedia.org/property/yearsActive',
+              label : 'years active',
+              type : 'lit',
+              group: 4,
+              color : color(4)
+            }
+          ],
+          objPropObj: [
+            {
+              uri : '',
+              label : '',
+              type : '',
+              group: 5,
+              color : color(5)
+            }
+          ]
+        };
+    });
+
     $scope.selectedEndpointUrl = "https://dbpedia.org/sparql";
     $scope.selectedEndpointName = "DBpedia";
-    $scope.selectedGraph = "default";
+    $scope.selectedGraph = "http://dbpedia.org";
 
     $scope.showPhoto = {
        value: 'true'
@@ -105,64 +155,14 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $rootScope.graph = graph;
         $rootScope.nodeLabels = $rootScope.nodeLabels.sort();
 
-        d3Service.then(function(d3) {
-
-          var color = d3.scaleOrdinal(d3.schemeCategory10);
-
-        // INFORMAZIONI TBox
-        $rootScope.dataInfo = {
-          classe : {
-            uri : 'http://dbpedia.org/ontology/Band',
-            label : 'Band',
-            type : "obj",
-            group: 1,
-            color : color(1)
-          },
-          litPropClasse: [
-            {
-              uri : 'http://dbpedia.org/property/genre',
-              label : 'genre',
-              type : 'lit',
-              group: 2,
-              color : color(2)
-            }
-          ],
-          objPropClasse: {
-            uri : 'http://dbpedia.org/ontology/bandMember',
-            label : 'band member',
-            type : 'obj',
-            group: 3,
-            color : color(3)
-          },
-          litPropObj: [
-            {
-              uri : 'http://dbpedia.org/property/yearsActive',
-              label : 'years active',
-              type : 'lit',
-              group: 4,
-              color : color(4)
-            }
-          ],
-          objPropObj: [
-            {
-              uri : '',
-              label : '',
-              type : '',
-              group: 5,
-              color : color(5)
-            }
-          ]
-        };
-        });
-
-        $scope.dataInfo = $rootScope.dataInfo;
-        $scope.info = $rootScope.info;
-
         $scope.clusterClasse = $rootScope.dataInfo.classe;
         $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
         $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
         $scope.litPropObj = $rootScope.dataInfo.litPropObj;
         $scope.objPropObj = $rootScope.dataInfo.objPropObj;
+
+        // init
+        $scope.selectedClusterOption = $scope.litPropClasse.label;
     });
 
 
@@ -193,15 +193,10 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     }, true);
 
 
-    $rootScope.$watch('dataInfo', function(dataInfo) {
+    $rootScope.$watch('dataInfo', function(dataInfo, dataInfoOld) {
       $scope.dataInfo = $rootScope.dataInfo;
       console.log("controller datainfo changed" + $scope.dataInfo);
-    });
-
-    $rootScope.$watch('info', function(info) {
-      $scope.info = $rootScope.info;
-      console.log("controller info changed" + $scope.info);
-    });
+    }, true);
 
     $scope.selected = " ";
 
@@ -346,8 +341,9 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       console.log('"menuItemClick" button clicked');
     };
 
-    $scope.toggleSelectionClusterOption = function toggleSelection(selectedClusterOption) {
-        $scope.selectedClusterOption = selectedClusterOption;
+    // opzione cluster
+    $scope.toggleSelectionClusterOption = function toggleSelection(clusterOption) {
+        $scope.selectedClusterOption = clusterOption;
     };
 
     // opzioni di visualizzazione (shape)

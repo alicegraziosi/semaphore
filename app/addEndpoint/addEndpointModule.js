@@ -13,33 +13,75 @@ angular.module('addEndpointModule', ['ngRoute', 'contactEndpointModule'])
         controller: 'addEndpointCtrl'
       })
 }])
-.controller('addEndpointCtrl', ['$scope' , '$rootScope',
+.controller('addEndpointCtrl', ['$scope' , '$rootScope', 'ContactSPARQLendpoint',
   function($scope, $rootScope, ContactSPARQLendpoint){
 
-  $scope.endpointName = "";
-  $scope.endpointURL = "";
-  $scope.endpointGraph = "";
+    $scope.endpointName = "";
+    $scope.endpointURL = "";
+    $scope.endpointGraph = "";
+
+    $scope.successMessageToAppear = false;
+    $scope.negativeMessageToAppear = false;
+    $scope.attentionMessageToAppear = false;
 
   $scope.addEndpoint = function(endpointName, endpointURL, endpointGraph) {
-    $rootScope.datasetsAndGraphs.push(
-      {
-        'endpointUrl': $scope.endpointURL, 
-        'endpointName': $scope.endpointName,
-        'graphs' : [$scope.endpointGraph]
-      }
-    );
-    console.log($rootScope.datasetsAndGraphs);
+    var endpoint = {
+      'endpointUrl': $scope.endpointURL, 
+      'endpointName': $scope.endpointName,
+      'graphs' : [$scope.endpointGraph]
+    };
+    // se c'è già
+    if (_.findWhere($rootScope.datasetsAndGraphs, endpoint) != null) {
+      $scope.attentionMessageToAppear = true;
+    } else {  // se non c'è
+      $scope.pingEndpoint($scope.endpointURL, $scope.endpointGraph);
+    } 
   }
 
 
-	$scope.pingEndpoint = function(ContactSPARQLendpoint, endpointURL, endpointGraph) {
+	$scope.pingEndpoint = function(endpointURL, endpointGraph) {
 		ContactSPARQLendpoint.contactSelectedEndpoint(endpointURL, endpointGraph)
 		.success(function(data, status, headers, config){
-      $scope.addEndpoint();
+      $scope.successMessageToAppear = true;
+      var endpoint = {
+        'endpointUrl': $scope.endpointURL, 
+        'endpointName': $scope.endpointName,
+        'graphs' : [$scope.endpointGraph]
+      };
+      $rootScope.datasetsAndGraphs.push(endpoint);
+      console.log($rootScope.datasetsAndGraphs);
 		})
 		.error(function(data, status, headers, config){
       console.log("error");
+      /*
+      var endpoint = {
+        'endpointUrl': $scope.endpointURL, 
+        'endpointName': $scope.endpointName,
+        'graphs' : [$scope.endpointGraph]
+      };
+      $rootScope.datasetsAndGraphs.push(endpoint);
+      console.log($rootScope.datasetsAndGraphs);
+      */
+      $scope.negativeMessageToAppear = true;
 		});
 	};
 	
+  $scope.dismissMessage = function(){
+    $('.message').transition('fade');
+  };
+
+
+  // clear selected graph and endpoint
+  $scope.restoreToDefault = function(){
+    $scope.endpointName = "";
+    $scope.endpointURL = "";
+    $scope.endpointGraph = "";
+
+    $scope.successMessageToAppear = false;
+    $scope.negativeMessageToAppear = false;
+    $scope.attentionMessageToAppear = false;
+  };
+
+  $scope.restoreToDefault();
+
 }]);

@@ -9,42 +9,49 @@
     <div id="data_info" class="ui list">
         
         <div class="item">
+          
+          <svg height="20" width="20">
+            <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{dataInfo.classe.color}}" />
+          </svg>
+
           <h5 class="header">
-
-            <svg height="20" width="20">
-              <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{dataInfo.classe.color}}" />
-            </svg>
-
-            <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.classe.color}}">{{dataInfo.classe.group}} {{dataInfo.classe.color}}</div> 
-              Class
+            <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.classe.color}}">
+                {{numClasses}}
+            </div> 
+            Class
           </h5>
+
           <p>{{dataInfo.classe.uri}}</p>
           <p>{{dataInfo.classe.label}}</p>
         </div>
 
         <div class="item">
-          <h5 class="header" ng-show="dataInfo.litPropHeadClass.length != 0">Class Literal Properties</h5>
+
+          <svg width="20" height="20">
+            <rect width="20" height="10" style="fill:{{dataInfo.litPropClasse[0].color}};stroke-width:1;stroke:rgb(0,0,0)" />
+          </svg>
+
+          <h5 class="header" ng-show="dataInfo.litPropHeadClass.length != 0">
+            <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropClasse[0].color}}" >    {{numClassDatatypeProperties}}
+            </div>  
+            Class Literal Properties
+          </h5>
           <div ng-model="dataInfo.litPropClasse"
                ng-repeat="prop in dataInfo.litPropClasse">
-
-            <svg width="20" height="20">
-              <rect width="20" height="10" style="fill:{{prop.color}};stroke-width:1;stroke:rgb(0,0,0)" />
-            </svg>
-
-              <div class="label-overrided horizontal-mini-label" style="background-color: {{prop.color}}" >  {{prop.color}} {{prop.group}}</div>  
               <p>{{prop.label}}</p>
               <p>{{prop.uri}}</p>
           </div>
         </div>
 
         <div class="item">
+          <svg height="20" width="20">
+            <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{dataInfo.objPropClasse.color}}" />
+          </svg>
           <h5 class="header" ng-show="dataInfo.objPropHeadClass.length != 0">
-
-            <svg height="20" width="20">
-              <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{dataInfo.objPropClasse.color}}" />
-            </svg>
-
-           <div class="label-overrided horizontal-mini-label"  style="background-color: {{dataInfo.objPropClasse.color}}">  {{dataInfo.objPropClasse.group}}</div> Class Object Properties</h5>
+            <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropClasse.color}}">    {{numClassDatatypeProperties}}
+            </div> 
+            Class Object Properties
+          </h5>
           <div ng-model="dataInfo.objPropClasse">
               <p>{{objPropClasse.label}}</p>
               <p>{{objPropClasse.uri}}</p>
@@ -52,29 +59,33 @@
         </div>
 
         <div class="item">
+          <svg width="20" height="20">
+            <rect width="20" height="10" style="fill:{{dataInfo.litPropObj[0].color}};stroke-width:1;stroke:rgb(0,0,0)" />
+          </svg>
           <h5 class="header" ng-show="dataInfo.litPropHeadClass.length != 0">
-          
-          Class Object Property Literal Properties</h5>
+            <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropObj[0].color}}" > {{numObjDatatypeProperties}}
+            </div>  
+           Class Object Property Literal Properties
+          </h5>
           <div ng-model="dataInfo.litPropObj"
                ng-repeat="prop in dataInfo.litPropObj">
-            <svg width="20" height="20">
-              <rect width="20" height="10" style="fill:{{prop.color}};stroke-width:1;stroke:rgb(0,0,0)" />
-            </svg>
-              <div class="label-overrided horizontal-mini-label" style="background-color: {{prop.color}}" > {{prop.color}} {{prop.group}}</div>  
               <p>{{prop.label}}</p>
               <p>{{prop.uri}}</p>
           </div>
         </div>
 
         <div class="item">
+          <svg height="20" width="20">
+            <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{dataInfo.objPropObj[0].color}}" />
+          </svg>
           <h5 class="header" ng-show="dataInfo.objPropHeadClass.length != 0">
-            Class Object Property Object Properties</h5>
+            <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropObj[0].color}}">{{numObjObjectProperties}}
+            </div>  
+            Class Object Property Object Properties
+          </h5>
           <div ng-model="dataInfo.objPropObj"
               ng-repeat="prop in dataInfo.objPropObj">
-              <svg height="20" width="20">
-                <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{prop.color}}" />
-              </svg>
-              <div class="label-overrided horizontal-mini-label" style="background-color: {{prop.color}}" >  {{prop.color}} {{prop.group}}</div>  
+              
               <p>{{prop.label}}</p>
               <p>{{prop.uri}}</p>
           </div>

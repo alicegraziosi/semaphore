@@ -27,6 +27,9 @@
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
   -->
 
+  <!--color palette-->
+  <script src="jscolor/jscolor.js"></script>
+
   <!-- underscore.js -->
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 
@@ -34,12 +37,13 @@
   <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
-  <!-- Rigth Sidebar -->
+  <!-- Rigth Sidebar
   <div class="ui right sidebar overlay vertical menu">
     <a class="item">
       item
     </a>
   </div>
+  -->
 
   <!-- Left Sidebar -->
   <div class="ui wide left overlay sidebar vertical menu">
@@ -49,17 +53,17 @@
       <div class="item">
         <a class="title">
           <i class="dropdown icon"></i>
-          <b>Select a SPARQL endpoint and a graph</b>
+          <b>Change current SPARQL endpoint or the graph</b>
         </a>
-        <div class="content active menu" id="endpointandgraph">
+        <div class="content menu" id="endpointandgraph">
           <div class="header">Select a SPARQL endpoint</div>
           <div class="ui fluid search selection dropdown" ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
             <div class="default text">Select a SPARQL endpoint</div>
               <div class="menu">
-                <div ng-init=""
-                     ng-model="endpointList" class="item"
-                     ng-click="selectEndpoint(endpoint)"
+                <div 
+                     ng-model="selected" class="item"
+                     ng-click="selectEndpoint(selected)"
                      ng-repeat="endpoint in endpointList">
                   <p class="compact">{{endpoint.name}}</p>
                   <p class="compact">{{endpoint.url}}</p>
@@ -72,7 +76,8 @@
               <i class="dropdown icon" ng-click="dropdown();"></i>
               <div class="default text">Select a graph</div>
               <div class="menu">
-                <div ng-model="graphList" class="item"
+                <div
+                     ng-model="graphList" class="item"
                      ng-click="selectGraph(graph)"
                      ng-repeat="graph in graphList">
                      {{graph}}
@@ -119,25 +124,16 @@
 
       <div class="ui fitted divider"></div>
 
-      <div class="item">
-        <a class="title">
+      <div class="active item">
+        <a class="title active">
           <i class="dropdown icon"></i>
-          <b>Query builder</b>
+          <b>Select data</b>
         </a>
-        <div class="content menu" id="datasetInfoRichieste">
-
-          <div class="ui icon message" ng-if="fetchingMessageToAppear">
-            <i class="notched circle loading icon"></i>
-            <div class="content">
-              <div class="header">
-                Just one second
-              </div>
-              <p>Fetching content...</p>
-            </div>
-          </div>
+        <div class="content active menu" id="datasetInfoRichieste">
 
           <div class="header" ng-show="classes.length!=0">Select a class 
             <div class="label-overrided">{{numClasses}}</div>
+            <div ng-if="fetchingMessageToAppear" class="ui active inline mini loader"></div>
           </div>
 
           <div ng-show="classes.length!=0">
@@ -157,14 +153,26 @@
             </div>
           </div>
 
-          <div class="header" ng-show="classDatatypeProperties.length!=0">Select class properties</div>
-          <div class="header" ng-show="classDatatypeProperties.length!=0">Select a class datatype property</div>
+          <h6 class="ui header"
+            ng-if="selectedClass!='' &&
+            classDatatypeProperties.length==0 && 
+            classObjectProperties.length==0">
+            No properties found.
+          </h6>
+
+          <div id="allClassPropertiesDropown">
+          <div class="header" ng-show="classDatatypeProperties.length!=0">
+            Select a class datatype property
+            <div class="label-overrided">
+              {{numClassDatatypeProperties}}
+            </div>
+            <div ng-if="classDatatypePropertiesLoading" class="ui inline mini loader"></div>
+          </div>
 
           <div ng-show="classDatatypeProperties.length!=0">
             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
               <div class="default text">Select a class datatype property
-                <div class="label-overrided">{{numClassDatatypeProperties}}</div>
               </div>
               <div class="menu">
                 <div ng-model="classDatatypeProperties" class="item"
@@ -179,7 +187,13 @@
             </div>
           </div>
 
-          <div class="header" ng-show="classObjectProperties.length!=0">Select a class object property</div>
+          <div class="header" ng-show="classObjectProperties.length!=0">
+            Select a class object property
+            <div class="label-overrided">
+              {{numClassObjectProperties}}
+            </div>
+            <div class="ui inline mini loader"></div>
+          </div>
           <div ng-show="classObjectProperties.length!=0">
             <!--<div class="ui fluid multiple search normal selection dropdown"
               ng-click="dropdown();">-->
@@ -187,7 +201,6 @@
                 ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
               <div class="default text">Select a class object property
-                <div class="label-overrided">{{numClassObjectProperties}}</div>
               </div>
               <div class="menu">
                 <div class="item" ng-model="classObjectProperty" class="item"
@@ -204,22 +217,31 @@
 
           <div ng-show="selectedClass!=''">
             <button class="ui mini button" ng-click="queryEndpointClassProperties()">
-              Query
+              Load data
             </button>
             <button class="ui mini button" ng-click="clearQueryParam()">
               Clear
             </button>
           </div>
 
-          <div class="ui divider"></div>
+          <div class="ui divider" ng-if="objDatatypeProperties.length!=0 || objObjectProperties.length!=0"></div>
 
-          <div class="header"
+          <div class="header" ng-if="objDatatypeProperties.length!=0 || objObjectProperties.length!=0"
               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
-              Select a datatype property of
+              Select 
               <div class="label-overrided">{{selectedClassObjectProperty.label}}</div>
-              <div class="label-overrided">{{numObjDatatypeProperties}}</div>
+              properties
           </div>
+          
           <div ng-show="objDatatypeProperties.length!=0">
+            <div class="header" >
+              Select a datatype property
+              <div class="label-overrided">
+                {{numObjDatatypeProperties}}
+              </div>
+              <div class="ui inline mini loader"></div>
+            </div>
+
             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
               <div class="default text">Select a datatype property</div>
@@ -235,14 +257,17 @@
               </div>
             </div>
           </div>
+          
+          <div ng-show="objObjectProperties.length!=0">
 
-          <div class="header"
-              ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
-              Select an object property of 
-              <div class="label-overrided">{{selectedClassObjectProperty.label}}</div>
-              <div class="label-overrided">{{numObjDatatypeProperties}}</div>
-          </div>
-          <div  ng-show="objObjectProperties.length!=0">
+            <div class="header">
+              Select an object property
+              <div class="label-overrided">
+                {{numObjObjectProperties}}
+              </div>
+              <div class="ui inline mini loader"></div>
+            </div>
+
             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
               <div class="default text">Select an object property</div>
@@ -258,11 +283,12 @@
                 </div>
               </div>
             </div>
+
           </div>
-          
-          <div ng-show="selectedClassDatatypeProperties!=''|| selectedClassObjectProperties!=''">
+          </div>
+          <div ng-show="selectedObjObjectProperties.length!=0 || selectedObjDatatypeProperties.length!=0">
             <button class="ui mini button" ng-click="queryEndpoint()">
-              Query
+              Load data
             </button>
             <button class="ui mini button" ng-click="clearQueryParam()">
               Clear
@@ -273,6 +299,8 @@
       </div><!-- chiude <div class="ui item"> -->
 
       <div class="ui fitted divider"></div>
+      
+      <!--
       <div class="item">
         <a class="title">
           <i class="dropdown icon"></i>
@@ -282,16 +310,16 @@
           <div class="ui fluid action input">
             <input type="text"
               ng-init="filename='yourData.json'"
-              ng-model="filename"></input>
+              ng-model="filename">
             <button class="ui icon button">
               <i class="search icon"></i>
             </button>
           </div>
         </div>
       </div> 
-      
-      <!--chiude <div class="item"> -->
-    </div>
+      -->
+
+    </div> <!--chiude <div class="item"> -->
   </div> <!-- chiude Left Sidebar --> 
 
   <!-- Top Fixed Menu -->
@@ -308,17 +336,21 @@
       </div>
     </div>
 
+    <!--
     <a href="#!/addEndpoint" class="item right">
       add Endpoint
     </a>
+    -->
 
     <a href="#!/about" class="item right">
       about
     </a>
 
+    <!--
     <div class="item right" id="toggleRightSidebar">
       <i class="ellipsis vertical medium icon"></i>
     </div>
+    -->
 
   </div>
 

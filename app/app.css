@@ -7,6 +7,10 @@ div.ui.top.fixed.menu{
   box-shadow: none;
 }
 
+.ui.menu:not(.vertical) .right.item, .ui.menu:not(.vertical) .right.menu{
+  margin-left: 0px !important; 
+}
+
 /* logo */
 a.appName{
   font-family: 'Kanit', sans-serif;
@@ -83,7 +87,7 @@ div.pusher{
   stroke-width: 1;
 }
 
-.nodes circle {
+.nodes circle, .nodes rect{
   stroke: #fff;
   stroke-width: 1;
 }
@@ -101,6 +105,19 @@ div.pusher{
 #data_info p,
 #endpointInfo p{
   margin-bottom: 0px;
+}
+
+#data_info .item h5{
+  display: inline;
+  vertical-align: super;
+}
+
+.fluidImg{
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  margin-bottom: 5px;
 }
 
 /* pagina about */

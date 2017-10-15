@@ -49,10 +49,10 @@ $http will not respect default setting for timeout set it in httpProvider
   $rootScope.subtitle = "generating interfaces for RDF graphs";
 
   // development mode
-  $rootScope.prefixApiUrl = "http://localhost:8080/api/";
-  $rootScope.jsonFileServiceUrl = "http://localhost:8080/api/";
+  //$rootScope.prefixApiUrl = "http://localhost:8080/api/";
+  //$rootScope.jsonFileServiceUrl = "http://localhost:8080/api/";
 
   // production mode
-  // $rootScope.prefixApiUrl = "http://eelst.cs.unibo.it:9092/api/";
-  // $rootScope.jsonFileServiceUrl = "http://eelst.cs.unibo.it:9092/api/";
+  $rootScope.prefixApiUrl = "http://eelst.cs.unibo.it:9092/api/";
+  $rootScope.jsonFileServiceUrl = "http://eelst.cs.unibo.it:9092/api/";
 });
