@@ -12,6 +12,9 @@ Directory BEX: > cd /var/www/graziosi/
 Directory GIG: > cd /var/www/graziosi/garrproject/semaphore
 
 ***
+git pull origin master
+git stash
+
 Deploy app in production mode:
 from Directory GIG: 
 first time:
