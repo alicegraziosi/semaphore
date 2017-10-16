@@ -33,7 +33,11 @@ myAppd3view.directive('d3Graphvisualization',
           // now you can use d3 as usual!
 
           scope.$watch('showPhoto', function (showPhoto) {
-             console.log(showPhoto.value);
+            if(showPhoto.value=="false"){
+              d3.selectAll(".immagini").attr("visibility", "hidden");
+            } else {
+              d3.selectAll(".immagini").attr("visibility", "visible");
+            }
           }, true);
 
           var width = "900";
@@ -229,7 +233,7 @@ myAppd3view.directive('d3Graphvisualization',
                           d.thisWidth = thisWidth;
                       });
 
-                  node.attr("width", function(d){return d.thisWidth + 1});
+                  node.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
 
                   /* immagini dbpedia relative ai nodi */
                   var image = gzoom.append("g")
@@ -238,10 +242,10 @@ myAppd3view.directive('d3Graphvisualization',
                     .data(nodes) //.data(graph.nodes)
                     .enter().append("g")
                       .append("image")
+                      .attr("class", "immagini")
                       .attr("xlink:href", function (d) { return d.photoUrl; })
                       .attr("width", 12)
                       .attr("height", 12)
-                      .attr("visibility", function(showPhoto){ if(showPhoto.value == "false" ) return "hidden"})
                       .call(d3.drag()
                           .on("start", dragstarted)
                           .on("drag", dragged)
@@ -271,7 +275,7 @@ myAppd3view.directive('d3Graphvisualization',
                     .attr("x", "-9")
                     .attr("y", "-5")
                     .attr("height", "8")
-                    .attr("fill", "#9c6");
+                    .attr("fill", "#c0c1c2");
             
 
                   var text = rect.append("text")
@@ -291,7 +295,7 @@ myAppd3view.directive('d3Graphvisualization',
                     })
                     .append("title");
 
-                rects.attr("width", function(d){return d.thisWidth + 1});
+                rects.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
                   
                     
                 //text.text(function(d){return d.label;});

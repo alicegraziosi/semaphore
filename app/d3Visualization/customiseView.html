@@ -11,7 +11,7 @@
         <div class="item">
           
           <svg height="20" width="20">
-            <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{dataInfo.classe.color}}" />
+            <circle cx="10" cy="10" r="8" fill="{{dataInfo.classe.color}}" />
           </svg>
 
           <h5 class="header">
@@ -28,13 +28,13 @@
         <div class="item">
 
           <svg width="20" height="20">
-            <rect width="20" height="10" style="fill:{{dataInfo.litPropClasse[0].color}};stroke-width:1;stroke:rgb(0,0,0)" />
+            <rect width="20" height="15" style="fill:{{dataInfo.litPropClasse[0].color}};" />
           </svg>
 
           <h5 class="header" ng-show="dataInfo.litPropHeadClass.length != 0">
             <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropClasse[0].color}}" >    {{numClassDatatypeProperties}}
             </div>  
-            Class Literal Properties
+            Class datatype property
           </h5>
           <div ng-model="dataInfo.litPropClasse"
                ng-repeat="prop in dataInfo.litPropClasse">
@@ -45,12 +45,13 @@
 
         <div class="item">
           <svg height="20" width="20">
-            <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{dataInfo.objPropClasse.color}}" />
+            <circle cx="10" cy="10" r="8" ng-if="dataInfo.objPropClasse.color" fill="{{dataInfo.objPropClasse.color}}" />
+            <circle cx="10" cy="10" r="8" ng-if="!dataInfo.objPropClasse.color" fill="#e0e1e2" />
           </svg>
           <h5 class="header" ng-show="dataInfo.objPropHeadClass.length != 0">
             <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropClasse.color}}">    {{numClassDatatypeProperties}}
             </div> 
-            Class Object Properties
+            Class object property
           </h5>
           <div ng-model="dataInfo.objPropClasse">
               <p>{{objPropClasse.label}}</p>
@@ -60,12 +61,13 @@
 
         <div class="item">
           <svg width="20" height="20">
-            <rect width="20" height="10" style="fill:{{dataInfo.litPropObj[0].color}};stroke-width:1;stroke:rgb(0,0,0)" />
+            <rect width="20" height="15" ng-if="dataInfo.litPropObj[0].color" fill="{{dataInfo.litPropObj[0].color}}" />
+            <rect width="20" height="15" ng-if="!dataInfo.litPropObj[0].color" fill="#e0e1e2" />
           </svg>
           <h5 class="header" ng-show="dataInfo.litPropHeadClass.length != 0">
             <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropObj[0].color}}" > {{numObjDatatypeProperties}}
             </div>  
-           Class Object Property Literal Properties
+           Class object property datatype property
           </h5>
           <div ng-model="dataInfo.litPropObj"
                ng-repeat="prop in dataInfo.litPropObj">
@@ -76,12 +78,13 @@
 
         <div class="item">
           <svg height="20" width="20">
-            <circle cx="10" cy="10" r="8" stroke="black" stroke-width="1" fill="{{dataInfo.objPropObj[0].color}}" />
+            <circle cx="10" cy="10" r="8" ng-if="dataInfo.objPropObj[0].color" fill="{{dataInfo.objPropObj[0].color}}" />
+            <circle cx="10" cy="10" r="8" ng-if="!dataInfo.objPropObj[0].color" fill="#e0e1e2" />
           </svg>
           <h5 class="header" ng-show="dataInfo.objPropHeadClass.length != 0">
             <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropObj[0].color}}">{{numObjObjectProperties}}
             </div>  
-            Class Object Property Object Properties
+            Class object property object property
           </h5>
           <div ng-model="dataInfo.objPropObj"
               ng-repeat="prop in dataInfo.objPropObj">

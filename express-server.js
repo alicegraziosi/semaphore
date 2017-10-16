@@ -23,8 +23,8 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var getDirName = require('path').dirname;
 
-var port = process.env.NODE_PORT  || 9092;  // set our port, locale: 8080;  su eelst: 9092
-var host = process.env.NODE_HOST || '130.136.131.42';  // set our host, locale: 127.0.0.1; su eelst: 130.136.131.42
+var port = process.env.NODE_PORT  || 8080;  // set our port, locale: 8080;  su eelst: 9092
+var host = process.env.NODE_HOST || '127.0.0.1';  // set our host, locale: 127.0.0.1; su eelst: 130.136.131.42
 
 
 // CORS is a node.js package for providing a Connect/Express middleware that

@@ -501,6 +501,22 @@ contactEndpointModule.controller('contactEndpointCtrl',
           });
         });
       }
+
+       $rootScope.dataInfo.litPropObj.push({
+              uri : "-",
+              label : "-",
+              type : 'lit',
+              group: 4,
+              color : $scope.litPropObj
+            });
+
+      $rootScope.dataInfo.objPropObj =  {
+              uri: "-",
+              label : $scope.selectedClassObjectProperties[0].label,
+              type : 'obj',
+              group: 5,
+              color : $scope.objPropObj
+            }
     }
 
     $scope.queryEndpoint = function(){
@@ -558,9 +574,10 @@ contactEndpointModule.controller('contactEndpointCtrl',
     }
 
     $scope.clearQueryParam = function(){
-      $scope.selectedClass = {};
+      $scope.selectedClass = '';
 
       $('#allClassPropertiesDropown .ui.dropdown').dropdown('restore placeholder text');
+      $('#allClassDropdown .ui.dropdown').dropdown('restore placeholder text');
 
       $scope.classObjectProperties = [];
       $scope.selectedClassObjectProperties = [];
