@@ -41,7 +41,7 @@ myAppd3view.directive('d3Graphvisualization',
           }, true);
 
           var width = 960,
-             height = 500;
+             height = 800;
 
           /* svg */
           var svg = d3.select(elem[0]).append("svg")
@@ -70,12 +70,9 @@ myAppd3view.directive('d3Graphvisualization',
             .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
           }
 
-          var color = d3.scaleOrdinal(d3.schemeCategory10);
-          
-
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph, graphold) {
-            if(graph != graphold){ //Checking if the given value is not undefined
+            if(graph){ //Checking if the given value is not undefined
 
                 clearAll();
                 update();
@@ -153,7 +150,7 @@ myAppd3view.directive('d3Graphvisualization',
                         d3.select(this).style('stroke-width', 1.2);
                         node.style('stroke', function(n) {
                           if (n === d.source || n === d.target)
-                            return color(n.group);
+                            return colorOfNode(n.group);
                           });
                       })
                       .on("mouseout", function(d){
@@ -180,8 +177,7 @@ myAppd3view.directive('d3Graphvisualization',
                         {return document.createElementNS('http://www.w3.org/2000/svg', 'rect')}})
                         .attr("height", 8)  //if rect
                         .attr("r", function(d) { return d.radius; }) // if circle
-                        .attr("fill", function(d) {
-                          return color(d.group); })
+                        .attr("fill", function(d){return colorOfNode(d.group)})
                         .call(d3.drag()
                             .on("start", dragstarted)
                             .on("drag", dragged)
@@ -189,7 +185,7 @@ myAppd3view.directive('d3Graphvisualization',
                         .on("mouseover", function(d){
                           d3.select(this).style("stroke", '#ffffff');
                           d3.select(this).style("cursor", "pointer"); 
-                          d3.select(this).style("stroke", color(d.group));
+                          d3.select(this).style("stroke", colorOfNode(d.group));
                           scope.$apply(function () {
                             $parse(attrs.selectedItem).assign(scope.$parent, d);
                           });
@@ -235,9 +231,21 @@ myAppd3view.directive('d3Graphvisualization',
 
                   node.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
 
+                  
+                  node.append('pattern')
+                   .attr('id', 'locked2')
+                   .attr('patternUnits', 'userSpaceOnUse')
+                   .attr('width', 20)
+                   .attr('height', 20)
+                   .append("image")
+                   .attr("xlink:href", function (d) { return d.photoUrl; })
+                   .attr('width', 20)
+                   .attr('height', 20);
+
                   /* immagini dbpedia relative ai nodi */
+
                   var image = gzoom.append("g")
-                    .attr("class", "nodes")
+                    .attr("class", "node")
                     .selectAll("g")
                     .data(nodes) //.data(graph.nodes)
                     .enter().append("g")
@@ -449,8 +457,19 @@ myAppd3view.directive('d3Graphvisualization',
                 d3.selectAll(".nodes").remove();
                 d3.selectAll(".label").remove();
                 d3.selectAll(".image").remove();
+                d3.selectAll(".immagini").remove();
                 d3.selectAll(".rectLabel").remove();
               }
+
+              // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
+              function colorOfNode(group){
+                if(group==1) return '#1f77b4';
+                if(group==2) return '#ff7f0e';
+                if(group==3) return '#2ca02c';
+                if(group==4) return '#d62728';
+                if(group==5) return '#9467bd';
+              }
+
             } // if(graph)
           }, true); // scope.$watch('graph', function (graph) { con  deep dirty checking
         }); // d3Service.then(function(d3) {

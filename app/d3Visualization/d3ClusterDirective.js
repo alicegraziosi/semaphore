@@ -38,7 +38,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                     // nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
 
                     var width = 960,
-                        height = 800,
+                        height = 900,
                         padding = 10, // separation between same-color nodes
                         clusterPadding = 10, // separation between different-color nodes
                         maxRadius = 5, //radius nodo cluster

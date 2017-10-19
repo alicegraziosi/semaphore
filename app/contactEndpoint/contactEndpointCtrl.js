@@ -502,21 +502,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
         });
       }
 
-      $rootScope.dataInfo.litPropObj.push({
-        uri : "-",
-        label : "-",
-        type : 'lit',
-        group: 4,
-        color : $scope.litPropObj
-      });
-
-      $rootScope.dataInfo.objPropObj =  {
-        uri: "-",
-        label : $scope.selectedClassObjectProperties[0].label,
-        type : 'obj',
-        group: 5,
-        color : $scope.objPropObj
-      }
+      $rootScope.dataInfo.litPropObj = [];
+      $rootScope.dataInfo.objPropObj = {};
     }
 
     $scope.queryEndpoint = function(){

@@ -340,3 +340,92 @@ body p, body h5, body b, body div, body a, body .ui.label, body h5 .ui.header,
   padding: 4px;
 }
 
+/* ribbon label override */
+.ui-blue-ribbon-label-override{
+    display: inline-block;
+    line-height: 1;
+    vertical-align: baseline;
+    margin: 0 .14285714em;
+    background-color: #e8e8e8;
+    background-image: none;
+    padding: .5833em .833em;
+    color: rgba(0,0,0,.6);
+    text-transform: none;
+    font-weight: 700;
+    border: 0 solid transparent;
+    border-radius: .28571429rem;
+    -webkit-transition: background .1s ease;
+    transition: background .1s ease;
+    position: relative;
+    margin: 0;
+    min-width: -webkit-max-content;
+    min-width: -moz-max-content;
+    min-width: max-content;
+    border-radius: 0 .28571429rem .28571429rem 0;
+    border-color: rgba(0,0,0,.15);
+    left: calc(-1rem - 1.2em);
+    margin-right: -1.2em;
+    padding-left: calc(1rem + 1.2em);
+    padding-right: 1.2em;
+    background-color: #2185d0!important;
+    color: #fff!important;
+    border-color: #1a69a4!important;
+    margin-bottom: 3px;
+}
+
+.ui-blue-ribbon-label-override:after {
+    position: absolute;
+    content: '';
+    top: 100%;
+    left: 0;
+    background-color: transparent!important;
+    border-style: solid;
+    border-width: 0 1.2em 1.2em 0;
+    border-color: transparent;
+    border-right-color: inherit;
+    width: 0;
+    height: 0;
+}
+
+.ui-blue-right-ribbon-label-override{
+    position: relative;
+    margin: 0;
+    min-width: -webkit-max-content;
+    min-width: -moz-max-content;
+    min-width: max-content;
+    border-radius: 0 .28571429rem .28571429rem 0;
+    border-color: rgba(0,0,0,.15);
+    left: calc(100% + 1rem + 1.2em);
+    text-align: left;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+    border-radius: .28571429rem 0 0 .28571429rem;
+
+    background-color: #2185d0!important;
+    color: #fff!important;
+    border-color: #1a69a4!important;
+    padding: .5833em .833em;
+    line-height: 1;
+    vertical-align: baseline;
+    margin-bottom: 3px;
+}
+
+.ui-blue-right-ribbon-label-override:after {
+    position: absolute;
+    content: '';
+    top: 100%;
+    background-color: transparent!important;
+    border-style: solid;
+    border-width: 0 1.2em 1.2em 0;
+    border-color: transparent;
+    border-right-color: inherit;
+    width: 0;
+    height: 0;
+
+    left: auto;
+    right: 0;
+    border-style: solid;
+    border-width: 1.2em 1.2em 0 0;
+    border-color: transparent;
+    border-top-color: inherit;
+}

@@ -27,10 +27,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 }])
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
-
-      d3Service.then(function(d3) {
-
-        var color = d3.scaleOrdinal(d3.schemeCategory10);
+      
         if($rootScope.dataInfo == undefined){ 
         // INFORMAZIONI TBox
         $rootScope.dataInfo = {
@@ -39,7 +36,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             label : 'Band',
             type : "obj",
             group: 1,
-            color : color(1)
+            color :'#1f77b4'
           },
           litPropClasse: [
             {
@@ -47,7 +44,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
               label : 'genre',
               type : 'lit',
               group: 2,
-              color : color(2)
+              color : '#ff7f0e'
             }
           ],
           objPropClasse: {
@@ -55,7 +52,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             label : 'band member',
             type : 'obj',
             group: 3,
-            color : color(3)
+            color :  '#2ca02c'
           },
           litPropObj: [
             {
@@ -63,7 +60,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
               label : 'years active',
               type : 'lit',
               group: 4,
-              color : color(4)
+              color : '#d62728'
             }
           ],
           objPropObj: [
@@ -72,12 +69,11 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
               label : '',
               type : '',
               group: 5,
-              color : color(5)
+              color : '#9467bd'
             }
           ]
         };
-      }
-    });
+      };
 
     $scope.selectedEndpointUrl = "https://dbpedia.org/sparql";
     $scope.selectedEndpointName = "DBpedia";
@@ -163,6 +159,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             // init
             $scope.selectedClusterOption = $scope.litPropClasse.label;
         });
+        
       } else {
 
         $scope.graph = $rootScope.graph;
