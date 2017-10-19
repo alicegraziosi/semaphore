@@ -40,16 +40,16 @@ myAppd3view.directive('d3Graphvisualization',
             }
           }, true);
 
-          var width = "900";
-          var height = "500";
+          var width = 960,
+             height = 500;
 
           /* svg */
           var svg = d3.select(elem[0]).append("svg")
-            .attr("height", "500")
+            .attr("height", height)
             .attr("width", '100%');
 
           svg.append("rect")
-            .attr("height", "500")
+            .attr("height", height)
             .attr("width", '100%')
             .attr("fill", "rgb(251, 251, 251)")
             .attr("fill-opacity", "1")
@@ -223,7 +223,7 @@ myAppd3view.directive('d3Graphvisualization',
                     .data(nodes) //.data(graph.nodes)
                     .enter().append("g")
                       .append("text")
-                      .text(function (d) { return d.label; })
+                      .text(function (d) { return d.label; })  // literal
                       .style("font-family", "Arial")
                       .style("font-size", 5)
                       .attr("x", "+2")

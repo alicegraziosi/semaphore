@@ -52,7 +52,6 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                             scope.$watch('selectedClusterOption', function(selectedClusterOption) {
                                 if(selectedClusterOption){
                                     $("svg").remove();
-                                    console.log("cluster by" + selectedClusterOption.type);
                                     clusterBy(selectedClusterOption);
                                 } // if (selectedClusterOption)
                             }); // scope.$watch('selectedClusterOption', function(selectedClusterOption) {
@@ -218,6 +217,31 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     return d;
                                 });
 
+                                var svg = d3.select(elem[0]).append("svg")
+                                    .attr("width", "100%")
+                                    .attr("height", height);
+
+                                svg.append("rect")
+                                .attr("height", height)
+                                .attr("width", '100%')
+                                .attr("fill", "rgb(251, 251, 251)")
+                                .attr("fill-opacity", "1")
+                                .call(d3.zoom()
+                                        .scaleExtent([1/2, 4])
+                                        .on("zoom", zoomed));
+                                /* svg > gzoom */
+                                var gzoom = svg.append("g");
+
+                                function zoomed() {
+                                    gzoom.attr("transform", d3.event.transform);
+                                }
+
+                                function zoomFunction() {
+                                    var transform = d3.zoomTransform(this);
+                                    d3.select(elem[0])
+                                    .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+                                }
+
                               /* directed force layout */
                                 var force = d3.forceSimulation()
                                     .nodes(nodes)
@@ -242,15 +266,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     .radius(function(d) { return d.radius + 1.5; })
                                     .iterations(1);
 
-                                var svg = d3.select(elem[0]).append("svg")
-                                    .attr("width", width)
-                                    .attr("height", height)
-                                    .call(d3.zoom().on("zoom", function () {
-                                        svg.attr("transform", d3.event.transform)
-                                    }));
-                                    //.call(d3.behavior.zoom().on("zoom", function () {
-                                      //  svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
-                                    //}))
+                                
 
 
                                 /*un rettangolo contenitore per ogni nodo cluster*/
@@ -258,7 +274,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     return elem.type=="cluster";
                                 });
 
-                                var rect = svg.selectAll("rect")
+                                var rect = gzoom.selectAll("rect")
                                     .data(nodirect)
                                     .enter()
                                     .append("rect")
@@ -267,14 +283,14 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     .style("stroke-width", 2)
                                     .attr("opacity", "1");
 
-                                var rectLabel = svg.append("g")
+                                var rectLabel = gzoom.append("g")
                                     .attr("class", "rectLable")
                                     .selectAll("g")
                                     .data(nodirect)
                                     .enter().append("g");
 
                                 var rl = rectLabel.append("rect")
-                                    .attr("id",function(d,i){return "rectLabelId" + i;})
+                                    .attr("id", function(d,i){return "rectLabelId" + i;})
                                     .style("fill", "white")
                                     .attr("x", "0")
                                     .attr("y", "0")
@@ -302,7 +318,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                 rect.attr("width", function(d){return Math.max(150, d.thisWidth) + 1});
                                 rect.attr("height", function(d){return Math.max(150, d.thisWidth) + 1});
 
-                                var node = svg.selectAll("circle")
+                                var node = gzoom.selectAll("circle")
                                     .data(nodes)
                                     .enter()
                                     .append("circle")
@@ -314,7 +330,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
 
                                 node.append("title").text(function(d) { return d.value; });
                                 /* label dei nodi */
-                                var label = svg.selectAll("nodeText")
+                                var label = gzoom.selectAll("nodeText")
                                     .data(nodes) //.data(graph.nodes)
                                     .enter().append("text")
                                     .attr("text-anchor", "start")

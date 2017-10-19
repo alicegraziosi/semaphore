@@ -124,12 +124,14 @@ angular.module('getJSONfileModule', [])
     var linksToLiteralsObj = [];
     data.forEach(function(d, index){
       var soggproplabel0 = "";
-      if(d.soggPropLabel0 !== undefined ){
+      if(d.soggPropLabel0 !== undefined){
         soggproplabel0 = d.soggPropLabel0.value;
+      } else {
+        soggproplabel0 = d.soggPropUri0.value;
       }
       var literalNode = {
         id: label+index, // soggPropUri0
-        url: d.soggPropUri0.value,
+        url: d.soggPropUri0.value, //
         label: soggproplabel0,
         type: d.propType.value,
         group: 2

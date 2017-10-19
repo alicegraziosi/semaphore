@@ -15,7 +15,7 @@
       <!--  Semantic's default theme uses 16 columns.-->
       <div class="ui ten wide column">
         <!-- d3-visualization = directive -->
-        <h5 class="ui header">Hover over node for item information</h5>
+        
         <d3-graphvisualization graph="graph"
                                selected-item="selected"
                                selected-node-label="selectedNodeLabel"
@@ -28,16 +28,14 @@
 
 
         <div class="ui top aligned three wide column">
-
-          <div id="node_info">
-
-            <h5 class="ui header">
+          <h5 class="ui header">
             <input type="checkbox" ng-model="showPhoto.value"
                    ng-true-value="'true'" ng-false-value="'false'">
             Show photograph
             </h5>
 
-            
+          <div class="ui segment">
+            <h5 class="ui header">Hover over node for item information</h5>
             <h5 class="ui header">{{selected.label}}</h5>
               <a ng-href="{{selected.id}}" target=”_blank”>{{selected.url}}
                 <i ng-show="selected != ' '" class="external link icon"></i>

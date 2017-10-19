@@ -396,7 +396,7 @@ angular.module('queryDatasetModule', [])
       });
 
       query += 'FILTER(lang(?soggType) = "en") FILTER(lang(?propType) = "en") FILTER(lang(?soggLabel) = "en")} LIMIT 50';
-
+      console.log(query);
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);

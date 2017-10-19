@@ -1,8 +1,9 @@
 <div class="ui darkRedBorderTop segment">
-    <div class="ribbon-label-overrided">Customise data displayed</div>
+    <!--<div class="ribbon-label-overrided">Customise data displayed</div>-->
+    <div class="ui blue right ribbon label">Customise data displayed</div>
 
     <button ng-click="customise()"
-      class="ui red basic button">
+      class="ui red mini basic button">
       Customise
     </button>
 
@@ -14,12 +15,12 @@
             <circle cx="10" cy="10" r="8" fill="{{dataInfo.classe.color}}" />
           </svg>
 
-          <h5 class="header">
+          <b>
             <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.classe.color}}">
                 {{numClasses}}
-            </div> 
+            </div>
             Class
-          </h5>
+          </b>
 
           <p>{{dataInfo.classe.uri}}</p>
           <p>{{dataInfo.classe.label}}</p>

@@ -26,15 +26,17 @@
       <div class="top aligned three wide column">
 
           <div class="ui darkRedBorderTop segment">
-            <div class="ribbon-label-overrided">Cluster data</div>
+            <!--<div class="ribbon-label-overrided">Cluster data</div>-->
+            <div class="ui blue right ribbon label">Cluster data</div>
+            <div class="ui segment">
                 <div class="grouped fields">
 
-                  <h5>Cluster
+                  <b>Cluster
 
                   <div class="ui horizontal label"
                   style="border: 2px solid {{dataInfo.classe.color}};">{{clusterClasse.label}}</div>
 
-                  by</h5>
+                  by</b>
 
                   <div class="field" data-value="{{litPropClasse}}" ng-repeat="clusterOption in litPropClasse">
                     <div class="ui radio checkbox checked">
@@ -47,17 +49,19 @@
                     </div>
                   </div>
 
-                  <div class="ui horizontal divider">
+                  <div ng-if="clusterObj.label"
+                   class="ui horizontal divider">
                     Or
                   </div>
 
-                  <h5>Cluster
+                  <b ng-if="clusterObj.label">Cluster
                   <div class="ui horizontal label" 
                     style="border: 2px solid {{dataInfo.objPropClasse.color}};">{{clusterObj.label}}</div>
 
-                  by</h5>
+                  by</b>
 
-                  <div class="field" data-value="{{litPropObj}}" ng-repeat="clusterOption in litPropObj">
+                  <div
+                    class="field" data-value="{{litPropObj}}" ng-repeat="clusterOption in litPropObj">
                     <div class="ui radio checkbox">
                       <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
                       <label>
@@ -68,7 +72,8 @@
                     </div>
                   </div>
 
-                <div class="field" data-value="{{objPropObj}}" ng-repeat="clusterOption in objPropObj">
+                <div ng-if="clusterObj.label!='-'" 
+                    class="field" data-value="{{objPropObj}}" ng-repeat="clusterOption in objPropObj">
                     <div class="ui radio checkbox" ng-if="clusterOption.label!=''">
                       <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);" >
                       <label>
@@ -79,6 +84,7 @@
                     </div>
                   </div>
                 </div>
+              </div>
               </div>
 
             <div ng-include="'d3Visualization/customiseView.html'"></div>

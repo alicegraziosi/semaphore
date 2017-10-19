@@ -5,6 +5,7 @@ div.ui.top.fixed.menu{
   font-family: sans-serif;
   border-top: 2px solid #b92b27;
   box-shadow: none;
+  height: 44px;
 }
 
 .ui.menu:not(.vertical) .right.item, .ui.menu:not(.vertical) .right.menu{
@@ -15,12 +16,12 @@ div.ui.top.fixed.menu{
 a.appName{
   font-family: 'Kanit', sans-serif;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 24px;
 }
 
 a.subtitle{
   font-family: 'Kanit', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 a.appName:hover, a.subtitle:hover{
@@ -48,7 +49,7 @@ i.big.icon{
 div.ui.left.sidebar.vertical.menu,
 div.ui.right.sidebar.vertical.menu,
 div.pusher{
-  top: 48px;
+  top: 43px;
 }
 
 /* accordion all'interno della sidebar */
@@ -212,6 +213,7 @@ span.limit-ellipsis {
     transition: background .1s ease;
 }
 
+/*
 .ribbon-label-overrided{
     display: inline-block;
     line-height: 1;
@@ -270,6 +272,7 @@ span.limit-ellipsis {
     border-top-color: inherit;
 
 }
+*/
 
 .horizontal-mini-label{
     display: inline-block;
@@ -305,6 +308,7 @@ span.limit-ellipsis {
   padding: 0px;
 }
 
+/* padding degli item dei menu laterale dx*/
 .ui.menu .ui.dropdown .menu>.item{
   padding: 8px !important;
   padding-left: 12px !important;
@@ -323,3 +327,16 @@ div.tooltip {
     border-radius: 8px;     
     pointer-events: none;     
 }
+
+
+/*font size di tutta l'app*/
+body p, body h5, body b, body div, body a, body .ui.label, body h5 .ui.header, 
+.ui.segment, .ui.segment h5.ui.header{
+  font-size: 11px;
+  word-wrap: break-word;
+}
+
+.ui.label{
+  padding: 4px;
+}
+

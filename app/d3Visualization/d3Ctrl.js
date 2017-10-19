@@ -31,7 +31,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       d3Service.then(function(d3) {
 
         var color = d3.scaleOrdinal(d3.schemeCategory10);
-
+        if($rootScope.dataInfo == undefined){ 
         // INFORMAZIONI TBox
         $rootScope.dataInfo = {
           classe : {
@@ -76,6 +76,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             }
           ]
         };
+      }
     });
 
     $scope.selectedEndpointUrl = "https://dbpedia.org/sparql";
@@ -114,44 +115,56 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       }
     });
 
-    // wait for all promises
-    $q.all([
-      queryDatasetService.queryDataset(),
-      queryDatasetService.queryDatasetLiteralBand()
-    ]).then(function(data) {
-        var graph = GetJSONfileService.createJsonFile(data[0].results.bindings);
-        var graph2 = GetJSONfileService.createNodeLiteral(data[1].results.bindings, "soggPropLabel");
-
-        $rootScope.nodeLabels = [];
-        graph2.nodes.forEach(function(node){
-          graph.nodes.push(node);
-          $rootScope.nodeLabels.push(node.label)
-        });
-        graph2.links.forEach(function(l){
-          graph.links.push(l);
-        });
-        graph2.linksToLiterals.forEach(function(ltl){
-          graph.linksToLiterals.push(ltl);
-        });
-        graph2.nodeLiteral.forEach(function(nl){
-          graph.nodeLiteral.push(nl);
-        });
-        $rootScope.graph = graph;
-        $rootScope.nodeLabels = $rootScope.nodeLabels.sort();
-
+    
+    $rootScope.$watch('dataInfo', function(){
         $scope.clusterClasse = $rootScope.dataInfo.classe;
         $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
         $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
         $scope.litPropObj = $rootScope.dataInfo.litPropObj;
         $scope.objPropObj = $rootScope.dataInfo.objPropObj;
-
-        // init
-        $scope.selectedClusterOption = $scope.litPropClasse.label;
     });
 
 
-    $rootScope.$watch('graph', function(graph, graphold) {
-      if(graph){
+    $rootScope.$watch('graph', function(graph) {
+      if(graph == undefined){
+
+        // wait for all promises
+        $q.all([
+          queryDatasetService.queryDataset(),
+          queryDatasetService.queryDatasetLiteralBand()
+        ]).then(function(data) {
+            var graph1 = GetJSONfileService.createJsonFile(data[0].results.bindings);
+            var graph2 = GetJSONfileService.createNodeLiteral(data[1].results.bindings, "soggPropLabel");
+
+            $rootScope.nodeLabels = [];
+            graph2.nodes.forEach(function(node){
+              graph1.nodes.push(node);
+              $rootScope.nodeLabels.push(node.label)
+            });
+            graph2.links.forEach(function(l){
+              graph1.links.push(l);
+            });
+            graph2.linksToLiterals.forEach(function(ltl){
+              graph1.linksToLiterals.push(ltl);
+            });
+            graph2.nodeLiteral.forEach(function(nl){
+              graph1.nodeLiteral.push(nl);
+            });
+            $rootScope.graph = graph1;
+            $scope.graph = $rootScope.graph;
+            $rootScope.nodeLabels = $rootScope.nodeLabels.sort();
+
+            $scope.clusterClasse = $rootScope.dataInfo.classe;
+            $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
+            $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
+            $scope.litPropObj = $rootScope.dataInfo.litPropObj;
+            $scope.objPropObj = $rootScope.dataInfo.objPropObj;
+
+            // init
+            $scope.selectedClusterOption = $scope.litPropClasse.label;
+        });
+      } else {
+
         $scope.graph = $rootScope.graph;
         // photo
         $scope.graph.nodes.forEach(function(node){
