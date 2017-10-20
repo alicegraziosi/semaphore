@@ -31,14 +31,12 @@ myAppd3view.directive('d3Graphvisualization',
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3) {
           // now you can use d3 as usual!
-          d3.selectAll(".immagini").attr("visibility", "hidden");
           scope.$watch('showPhoto', function (showPhoto) {
             if(showPhoto.value=="false"){
-              d3.selectAll(".immagini").attr("visibility", "hidden");
+              //d3.selectAll(".immagini").attr("visibility", "hidden");
               d3.selectAll("circle").attr("fill", function(d) { return colorOfNode(d.group)});
             } else {
               //d3.selectAll(".immagini").attr("visibility", "visible");
-              d3.selectAll(".immagini").attr("visibility", "hidden");
               d3.selectAll("circle").attr("fill", function(d, i) { 
                 if(d.photoUrl!=''){
                   return ("url(#"+i+"-icon)"); 
@@ -289,6 +287,7 @@ myAppd3view.directive('d3Graphvisualization',
                       .attr("xlink:href", function (d) { return d.photoUrl; })
                       .attr("width", 12)
                       .attr("height", 12)
+                      .attr("visibility", "hidden")
                       .call(d3.drag()
                           .on("start", dragstarted)
                           .on("drag", dragged)

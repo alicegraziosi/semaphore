@@ -28,7 +28,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
       
-        if($rootScope.dataInfo == undefined){ 
+      if($rootScope.dataInfo == undefined){ 
         // INFORMAZIONI TBox
         $rootScope.dataInfo = {
           classe : {
@@ -156,8 +156,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             $scope.litPropObj = $rootScope.dataInfo.litPropObj;
             $scope.objPropObj = $rootScope.dataInfo.objPropObj;
 
-            // init
-            $scope.selectedClusterOption = $scope.litPropClasse.label;
+            $scope.toggleSelectionClusterOption($scope.litPropClasse[0]);
+
         });
         
       } else {
@@ -184,6 +184,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         }
         $scope.nodeLabels = $rootScope.nodeLabels;
       }
+
+      $scope.toggleSelectionClusterOption($scope.litPropClasse[0]);
     }, true);
 
 

@@ -46,9 +46,6 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
 
                     scope.$watch('graph', function (graph) {  //Scope.$watch accepts as first parameter expression or function
                         if(graph){ //Checking if the given value is not undefined;
-                            console.log("changed graph " + graph);
-
-
                             scope.$watch('selectedClusterOption', function(selectedClusterOption) {
                                 if(selectedClusterOption){
                                     $("svg").remove();
