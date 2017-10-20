@@ -40,7 +40,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                     var width = 960,
                         height = 900,
                         padding = 10, // separation between same-color nodes
-                        clusterPadding = 10, // separation between different-color nodes
+                        clusterPadding = 30, // separation between different-color nodes
                         maxRadius = 5, //radius nodo cluster
                         radius = 15;
 
