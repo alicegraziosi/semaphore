@@ -10,28 +10,8 @@
     "endpointName": "OpenCitation Corpus"
   },
   {
-    "endpointUrl": "http://localhost:3030/springer/query",
-    "graphs": ["default"],
-    "endpointName": "Local Semantic Lancet"
-  },
-  {
-    "endpointUrl": "http://localhost:3030/spacin/query",
-    "graphs": ["default"],
-    "endpointName": "Local Springer"
-  },
-  {
     "endpointUrl": "https://dbpedia.org/sparql",
     "graphs": ["http://dbpedia.org", "default", "http://wikidata.dbpedia.org"],
     "endpointName": "DBpedia"
-  },
-  {
-    "endpointUrl": "http://localhost:8890/sparql", 
-    "graphs": ["default", "http://localhost:8890/dbpediadump"],
-    "endpointName": "Local DBpedia dump"
-  },
-  {
-    "endpointUrl": "http://dati.senato.it/sparql",
-    "graphs": ["default"],
-    "endpointName": "dati.senato.it"
   }
 ]

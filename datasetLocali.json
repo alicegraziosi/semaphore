@@ -1,0 +1,17 @@
+[
+ {
+    "endpointUrl": "http://localhost:3030/springer/query",
+    "graphs": ["default"],
+    "endpointName": "Local Semantic Lancet"
+  },
+  {
+    "endpointUrl": "http://localhost:3030/spacin/query",
+    "graphs": ["default"],
+    "endpointName": "Local Springer"
+  },
+  {
+    "endpointUrl": "http://localhost:8890/sparql", 
+    "graphs": ["default", "http://localhost:8890/dbpediadump"],
+    "endpointName": "Local DBpedia dump"
+  }
+]
