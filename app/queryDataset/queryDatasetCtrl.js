@@ -38,5 +38,9 @@ queryDatasetModule.controller('queryDatasetCtrl', function($scope, queryDatasetS
 	PREFIX c4o:     <http://purl.org/spar/c4o/>
 	PREFIX   ex:    <http://www.example.org/resources#>
 	PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
-	PREFIX text:    <http://jena.apache.org/text#>`
+	PREFIX text:    <http://jena.apache.org/text#>
+    PREFIX indl: <http://www.science.uva.nl/research/sne/indl#>
+    PREFIX nml: <http://schemas.ogf.org/nml/2013/05/base#>
+    PREFIX nmle: <http://www.science.uva.nl/research/sne/nmle#>
+	`
 });

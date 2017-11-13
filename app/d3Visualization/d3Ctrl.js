@@ -28,6 +28,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
       
+    //$scope.showLoader = true;
+      
       if($rootScope.dataInfo == undefined){ 
         // INFORMAZIONI TBox
         $rootScope.dataInfo = {
@@ -122,7 +124,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
 
     $rootScope.$watch('graph', function(graph) {
-      if(graph == undefined){
+      if($rootScope.graph == undefined){
 
         // wait for all promises
         $q.all([
@@ -161,9 +163,9 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         });
         
       } else {
-
         $scope.graph = $rootScope.graph;
         // photo
+        
         $scope.graph.nodes.forEach(function(node){
           var promise = queryDatasetService.queryPhotoFromDB($scope.selectedEndpointUrl, $scope.selectedGraph, node.id);
           promise.then(function(response) {
@@ -174,7 +176,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             node.customProperties[0].value = photoUrl;
           });
         });
-
+        
         $rootScope.nodeLabels = [];
         if($scope.graph != undefined){
           $scope.graph.nodes.forEach(function(node){
@@ -201,7 +203,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     });
 
     $scope.exportJSON = function () {
-        getJSONfileModule.exportJSON($rootScope.graph);
+        GetJSONfileService.exportJSON($rootScope.graph);
     };
 
     $scope.exportPNG = function(){

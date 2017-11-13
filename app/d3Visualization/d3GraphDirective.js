@@ -24,7 +24,8 @@ myAppd3view.directive('d3Graphvisualization',
           objectShape: "=",  // nella view: object-shape
           datatypeShape: "=",  // nella view: datatype-shape
           dataInfo: "=",
-          showPhoto: "="
+          showPhoto: "=",
+          showLoader: "="
 
       },
       link: function(scope, elem, attrs){
@@ -78,14 +79,14 @@ myAppd3view.directive('d3Graphvisualization',
 
           function colorOfNode(group){
               if(group==1) return '#1f77b4';
-              if(group==2) return '#ff7f0e';
-              if(group==3) return '#2ca02c';
-              if(group==4) return '#d62728';
-              if(group==5) return '#9467bd';
+              else if(group==2) return '#ff7f0e';
+              else if(group==3) return '#2ca02c';
+              else if(group==4) return '#d62728';
+              else return '#9467bd';
           }
 
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
-          scope.$watch('graph', function (graph, graphold) {
+          scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
 
                 clearAll();
@@ -125,9 +126,7 @@ myAppd3view.directive('d3Graphvisualization',
                       shape: "circle",
                       radius: radius
                     });
-
                   });
-
 
                   graph.nodeLiteral.forEach(function(n) {
                     nodes.push({
@@ -141,13 +140,12 @@ myAppd3view.directive('d3Graphvisualization',
                     });
                   });
 
-
                   /* directed force layout */
                   var simulation = d3.forceSimulation()
                     // replace force.linkStrength in d3v3
                     .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100).strength(1))
                     // replace force.charge of d3v3
-                    .force("charge", d3.forceManyBody())
+                    .force("charge", d3.forceManyBody().strength(-20))
                     .force("center", d3.forceCenter(width / 2, height / 2));
 
                   simulation.nodes(nodes).on("tick", ticked);
@@ -228,7 +226,6 @@ myAppd3view.directive('d3Graphvisualization',
                         })
                         .on('dblclick', connectedNodes);
 
-
                   var div =  d3.select(elem[0]).append("div")
                       .attr("class", "tooltip")       
                       .style("opacity", 0); 
@@ -250,9 +247,9 @@ myAppd3view.directive('d3Graphvisualization',
                           d.thisWidth = thisWidth;
                       });
 
-                node.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
-
-                var img = 
+                  node.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
+ 
+                  var img = 
                     gzoom.append("g")
                     .attr("class", "nodesLabel")
                     .selectAll("g")
@@ -274,9 +271,7 @@ myAppd3view.directive('d3Graphvisualization',
                         .attr("y", "0")
                         .attr("preserveAspectRatio", "xMinYMin slice");
 
-
                   /* immagini dbpedia relative ai nodi*/
-
                   var image = gzoom.append("g")
                     .attr("class", "node")
                     .selectAll("g")
@@ -305,7 +300,6 @@ myAppd3view.directive('d3Graphvisualization',
                         d3.select(this).style("cursor", "default"); 
                       }); 
                     
-
                   /*rect e label */
                   var rect = gzoom.append("g")
                     .attr("class", "rectLabel")
@@ -313,14 +307,13 @@ myAppd3view.directive('d3Graphvisualization',
                     .data(links) //.data(graph.links)
                     .enter().append("g");
 
-                 var rects = rect.append("rect")
+                  var rects = rect.append("rect")
                     .attr("id", function(d,i){return "linkId_" + i;})
                     .attr("x", "-9")
                     .attr("y", "-5")
                     .attr("height", "8")
                     .attr("fill", "#c0c1c2");
-            
-
+          
                   var text = rect.append("text")
                     .text(function (d) { return d.label; })
                     .style("font-family", "Arial")
@@ -338,28 +331,9 @@ myAppd3view.directive('d3Graphvisualization',
                     })
                     .append("title");
 
-                rects.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
+                  rects.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
                   
-
-
                 //text.text(function(d){return d.label;});
-
-                  /* frecce dei nodo link nodo - markers to indicate that this is a directed graph
-                  gzoom.append("defs")
-                    .selectAll("marker")
-                    .data(links) //.data(graph.links)
-                    .enter().append("marker")
-                      .attr("id", function(d){return d.source.id;})
-                      .attr("viewBox", "0 -5 10 10")
-                      .attr("refX", 2*5+2*radius) // 2*markerHeight+2*radius (vale per i circle)
-                      .attr("refY", 0)
-                      .attr("markerWidth", 5)
-                      .attr("markerHeight", 5)
-                      .attr("orient", "auto")
-                      .attr("fill", "#999")
-                      .append("path") //shape of the arrow
-                        .attr("d", "M0,-5L10,0L0,5");
-                  */
 
                 /* tooltip di nodi e link*/
                 node.append("title").text(function(d) { return d.id; });
@@ -370,8 +344,12 @@ myAppd3view.directive('d3Graphvisualization',
                       .attr("y1", function(d) { return d.source.y; })
                       .attr("x2", function(d) { return d.target.x; })
                       .attr("y2", function(d) { return d.target.y; });
-                  node.attr("cx", function(d) { return d.x; })
-                      .attr("cy", function(d) { return d.y; }); // if circle
+                  //node.attr("cx", function(d) { return d.x; })
+                    //  .attr("cy", function(d) { return d.y; }); // if circle
+
+                  node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+                      .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });
+
                   node.attr("x",  function(d) { return d.x - 30/2; })
                       .attr("y",  function(d) { return d.y - 5; }); // if rect
                   label.attr("x", function(d) { return d.x - 15; })
@@ -474,32 +452,25 @@ myAppd3view.directive('d3Graphvisualization',
                     }
                   } // if (selectedNodeLabel)
                 }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
-              } //update()
-              scope.$watch('objectShape', function (objectShape) {
-                if(objectShape){
-                  clearAll();
-                  update();
-                }
-              });
-              scope.$watch('datatypeShape', function (datatypeShape) {
-                if(datatypeShape){
-                  clearAll();
-                  update();
-                }
-              });
-
-              function clearAll() {
-                d3.selectAll(".links").remove();
-                d3.selectAll(".nodes").remove();
-                d3.selectAll(".nodesLabel").remove();
-                d3.selectAll(".label").remove();
-                d3.selectAll(".image").remove();
-                d3.selectAll(".immagini").remove();
-                d3.selectAll(".rectLabel").remove();
-              }
-
-              // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
               
+               
+              } //update()
+              
+              
+
+                function clearAll() {
+                
+                  //scope.showLoader = true;
+                  d3.selectAll(".links").remove();
+                  d3.selectAll(".nodes").remove();
+                  d3.selectAll(".nodesLabel").remove();
+                  d3.selectAll(".label").remove();
+                  d3.selectAll(".image").remove();
+                  d3.selectAll(".immagini").remove();
+                  d3.selectAll(".rectLabel").remove();
+                }
+                
+              // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
               function colorOfNode(group){
                   if(group==1) return '#1f77b4';
                   if(group==2) return '#ff7f0e';

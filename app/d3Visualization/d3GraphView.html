@@ -16,14 +16,25 @@
       <div class="ui ten wide column">
         <!-- d3-visualization = directive -->
         
-        <d3-graphvisualization graph="graph"
-                               selected-item="selected"
-                               selected-node-label="selectedNodeLabel"
-                               object-shape="objectShape"
-                               datatype-shape="datatypeShape"
-                               data-info="dataInfo"
-                               show-photo="showPhoto">
-        </d3-graphvisualization>
+        <div class="ui segment">
+          <div ng-if="showLoader"
+            class="ui active inverted dimmer">
+            <div class="ui large text loader">Loading</div>
+          </div>
+        
+
+          <d3-graphvisualization graph="graph"
+                                 selected-item="selected"
+                                 selected-node-label="selectedNodeLabel"
+                                 object-shape="objectShape"
+                                 datatype-shape="datatypeShape"
+                                 data-info="dataInfo"
+                                 show-photo="showPhoto"
+                                 ,
+                show-loader="showLoader">
+          </d3-graphvisualization>
+
+        </div>
       </div>
 
 
@@ -49,8 +60,6 @@
           </div>
 
           <div ng-include="'d3Visualization/customiseView.html'"></div>
-        </div>
-
       </div>
     </div>
   </div>

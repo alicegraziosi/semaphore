@@ -7,11 +7,11 @@
   <div class="ui stackable divided grid">
     <div class="row" id="graph_box">
 
-      <div class="three wide column">
+      <div class="ui three wide column">
         <div ng-include="'d3Visualization/infoDatiVisualisation.html'"></div>
       </div>
 
-      <div class="ten wide column">
+      <div class="ui ten wide column">
         <!-- d3-visualization = directive -->
 
         <d3-clustervisualization graph="graph"
@@ -51,12 +51,12 @@
                     </div>
                   </div>
 
-                  <div ng-if="clusterObj.label"
+                  <div ng-if="litPropObj.length!=0"
                    class="ui horizontal divider">
                     Or
                   </div>
 
-                  <b ng-if="clusterObj.label">Cluster
+                  <b ng-if="litPropObj.length!=0">Cluster
                   <div class="ui horizontal label" 
                     style="border: 2px solid {{dataInfo.objPropClasse.color}};">{{clusterObj.label}}</div>
 
@@ -91,7 +91,6 @@
 
             <div ng-include="'d3Visualization/customiseView.html'"></div>
 
-        </div>
       </div>
     </div>
   </div>

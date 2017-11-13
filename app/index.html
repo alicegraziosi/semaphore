@@ -21,15 +21,15 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!-- semantic-ui -->
-  <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
-  <script src="semantic/dist/semantic.min.js"></script>
-  <!--
-  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-  -->
+  <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.css">
+  <script src="semantic/dist/semantic.js"></script>
+  <script src="semantic/dist/components/image.css"></script>
 
-  <!--color palette
-  <script src="jscolor/jscolor.js"></script>-->
+  <link rel="stylesheet" href="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.css" />
 
+  <script src="node_modules/tinycolor2/dist/tinycolor-min.js"></script>
+  <script src="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.js"></script>
+  
   <!-- underscore.js -->
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 
@@ -53,7 +53,7 @@
       <div class="item">
         <a class="title">
           <i class="dropdown icon"></i>
-          <b>Change current SPARQL endpoint or the graph</b>
+          <b>Change current SPARQL endpoint or graph</b>
         </a>
         <div class="content menu" id="endpointandgraph">
           <div class="header">Select a SPARQL endpoint</div>
@@ -63,8 +63,9 @@
               <div class="menu">
                 <div 
                      ng-model="selected" class="item"
-                     ng-click="selectEndpoint(selected)"
+                     ng-click="selectEndpoint(endpoint)"
                      ng-repeat="endpoint in endpointList">
+                     
                   <p class="compact">{{endpoint.name}}</p>
                   <p class="compact">{{endpoint.url}}</p>
                 </div>
@@ -87,13 +88,15 @@
 
             <button class="ui mini primary button" ng-click="contactSelectedEndpoint()">
               Ok
+              <!--
               <i class="icons">
                 <i class="database icon"></i>
                 <i class="corner search icon"></i>
               </i>
+              -->
             </button>
             <button class="ui mini button" ng-click="restoreToDefault()">
-              Discard
+              Clear
             </button>
 
             <div ng-if="successMessageToAppear" class="ui tiny success message">
@@ -286,6 +289,7 @@
 
           </div>
           </div>
+          
           <div ng-show="selectedObjObjectProperties.length!=0 || selectedObjDatatypeProperties.length!=0">
             <button class="ui mini button" ng-click="queryEndpoint()">
               Load data
@@ -468,6 +472,9 @@
   <script src="https://cdn.rawgit.com/eligrey/canvas-toBlob.js/f1a01896135ab378aa5c0118eadd81da55e698d8/canvas-toBlob.js"></script>
   <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
 
+  <script src="node_modules/tinycolor2/dist/tinycolor-min.js"></script>
+  <script src="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.js"></script>
+  
   <!-- Global Site Tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88652737-2"></script>
   <script>

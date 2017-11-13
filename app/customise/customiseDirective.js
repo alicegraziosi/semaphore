@@ -24,7 +24,7 @@ myAppd3view.directive('customiseDirective',
       },
 
       link: function(scope, elem, attrs){
-      	console.log("+++++++++"+dataInfo);
+        
       } // chiude link
   	} // chiude return
   }]); // chiude directive

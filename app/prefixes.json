@@ -49,5 +49,21 @@
     {
         "prefix": "doco", 
         "url": "http://purl.org/spar/doco/"
+    }, 
+    {
+        "prefix": "yago",
+        "url": "http://dbpedia.org/class/yago/"
+    },
+    {
+        "prefix": "indl", 
+        "url": "http://www.science.uva.nl/research/sne/indl#"
+    }, 
+    {
+        "prefix": "nmle",
+        "url": "http://www.science.uva.nl/research/sne/nmle#"
+    },
+    {
+        "prefix": "nml",
+        "url": "http://schemas.ogf.org/nml/2013/05/base#"
     }
 ]

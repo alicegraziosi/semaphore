@@ -1,80 +1,123 @@
 <div class="ui modal" ng-controller="customiseCtrl">
   <i class="close icon"></i>
   <div class="header">Customise view</div>
-    <div class="content">
-           
-      <h4 class="ui dividing header">Customise colors</h4>
-
-        <div class="ui items">
-          <div class="item">
-            <h5 class="ui header">Class</h5>
-            <div class="ui input">
-              <input ng-model="dataInfo.classe.color"
-              type="text" placeholder="Color...">
-              
+  <div class="content">
+    <h4 class="ui dividing header">Customise images and colors</h4>
+    <table class="ui very basic table">
+      <thead>
+        <tr>
+          <th>Images</th>
+          <th></th>
+          <th>Colors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ui small aliceImage" ng-click="selectImage();">
+              <img ng-src="http://localhost:8000/{{image1src}}" 
+              alt="images/wireframe/image.png">
             </div>
-          </div>
-          <div class="item">
-            <h5 class="ui header">Class Literal Property</h5>
-            <div class="ui input">
-              <input ng-model="dataInfo.litPropClasse[0].color"
-              type="text" placeholder="Search...">
+          </td>
+          <td>
+              <a class="header">Class</a>
+              <div class="meta">
+                <span>{{localdataInfo.classe.label}}</span>
+              </div>
+              <input type="file" id="file" name="file"/>
+              <input type="button" ng-click="uploadFile()" value="Upload" />
+          </td>
+          <td>
+              <div class="ui input">
+                <color-picker ng-model="localdataInfo.classe.color"></color-picker>
+              </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ui small aliceImage" ng-click="selectImage();">
+              <img ng-src="http://localhost:8000/{{image1src}}" 
+              alt="images/wireframe/image.png">
             </div>
-          </div>
-          <div class="item">
-            <h5 class="ui header">Class Object Property</h5>
+          </td>
+          <td>
+            <a class="header">Class Datatype Property</a>
+              <div class="meta">
+                <span>{{localdataInfo.litPropClasse[0].label}}</span>
+              </div>
+          </td>
+          <td>
             <div class="ui input">
-              <input ng-model="dataInfo.objPropClasse.color"
-              type="text" placeholder="Search...">
+              <color-picker ng-model="localdataInfo.litPropClasse[0].color"></color-picker>
             </div>
-          </div>
-          <div class="item">
-            <h5 class="ui header">Class Object Property Literal Property</h5>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ui small aliceImage">
+              <img src="images/wireframe/image.png">
+            </div>
+          </td>
+          <td>
+            <a class="header">Class Object Property</a>
+            <div class="meta">
+              <span>{{localdataInfo.objPropClasse.label}}</span>
+            </div>
+            <input type="file" id="file2" name="file"/>
+            <input type="button" ng-click="uploadFile()" value="Upload" />
+          </td>
+          <td>
             <div class="ui input">
-              <input ng-model="dataInfo.litPropObj[0].color"
-              type="text" placeholder="Search...">
+              <color-picker ng-model="localdataInfo.objPropClasse.color"></color-picker>
             </div>
-          </div>
-          <div class="item">
-            <h5 class="ui header">Class Object Property Object Property</h5>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ui small aliceImage" ng-click="selectImage();">
+              <img ng-src="http://localhost:8000/{{image1src}}" 
+              alt="images/wireframe/image.png">
+            </div>
+          </td>
+          <td>
+            <a class="header">Class Object Property Datatype Property</a>
+            <div class="meta">
+              <span>{{localdataInfo.litPropObj[0].label}}</span>
+            </div>
+          </td>
+          <td>
             <div class="ui input">
-              <input ng-model="dataInfo.objPropObj[0].color"
-              type="text" placeholder="Search...">
+              <color-picker ng-model="localdataInfo.litPropObj[0].color"></color-picker>
             </div>
-          </div>
-        </div>
-
-        <h4 class="ui dividing header">Customise icons and images</h4>
-
-        <div class="ui items">
-          <div class="item">
-            <h5 class="ui header">Class image</h5>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ui small aliceImage">
+              <img src="images/wireframe/image.png">
+            </div>
+          </td>
+          <td>
+            <a class="header">Class Object Property Object Property</a>
+            <div class="meta">
+              <span>{{localdataInfo.objPropObj[0].label}}</span>
+            </div>
+            <input type="file" id="file3" name="file"/>
+            <input type="button" ng-click="uploadFile()" value="Upload" />
+          </td>
+          <td>
             <div class="ui input">
-              <input type="text">
+              <color-picker ng-model="localdataInfo.objPropObj[0].color"></color-picker>
             </div>
-          </div>
-        </div>
-
-
-          <button ng-click="apply()"
-            class="ui primary button">
-            Apply
-          </button>
-          <button ng-click="restoreDefault()"
-            class="ui button">
-            Restore default
-          </button>
-        </div>
-        </div>
-        <div class="eight wide column"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button ng-click="applyAndCloseModal()" class="ui primary button">
+      Apply
+    </button>
+    <button ng-click="restoreDefault()" class="ui button">
+      Restore default
+    </button>
   </div>
-  <!--
-  	<customise-directive
-  		data-info="dataInfo">
-  	</customise-directive>
-    <p></p>
-    <p></p>
-    <p></p>
-  </div>
-  -->
 </div>

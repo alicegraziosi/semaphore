@@ -21,20 +21,19 @@ angular.module('contactEndpointModule', [])
 
     //var selectedEndpoint = "http://localhost:3030/semanticLancet/query";  //endpoint di esempio
     contactSelectedEndpoint: function(selectedEndpoint, selectedGraph){  //selectedEndpoint è variabile di scope
-
         var query = 'ASK WHERE { GRAPH <'+ selectedGraph + '> { ?s ?p ?o } }';
-				return $http({
+				if (selectedGraph = "default"){
+          query = 'ASK { ?s ?p ?o }';
+        }
+        return $http({
 					method:"GET",
-          // http://localhost:3030/semanticlancet/query?format=json&query=ASK{?s ?p ?o}
 					url: selectedEndpoint + "?format=json&query=" + encodeURIComponent(query),
 					timeout: 3000
 				})
-				.success(function(data, status, headers, config){
-          console.log(data);
-					console.log("Selected endpoint named " + selectedEndpoint + " - graph " + selectedGraph + " succesfully reached!!!");
+				.success(function(data){
+					console.log("Selected endpoint named " + selectedEndpoint + " - graph " + selectedGraph + " succesfully reached!!!");     
         })
-				.error(function(data, status, headers, config){
-          console.log(data);
+				.error(function(){
 					console.log("Selected endpoint named " + selectedEndpoint + " - graph " + selectedGraph + " unreachable :(");
         });
     },
@@ -49,7 +48,6 @@ angular.module('contactEndpointModule', [])
         var deferred = $q.defer();
         //Do not return  here
         //you need to return the deferred.promise
-
 
         //Inside then() callback you simply resolve or reject deferred promise.
         //.then(successCallback, errorCallback)
@@ -71,6 +69,7 @@ angular.module('contactEndpointModule', [])
         //url da cui è partita la richiesta http preso dagli header della request
         //console.log(config.url); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
     },
+
     // usato
     // uri to prefix
     // url: https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
@@ -82,7 +81,6 @@ angular.module('contactEndpointModule', [])
         var deferred = $q.defer();
         //Do not return  here
         //you need to return the deferred.promise
-
 
         //Inside then() callback you simply resolve or reject deferred promise.
         //.then(successCallback, errorCallback)
@@ -103,7 +101,6 @@ angular.module('contactEndpointModule', [])
           deferred.resolve(response.data);
 
         }, function errorCallback(response) {
-
           // called asynchronously if an error occurs
           // or server returns response with an error status.
 

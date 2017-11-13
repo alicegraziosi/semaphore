@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Express is a minimal and flexible Node.js web application framework that provides a robust set of features
 to develop web and mobile applications.
@@ -23,8 +23,8 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var getDirName = require('path').dirname;
 
-var port = process.env.NODE_PORT  || 8080;  // set our port, locale: 8080;  su eelst: 9092
-var host = process.env.NODE_HOST || '127.0.0.1';  // set our host, locale: 127.0.0.1; su eelst: 130.136.131.42
+var port = process.env.NODE_PORT  || 9092;  // set our port, locale: 9092;  su eelst: 9092
+var host = process.env.NODE_HOST || '130.136.131.42';  // set our host, locale: 127.0.0.1; su eelst: 130.136.131.42
 
 
 // CORS is a node.js package for providing a Connect/Express middleware that
@@ -165,7 +165,7 @@ if(process.env.NODE_ENV === 'production') {
 // set NODE_ENV=development
 // node express-server.js
 if(process.env.NODE_ENV === 'development') {
-  app.set('port', 8080);
+  app.set('port', 9092);
   app.set('host', "127.0.0.1");
 }
 
@@ -182,7 +182,7 @@ console.log('Express.js server for prefix proxy service listening on: '+host+":"
 
 run server in windows:
 
-set NODE_PORT=8080
+set NODE_PORT=9092
 set NODE_HOST=127.0.0.1
 node express-server.js
 

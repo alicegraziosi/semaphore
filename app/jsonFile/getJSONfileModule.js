@@ -184,7 +184,7 @@ angular.module('getJSONfileModule', [])
           id: d.oo.value,
           label: d.ooLabel.value,
           type: d.ooLabel.value,
-          group: 1,
+          group: 3, // qui è giusto 3 (tested)
           customProperties : [
             {
               type: "photoUrl",

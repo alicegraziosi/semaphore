@@ -13,5 +13,10 @@
     "endpointUrl": "https://dbpedia.org/sparql",
     "graphs": ["http://dbpedia.org", "default", "http://wikidata.dbpedia.org"],
     "endpointName": "DBpedia"
+  },
+  {
+    "endpointUrl": "http://eelst.cs.unibo.it:8093/blazegraph/namespace/nd/",
+    "graphs": ["nd"],
+    "endpointName": "network dataset"
   }
 ]

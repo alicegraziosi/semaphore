@@ -429,3 +429,25 @@ body p, body h5, body b, body div, body a, body .ui.label, body h5 .ui.header,
     border-color: transparent;
     border-top-color: inherit;
 }
+
+/* image */
+.ui.aliceImage {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    background-color: transparent;
+}
+
+.ui.aliceImage img{
+    display: block;
+}
+
+.ui.small.aliceImage img{
+  max-width: 125px;
+  max-height: 100px;
+}
+
+.color-picker-wrapper .input-group .color-picker-input-swatch{
+  width: 140px;
+}
