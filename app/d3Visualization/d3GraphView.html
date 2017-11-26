@@ -15,13 +15,13 @@
       <!--  Semantic's default theme uses 16 columns.-->
       <div class="ui ten wide column">
         <!-- d3-visualization = directive -->
-        
+
         <div class="ui segment">
           <div ng-if="showLoader"
             class="ui active inverted dimmer">
             <div class="ui large text loader">Loading</div>
           </div>
-        
+
 
           <d3-graphvisualization graph="graph"
                                  selected-item="selected"
@@ -51,7 +51,7 @@
               <a ng-href="{{selected.id}}" target=”_blank”>{{selected.url}}
                 <i ng-show="selected != ' '" class="external link icon"></i>
               </a>
-            
+
             <a ng-href="{{selected.photoUrl}}" target=”_blank”>
             <img class="fluidImg"
               ng-if="selected.photoUrl!=' '"

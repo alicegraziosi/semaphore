@@ -38,9 +38,9 @@ myAppd3view.directive('d3Graphvisualization',
               d3.selectAll("circle").attr("fill", function(d) { return colorOfNode(d.group)});
             } else {
               //d3.selectAll(".immagini").attr("visibility", "visible");
-              d3.selectAll("circle").attr("fill", function(d, i) { 
+              d3.selectAll("circle").attr("fill", function(d, i) {
                 if(d.photoUrl!=''){
-                  return ("url(#"+i+"-icon)"); 
+                  return ("url(#"+i+"-icon)");
                 } else {
                   return colorOfNode(d.group)};
                 });
@@ -123,8 +123,8 @@ myAppd3view.directive('d3Graphvisualization',
                       url: n.url,
                       group: n.group,
                       photoUrl: n.customProperties[0].value,
-                      shape: "circle",
-                      radius: radius
+                      shape: n.shape,
+                      radius: n.radius
                     });
                   });
 
@@ -136,16 +136,22 @@ myAppd3view.directive('d3Graphvisualization',
                       url: n.url,
                       group: n.group,
                       photoUrl: " ",
-                      shape: "rectangle"
+                      shape: n.shape
                     });
                   });
+
+
+                  var forceCollide = d3.forceCollide()
+                      .radius(function(d) { return d.radius + 10; })
+                      .iterations(1);
 
                   /* directed force layout */
                   var simulation = d3.forceSimulation()
                     // replace force.linkStrength in d3v3
                     .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100).strength(1))
                     // replace force.charge of d3v3
-                    .force("charge", d3.forceManyBody().strength(-20))
+                    .force("collide", forceCollide)
+                    .force("charge", d3.forceManyBody().strength(-30))
                     .force("center", d3.forceCenter(width / 2, height / 2));
 
                   simulation.nodes(nodes).on("tick", ticked);
@@ -190,9 +196,9 @@ myAppd3view.directive('d3Graphvisualization',
                         .attr("height", 8)  //if rect
                         .attr("r", function(d) { return d.radius; }) // if circle
                         .attr("fill", function(d) { return colorOfNode(d.group)})
-                        .attr("fill", function(d, i) { 
-                          if(d.shape=="circle" && d.photoUrl!='') { 
-                            return ("url(#"+i+"-icon)") 
+                        .attr("fill", function(d, i) {
+                          if(d.shape=="circle" && d.photoUrl!='') {
+                            return ("url(#"+i+"-icon)")
                           } else {
                             return colorOfNode(d.group)
                           }
@@ -203,32 +209,36 @@ myAppd3view.directive('d3Graphvisualization',
                             .on("end", dragended))
                         .on("mouseover", function(d){
                           d3.select(this).style("stroke", '#ffffff');
-                          d3.select(this).style("cursor", "pointer"); 
+                          d3.select(this).style("cursor", "pointer");
                           d3.select(this).style("stroke", colorOfNode(d.group));
                           scope.$apply(function () {
                             $parse(attrs.selectedItem).assign(scope.$parent, d);
                           });
 
-                          div.transition()   
-                              .duration(200)    
+                          div.transition()
+                              .duration(200)
                               .style("opacity", .9);
 
-                          div.style("left", d3.select(this).attr('cx') + "100px")    
-                             .style("top",  d3.select(this).attr('cy') + "50px");  
+                          div.style("left", d3.select(this).attr('cx') + "100px")
+                             .style("top",  d3.select(this).attr('cy') + "50px");
+
+                          tool_tip.show();
                         })
                         .on("mouseout", function(d){
                           d3.select(this).style("stroke", '#ffffff');
                           d3.select(this).style("cursor", "default");
 
-                          div.transition()    
-                            .duration(500)    
-                            .style("opacity", 0);  
+                          div.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+
+                          tool_tip.hide;
                         })
                         .on('dblclick', connectedNodes);
 
                   var div =  d3.select(elem[0]).append("div")
-                      .attr("class", "tooltip")       
-                      .style("opacity", 0); 
+                      .attr("class", "tooltip")
+                      .style("opacity", 0);
 
                   /* label dei nodi */
                   var label = gzoom.append("g")
@@ -248,8 +258,8 @@ myAppd3view.directive('d3Graphvisualization',
                       });
 
                   node.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
- 
-                  var img = 
+
+                  var img =
                     gzoom.append("g")
                     .attr("class", "nodesLabel")
                     .selectAll("g")
@@ -257,7 +267,7 @@ myAppd3view.directive('d3Graphvisualization',
                     .enter().append("g")
                     .append('defs')
                     .append('pattern')
-                    .attr('id', function(d, i) { return (i+"-icon");})  
+                    .attr('id', function(d, i) { return (i+"-icon");})
                     .attr('width', 1)
                     .attr('height', 1)
                     .attr("x", "0")
@@ -290,16 +300,16 @@ myAppd3view.directive('d3Graphvisualization',
                       .on("mouseover", function(d){
                         d3.selectAll("circle").style("stroke", '#ffffff');
                         d3.select(this).style("stroke", color(d.group));
-                        d3.select(this).style("cursor", "pointer"); 
+                        d3.select(this).style("cursor", "pointer");
                         scope.$apply(function () {
                           $parse(attrs.selectedItem).assign(scope.$parent, d);
                         });
                       })
                       .on("mouseout", function(d){
                         d3.selectAll("circle").style("stroke", '#ffffff');
-                        d3.select(this).style("cursor", "default"); 
-                      }); 
-                    
+                        d3.select(this).style("cursor", "default");
+                      });
+
                   /*rect e label */
                   var rect = gzoom.append("g")
                     .attr("class", "rectLabel")
@@ -313,7 +323,7 @@ myAppd3view.directive('d3Graphvisualization',
                     .attr("y", "-5")
                     .attr("height", "8")
                     .attr("fill", "#c0c1c2");
-          
+
                   var text = rect.append("text")
                     .text(function (d) { return d.label; })
                     .style("font-family", "Arial")
@@ -332,12 +342,21 @@ myAppd3view.directive('d3Graphvisualization',
                     .append("title");
 
                   rects.attr("width", function(d){ return Math.max(15, d.thisWidth + 1)});
-                  
+
                 //text.text(function(d){return d.label;});
 
-                /* tooltip di nodi e link*/
-                node.append("title").text(function(d) { return d.id; });
+                // tooltip (solo teso) di nodi e link
+                node.append("title").text(function(d) { return d.id + "\nEntity " + d.label + " is instance of " + d.type; });
                 link.append("title").text(function(d) { return d.label; });
+
+                // Setup the tool tip.  Note that this is just one example, and that many styling options are available.
+                // See original documentation for more details on styling: http://labratrevenge.com/d3-tip/
+                var tool_tip = d3.tip()
+                  .attr("class", "d3-tip")
+                  .offset([-8, 0])
+                  .html(function(d) { return "Radius: " + d; });
+
+                d3.select("svg").call(tool_tip);
 
                 function ticked() {
                   link.attr("x1", function(d) { return d.source.x; })
@@ -359,6 +378,7 @@ myAppd3view.directive('d3Graphvisualization',
                   rect.attr("transform", function (d) {
                        return "translate(" + (d.source.x + d.target.x)/2 + ","
                                           + ((d.source.y + d.target.y)/2)+ ")"});
+
                 }
 
                 function dragstarted(d) {
@@ -392,10 +412,12 @@ myAppd3view.directive('d3Graphvisualization',
                 links.forEach(function (d) {
                     linkedByIndex[d.source.index + "," + d.target.index] = 1;
                 });
+
                 //This function looks up whether a pair are neighbours
                 function neighboring(a, b) {
                     return linkedByIndex[a.index + "," + b.index];
                 }
+
                 function connectedNodes() {
                     if (toggle == 0) {
                         //Reduce the opacity of all but the neighbouring nodes
@@ -452,14 +474,11 @@ myAppd3view.directive('d3Graphvisualization',
                     }
                   } // if (selectedNodeLabel)
                 }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
-              
-               
-              } //update()
-              
-              
 
-                function clearAll() {
-                
+
+              } //update()
+
+              function clearAll() {
                   //scope.showLoader = true;
                   d3.selectAll(".links").remove();
                   d3.selectAll(".nodes").remove();
@@ -468,8 +487,8 @@ myAppd3view.directive('d3Graphvisualization',
                   d3.selectAll(".image").remove();
                   d3.selectAll(".immagini").remove();
                   d3.selectAll(".rectLabel").remove();
-                }
-                
+              }
+
               // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
               function colorOfNode(group){
                   if(group==1) return '#1f77b4';
@@ -477,7 +496,7 @@ myAppd3view.directive('d3Graphvisualization',
                   if(group==3) return '#2ca02c';
                   if(group==4) return '#d62728';
                   if(group==5) return '#9467bd';
-              }
+              };
 
             } // if(graph)
           }, true); // scope.$watch('graph', function (graph) { con  deep dirty checking

@@ -36,6 +36,8 @@ angular.module('getJSONfileModule', [])
             label: d.ooLabel.value,
             type: d.p.value,//type: d.ooLabel.value,
             group: 3,
+            shape: "circle",
+            radius: 20,
             customProperties : [
               {
                 type: "photoUrl",
@@ -71,7 +73,8 @@ angular.module('getJSONfileModule', [])
             id: "ooPropUri0"+index,
             label: ooproplabel,
             type: d.ooPropType0.value,
-            group: 4
+            group: 4,
+            shape: "rectangle"
           }
           literalNodesObj.push(literalNode);
 
@@ -109,6 +112,8 @@ angular.module('getJSONfileModule', [])
           url: d.sogg.value,
           type: d.soggType.value,
           group: 1,
+          shape: "circle",
+          radius: 20,
           customProperties : [
             {
               type: "photoUrl",
@@ -134,7 +139,8 @@ angular.module('getJSONfileModule', [])
         url: d.soggPropUri0.value, //
         label: soggproplabel0,
         type: d.propType.value,
-        group: 2
+        group: 2,
+        shape: "rectangle"
       }
       literalNodesObj.push(literalNode);
 
@@ -168,6 +174,8 @@ angular.module('getJSONfileModule', [])
           label: d.soggLabel.value,
           type: d.soggType.value,
           group: 3,
+          shape: "circle",
+          radius: 20,
           customProperties : [
             {
               type: "photoUrl",
@@ -184,7 +192,9 @@ angular.module('getJSONfileModule', [])
           id: d.oo.value,
           label: d.ooLabel.value,
           type: d.ooLabel.value,
-          group: 3, // qui è giusto 3 (tested)
+          group: 3, // qui è giusto 3
+          shape: "circle",
+          radius: 20,
           customProperties : [
             {
               type: "photoUrl",

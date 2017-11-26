@@ -4,8 +4,8 @@
 var myAppd3view = angular.module('myApp.d3view');
 
 myAppd3view.directive('customiseDirective',
-  ['$rootScope', '$scope', '$window', '$parse',
-  function($rootScope, $scope, $window, $parse,) {
+  ['$scope', '$window', '$parse',
+  function($scope, $window, $parse,) {
     return{
       //restrict:'E' --> <customise-directive></customise-directive>
       //restrict:'A' --> <div d3-visualization ></div>
@@ -19,12 +19,12 @@ myAppd3view.directive('customiseDirective',
       //The = symbol tells angular that this is a two-way bound value
 
       scope: {
-          model: "=",
-          dataInfo: "="
+          model: "@",
+          dataInfo: "@"
       },
 
       link: function(scope, elem, attrs){
-        
+
       } // chiude link
   	} // chiude return
   }]); // chiude directive

@@ -34,7 +34,8 @@ angular.module('queryDatasetModule', [])
   PREFIX text:    <http://jena.apache.org/text#>
   PREFIX indl: <http://www.science.uva.nl/research/sne/indl#>
   PREFIX nml: <http://schemas.ogf.org/nml/2013/05/base#>
-  PREFIX nmle: <http://www.science.uva.nl/research/sne/nmle#>`;
+  PREFIX nmle: <http://www.science.uva.nl/research/sne/nmle#>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>`;
 
   var queryDataset = function(){
         var endpoint = "http://dbpedia.org/sparql";
@@ -103,7 +104,7 @@ angular.module('queryDatasetModule', [])
                 ?p ?oo.
                 dbo:Band rdfs:label ?soggType.
            ?p rdfs:label ?pLabel;
-              rdfs:label "former band member"@en.
+              rdfs:label "band member"@en.
               ?oo rdfs:label ?ooLabel;
                 dbp:yearsActive ?ooPropUri0;
                 dbo:birthPlace ?ooPropUri1.
@@ -248,6 +249,11 @@ angular.module('queryDatasetModule', [])
         ?classe a ?classUri.
       } LIMIT 1500
 
+      filtering classi
+      https://stackoverflow.com/questions/24180387/filtering-based-on-a-uri-in-sparql
+      https://stackoverflow.com/questions/19044871/exclude-results-from-dbpedia-sparql-query-based-on-uri-prefix
+      FILTER(regex(str(?classUri), "www.w3.org" ) )
+      ma.. non conviene! è lentissimo...meglio lasciare la query così e togliere i dati dal risultati
       */
 
       var query = 'SELECT DISTINCT ?classUri ';
@@ -255,19 +261,12 @@ angular.module('queryDatasetModule', [])
         query += ' FROM <' + graph + '> ';
       }
 
-      query += `
-        { 
-          ?classe a ?classUri.
-        } 
-      
-      LIMIT 500`;
+      query += `{ ?classe a ?classUri. } LIMIT 500`;
 
       //Va bene sia per dbpedia che per semanticLancet
       console.log("Query classi: " + query);
 
-      var encodedquery = encodeURIComponent(prefixes + " " + query);
-      // https://www.w3.org/TR/sparql11-results-json/
-      // 
+      var encodedquery = encodeURIComponent(prefixes + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -302,7 +301,7 @@ angular.module('queryDatasetModule', [])
                   '}';
       console.log("queryDatasetClassObjectProperty");
       console.log(prefixes + " " + query)
-      var encodedquery = encodeURIComponent(prefixes + " " + query);
+      var encodedquery = encodeURIComponent(prefixes + query);
       //var format = "application/sparql-results+json";
       //var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
@@ -328,7 +327,7 @@ angular.module('queryDatasetModule', [])
         query += '<' + ob + '> ';
       });
       query +=    ' } ?soggetto ?propertyUri ?p. '+
-                  'FILTER(!isLiteral(?p)) ' + 
+                  'FILTER(!isLiteral(?p)) ' +
                   '?propertyUri rdfs:label ?propertyLabel. '+
                   'FILTER (lang(?propertyLabel) = "en")'+
                   '}';
@@ -636,14 +635,33 @@ angular.module('queryDatasetModule', [])
       }
       query += 'WHERE { { <' + selectedItem + '> <http://dbpedia.org/ontology/thumbnail> ?photoUrl. }';
       query += 'UNION { <' + selectedItem + '> <http://www.science.uva.nl/research/sne/nmle#thumbnail> ?photoUrl.} }'
-      console.log(query);
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
       //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.post(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
+        .then(function(data) {
+          defer.resolve(data);
+        });
+        return defer.promise;
+    }
+
+    var queryEndpointForRange = function(endpoint, graph, classObjectProperties){
+      var query = 'SELECT DISTINCT ?rangeUri ';
+      if(graph != "default"){
+        query += ' FROM <' + graph + '> ';
+      }
+      query += 'WHERE { <' + classObjectProperties[0].uri + '> rdfs:range ?rangeUri. }';
+
+      var encodedquery = encodeURIComponent(prefixes + query);
+      var format = "application/sparql-results+json";
+      var endcodedformat = encodeURIComponent(format);
+      var defer = $q.defer();
+      // Angular $http() and then() both return promises themselves
+      //$http.get(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format="+endcodedformat+"&query="+encodedquery)
         .then(function(data) {
           defer.resolve(data);
         });
@@ -665,7 +683,8 @@ angular.module('queryDatasetModule', [])
       */
       queryDatasetValuesObjObjectProperty: queryDatasetValuesObjObjectProperty,
       queryDatasetValuesObjDatatypeProperty: queryDatasetValuesObjDatatypeProperty,
-      queryPhotoFromDB: queryPhotoFromDB
+      queryPhotoFromDB: queryPhotoFromDB,
+      queryEndpointForRange: queryEndpointForRange
 
     };
 }]);

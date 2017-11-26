@@ -5,16 +5,25 @@ var contactEndpointModule = angular.module('contactEndpointModule');
 contactEndpointModule.controller('contactEndpointCtrl',
   function($http, $scope, $rootScope, ContactSPARQLendpoint, queryDatasetService, GetJSONfileService) {
 
+    //
+    // DEFAULT
+    //
+
+    $scope.dropdown = function(){
+      $('.ui.dropdown').dropdown();
+    };
+
     $scope.datasetsAndGraphs = []; // dati dal file datasetsAndGraphs.json
     $scope.endpointList = [];
     $scope.graphList = [];
-    
+
     $scope.classeColor = '#1f77b4';
     $scope.litPropClasseColor = '#ff7f0e';
-    $scope.objPropClasse = '#2ca02c';
-    $scope.litPropObj = '#d62728';
-    $scope.objPropObj = '#9467bd';
+    $scope.objPropClasseColor = '#2ca02c';
+    $scope.litPropObjColor = '#d62728';
+    $scope.objPropObjColor = '#9467bd';
 
+    // default endpoint and graph
     $scope.selectedEndpointUrl = "https://dbpedia.org/sparql";
     $scope.selectedEndpointName = "DBpedia";
     $scope.selectedGraph = "http://dbpedia.org";
@@ -26,8 +35,12 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.successMessageToAppear = false;
     $scope.negativeMessageToAppear = false;
     $scope.attentionMessageToAppear = false;
+
     $scope.fetchingMessageToAppear = false;
     $scope.classDatatypePropertiesLoading = false;
+    $scope.showSecondSection = false;
+    $scope.objectPropertyRange = {};
+    $scope.objObjectPropertyRange = {};
 
     // numeri per label info da cui si può selezionare
     $rootScope.numClasses = 0;
@@ -36,19 +49,24 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $rootScope.numObjObjectProperties = 0;
     $rootScope.numObjDatatypeProperties = 0;
 
-    $scope.dismissMessage = function(){
-      $('.message').transition('fade');
-    };
+    $scope.selectedClass = '';
+    $scope.selectedClassObjectProperties = [];
+    $scope.selectedClassDatatypeProperties = [];
+    $scope.selectedObjDatatypeProperties = [];
+    $scope.selectedObjObjectProperties = [];
 
-    // clear ALL
-    $scope.restoreToDefault = function(){
+    $scope.classes = [];
+    $scope.classDatatypeProperties = [];
+    $scope.classObjectProperties = [];
+    $scope.objDatatypeProperties = [];
+    $scope.objObjectProperties = [];
+
+    //per risolvere problemi di performance di ng-repeat nei menu dropdown
+    $scope.totalDisplayed = 250;
+
+    // all'inizio inizio
+    $scope.restoreALLToDefault = function(){
       //check
-        $('#endpointandgraph .ui.dropdown').dropdown('restore placeholder text');
-
-        $scope.selectedEndpointUrl = "https://dbpedia.org/sparql";
-        $scope.selectedEndpointName = "DBpedia";
-        $scope.selectedGraph = "http://dbpedia.org";
-
 
         $rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
         $rootScope.selectedEndpointName = $scope.selectedEndpointName;
@@ -76,14 +94,13 @@ contactEndpointModule.controller('contactEndpointCtrl',
         $scope.selectedClassObjectProperties = [];
         $scope.selectedClassDatatypeProperties = [];
         $scope.selectedObjDatatypeProperties = [];
-        $scope.selectedObjDatatypeProperties = [];
+        $scope.selectedObjObjectProperties = [];
 
         $scope.classes = [];
-        $scope.classDatatypeProperties = []; 
+        $scope.classDatatypeProperties = [];
         $scope.classObjectProperties = [];
         $scope.objDatatypeProperties = [];
         $scope.objObjectProperties = [];
-
     };
 
     $http.get('../datasetsAndGraphs.json').then(function (response) {
@@ -109,111 +126,57 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $rootScope.prefixes = response.data;
     });
 
-    $scope.classes = [];
-    $scope.selectedClass = {};
-
-    $scope.classObjectProperties = [];
-    $scope.selectedClassObjectProperties = [];
-
-    $scope.classDatatypeProperties = [];
-    $scope.selectedClassDatatypeProperties = [];
-
-    $scope.objObjectProperties = [];
-    $scope.selectedObjObjectProperties = [];
-
-    $scope.objDatatypeProperties = [];
-    $scope.selectedObjDatatypeProperties = [];
-
-    //per risolvere problemi di performance di ng-repeat nei menu dropdown
-    $scope.totalDisplayed = 150;
-
-    $scope.loadMore = function () {
-      $scope.totalDisplayed += 100;
-    };
-
+    // quando si seleziona uno sparql endopoint
     $scope.selectEndpoint = function (endpoint) {
-
-      $scope.successMessageToAppear = false;
-      $scope.negativeMessageToAppear = false;
-      $scope.attentionMessageToAppear = false;
-      $scope.fetchingMessageToAppear = false;
+      // graph default text
 
       $scope.selectedEndpointUrl = endpoint.url;
       $scope.selectedEndpointName = endpoint.name;
       $scope.selectedGraph = "";
-      console.log("$scope.selectedEndpointUrl " + $scope.selectedEndpointUrl + " " + $scope.selectedEndpointName); 
 
       $scope.datasetsAndGraphs.forEach(function(endpoint){
         if(endpoint.endpointUrl === $scope.selectedEndpointUrl){
           $scope.graphList = endpoint.graphs;
         }
       });
-
-      $scope.numClasses = 0;
-      $scope.numClassObjectProperties = 0;
-      $scope.numClassDatatypeProperties = 0;
-      $scope.numObjObjectProperties = 0;
-      $scope.numObjDatatypeProperties = 0;
+      // TODO non so perchè cazzo non funziona qui, visto che da console va...
+      $('#graphDropdown ui.dropdown').dropdown('restore placeholder text');
     };
 
+    // quando si seleziona un grafo
     $scope.selectGraph = function (graph) {
        $scope.selectedGraph = graph;
     };
 
-    // ask for endpoint
+    // ask for selected endpoint and graph (button ok)
     $scope.contactSelectedEndpoint = function () {
+      $scope.successMessageToAppear = false;
+      $scope.negativeMessageToAppear = false;
+      $scope.attentionMessageToAppear = false;
       if ($scope.selectedEndpointUrl != "" && $scope.selectedGraph != "") {
         ContactSPARQLendpoint.contactSelectedEndpoint($scope.selectedEndpointUrl, $scope.selectedGraph)
           .success(function(data, status, headers, config){
             $scope.successMessageToAppear = true;
             $scope.queryDatasetClass();
             $('#datasetInfoRichieste').addClass("active");
+            $('#allClassDropdown .ui.dropdown').dropdown('restore placeholder text');
+            $scope.restoreALLToDefault();
           })
           .error(function(data, status, headers, config){
             $scope.negativeMessageToAppear = true;
           });
-        } else {
+        } else {  // se non è stato selezionato l'endpoint o il grafo
           $scope.attentionMessageToAppear = true;
-          console.log("endpoint: " + $scope.selectedEndpointUrl + "graph: " + $scope.selectedGraph);
         }
-
-      $scope.numClasses = 0;
-      $scope.numClassObjectProperties = 0;
-      $scope.numClassDatatypeProperties = 0;
-      $scope.numObjObjectProperties = 0;
-      $scope.numObjDatatypeProperties = 0;
-
-      $scope.classes.splice(0, $scope.classObjectProperties.length);
-      $scope.classObjectProperties.splice(0, $scope.classObjectProperties.length);
-      $scope.classDatatypeProperties.splice(0, $scope.classDatatypeProperties.length);
-
-      //vuotato l'array delle proprietà selezionate della classe corrente
-      $scope.selectedClassObjectProperties.splice(0, $scope.selectedClassObjectProperties.length);
-      $scope.selectedClassDatatypeProperties.splice(0, $scope.selectedClassDatatypeProperties.length);
     };
 
-    $scope.convertUriToPrefixProxy = function(classUri, uriToFind, name){  // uri="http://xmlns.com/foaf/0.1/"
-      var promise = ContactSPARQLendpoint.convertUriToPrefixProxy(uriToFind);
-      promise.then(function(data) {
-        var prefix = Object.keys(data)[0];
-        var url = Object.values(data)[0];
-        var prefixUrl = {
-          'prefix' : prefix,
-          'url' : url
-        };
-        console.log(prefixUrl);
-        if (_.findWhere($rootScope.prefixes, prefixUrl) == null) {
-            $rootScope.prefixes.push(prefixUrl);
-        };
-        $scope.classes.push({
-            uri: classUri,
-            label: prefix + ":" + name
-          });
-        $rootScope.numClasses++;
-      }, function (error) {
-          console.error(error);
-      });
-    };
+    // clear button
+    $scope.restoreEndpointGraphDropdownToDefault = function(){
+      $('#endpointGraphDropdown .ui.dropdown').dropdown('restore placeholder text');
+      $rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
+      $rootScope.selectedEndpointName = $scope.selectedEndpointName;
+      $rootScope.selectedGraph = $scope.selectedGraph;
+    }
 
     // classi del dataset
     $scope.queryDatasetClass = function(){
@@ -221,18 +184,19 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.fetchingMessageToAppear = true;
 
       var promise = queryDatasetService.queryDatasetClass($scope.selectedEndpointUrl, $scope.selectedGraph);
-      
+
       promise.then(function(response) {
-        // forse meglio farlo ancora piu tardi
+
+        // aggiorno variabili di scope
         $rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
         $rootScope.selectedEndpointName = $scope.selectedEndpointName;
         $rootScope.selectedGraph = $scope.selectedGraph;
-      
+
 
         $scope.numClasses = 0;
         if(response.data.results.bindings.length == 0){
           $scope.fetchingMessageToAppear = false;
-        }
+        };
 
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.fetchingMessageToAppear = false;
@@ -242,50 +206,44 @@ contactEndpointModule.controller('contactEndpointCtrl',
           // ma si sceglie il rdf:type, e per la label si fa richiesta a prefix.cc
 
           var classUri = response.data.results.bindings[i].classUri.value;
-          var lastSlash = classUri.lastIndexOf('/');
-          var lastHash = classUri.lastIndexOf('#');
-          var name = ""; // nome classe
-          var label = ""; //prefix:name
-          var uriToFind = "";
-          if(lastHash>lastSlash){
-            name = classUri.substring(lastHash+1, classUri.length);
-            uriToFind = classUri.substring(0, lastHash+1);
-          } else {
-            name = classUri.substring(lastSlash+1, classUri.length);
-            uriToFind = classUri.substring(0, lastSlash+1);
+          if(!classUri.includes("www.w3.org")){ // per escludere :owl e :rdfs
+
+            var lastSlash = classUri.lastIndexOf('/');
+            var lastHash = classUri.lastIndexOf('#');
+            var name = ""; // nome classe
+            var label = ""; // prefix:name
+            var uriToFind = "";
+            if(lastHash>lastSlash){
+              name = classUri.substring(lastHash+1, classUri.length);
+              uriToFind = classUri.substring(0, lastHash+1);
+            } else {
+              name = classUri.substring(lastSlash+1, classUri.length);
+              uriToFind = classUri.substring(0, lastSlash+1);
+            }
+
+            // cerco uriToFind in $scope.prefixes
+            var found = false;
+            var result = $.grep($rootScope.prefixes, function(e){ return e.url == uriToFind; });
+            //console.log(result[0].prefix);
+            if(result.length==0){
+              //$scope.convertUriToPrefixProxy(classUri, uriToFind, name);
+            } else {
+              var label = result[0].prefix + ":" + name;
+              $scope.classes.push({
+                uri: classUri,
+                label: label
+              });
+              $scope.numClasses++;
+            }
           }
-
-          // cerco uriToFind in $scope.prefixes
-          var found = false;
-          var result = $.grep($rootScope.prefixes, function(e){ return e.url == uriToFind; });
-          //console.log(result[0].prefix);
-          if(result.length==0){
-            //$scope.convertUriToPrefixProxy(classUri, uriToFind, name);
-          } else {
-            var label = result[0].prefix + ":" + name;
-            $scope.classes.push({
-              uri: classUri,
-              label: label
-            });
-            $scope.numClasses++;
-          }
-
-
         };
       });
     }
-
-    $scope.restoreToDefault();
-    $scope.contactSelectedEndpoint();
-    $scope.queryDatasetClass();
-
 
     // object properties della classe selezionata
     $scope.queryDatasetClassObjectProperty = function(){
       var promise = queryDatasetService.queryDatasetClassObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri);
       promise.then(function(response) {
-
-        console.log("num class obj prop: " + response.data.results.bindings.length);
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.classObjectProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
@@ -301,8 +259,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.classDatatypePropertiesLoading = true;
       var promise = queryDatasetService.queryDatasetClassDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri);
       promise.then(function(response) {
-        
-        console.log("num class data prof: " + response.data.results.bindings.length);
         for(var i=0; i<response.data.results.bindings.length; i++){
           $scope.classDatatypeProperties.push({
             uri: response.data.results.bindings[i].propertyUri.value,
@@ -313,36 +269,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
       });
       $scope.classDatatypePropertiesLoading = false;
     }
-
-    // object properties della object properties della classe selezionata
-    /*
-    $scope.queryDatasetObjDatatypeProperty = function(objClass){
-      var promise = queryDatasetService.queryDatasetClassDatatypeProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, objClass);
-      promise.then(function(response) {
-        for(var i=0; i<response.data.results.bindings.length; i++){
-          $scope.objDatatypeProperties.push({
-            uri: response.data.results.bindings[i].propertyUri.value,
-            label: response.data.results.bindings[i].propertyLabel.value
-          });
-        };
-      });
-    }
-    */
-
-    // datatype properties della object properties della classe selezionata
-    /*
-    $scope.queryDatasetObjObjectProperty = function(objClass){
-      var promise = queryDatasetService.queryDatasetClassObjectProperty($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, objClass);
-      promise.then(function(response) {
-        for(var i=0; i<response.data.results.bindings.length; i++){
-          $scope.objObjectProperties.push({
-            uri: response.data.results.bindings[i].propertyUri.value,
-            label: response.data.results.bindings[i].propertyLabel.value
-          });
-        };
-      });
-    }
-    */
 
     // datatype properties della object properties della classe selezionata
     $scope.queryDatasetValuesObjDatatypeProperty = function(obj){
@@ -390,16 +316,20 @@ contactEndpointModule.controller('contactEndpointCtrl',
       // se lo elimino poi non partono le query
 
       //eliminate le proprietà della classe precedente
-      $scope.classObjectProperties.splice(0, $scope.classObjectProperties.length);
-      $scope.classDatatypeProperties.splice(0, $scope.classDatatypeProperties.length);
+      $scope.classObjectProperties = [];
+      $scope.classDatatypeProperties = [];
 
       //vuotato l'array delle proprietà selezionate della classe corrente
-      $scope.selectedClassObjectProperties.splice(0, $scope.selectedClassObjectProperties.length);
-      $scope.selectedClassDatatypeProperties.splice(0, $scope.selectedClassDatatypeProperties.length);
+      $scope.selectedClassObjectProperties = [];
+      $scope.selectedClassDatatypeProperties = [];
 
       //ricerca delle proprietà della nuova classe corrente
       $scope.queryDatasetClassObjectProperty();
       $scope.queryDatasetClassDatatypeProperty();
+
+      $scope.showSecondSection = false;
+      $scope.objectPropertyRange = {};
+      $scope.objObjectPropertyRange = {};
     };
 
     $scope.selectClassDatatypeProperty = function(selectedClassProperty){
@@ -414,14 +344,14 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.selectedClassObjectProperties.length = 0;
       $scope.selectedClassObjectProperties.push(selectedClassProperty);
 
-      //todo aggiornare dinamicamente
-
       $scope.numObjObjectProperties = 0;
       $scope.numObjDatatypeProperties = 0;
       $scope.objDatatypeProperties.length = 0;
       $scope.objObjectProperties.length = 0;
       $scope.selectedObjDatatypeProperties.length = 0;
       $scope.selectedObjObjectProperties.length = 0;
+
+      $scope.showSecondSection = false;
 
       var promise = queryDatasetService.queryEndpointForObject($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassObjectProperties);
         promise.then(function(response) {
@@ -432,7 +362,15 @@ contactEndpointModule.controller('contactEndpointCtrl',
           $scope.queryDatasetValuesObjObjectProperty($scope.obj);
           $scope.queryDatasetValuesObjDatatypeProperty($scope.obj);
         });
-      
+
+      // classe range della object property
+      var promise = queryDatasetService.queryEndpointForRange($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClassObjectProperties);
+        promise.then(function(response) {
+          $scope.objectPropertyRange = {
+            'uri': response.data.results.bindings[0].rangeUri.value,
+            'label':response.data.results.bindings[0].rangeUri.value
+          }
+        });
     }
 
     $scope.selectObjDatatypeProperty = function(selectedClassProperty){
@@ -443,49 +381,68 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.selectObjObjectProperty = function(selectedClassProperty){
       $scope.selectedObjObjectProperties.splice(0, $scope.selectedObjObjectProperties);
       $scope.selectedObjObjectProperties.push(selectedClassProperty);
+
+      $scope.objObjectPropertyRange = {};
+
+      // classe range della object property
+      var promise = queryDatasetService.queryEndpointForRange($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClassObjectProperties);
+        promise.then(function(response) {
+          $scope.objObjectPropertyRange = {
+            'uri': response.data.results.bindings[0].rangeUri.value,
+            'label':response.data.results.bindings[0].rangeUri.value
+          }
+        });
     }
 
-    $scope.dropdown = function(){
-      $('.ui.dropdown').dropdown();
-    };
+    $scope.dropdown = function(){ $('.ui.dropdown').dropdown(); };
 
-    $scope.clearRootScopeGraph= function(){
+    $scope.clearRootScopeGraph = function(){
       $rootScope.graph.nodes.length = 0;
       $rootScope.graph.linksToLiterals.length = 0;
       $rootScope.graph.links.length = 0;
       $rootScope.graph.nodeLiteral.length = 0;
     }
 
-    // primo bottone load data
+    $scope.clearRootScopeDataInfo = function(){
+      $rootScope.dataInfo = {};
+      $rootScope.dataInfo.classe = {};
+      $rootScope.dataInfo.litPropClasse = [];
+      $rootScope.dataInfo.objPropClasse = {};
+      $rootScope.dataInfo.litPropObj = [];
+      $rootScope.dataInfo.objPropObj = {};
+    }
+
+    // primo load data
     $scope.queryEndpointClassProperties = function(){
 
       $scope.classeColor = '#1f77b4';
       $scope.litPropClasseColor = '#ff7f0e';
-      $scope.objPropClasse = '#2ca02c';
-      $scope.litPropObj = '#d62728';
-      $scope.objPropObj = '#9467bd';
+      $scope.objPropClasseColor = '#2ca02c';
+      $scope.litPropObjColor = '#d62728';
+      $scope.objPropObjColor = '#9467bd';
 
       $scope.clearRootScopeGraph();
+      $scope.clearRootScopeDataInfo();
+
+      $rootScope.dataInfo.classe = {
+        uri : $scope.selectedClass.uri,
+        label : $scope.selectedClass.label,
+        type : "obj",
+        group: 1,
+        color : $scope.classeColor
+      }
 
       if($scope.selectedClassDatatypeProperties.length != 0){
-        $rootScope.dataInfo = {};
-        $rootScope.dataInfo.litPropClasse = [];
-        $rootScope.dataInfo.classe = {
-          uri : $scope.selectedClass.uri,
-          label : $scope.selectedClass.label,
-          type : "obj",
-          group: 1,
-          color : $scope.classeColor
-        }
-
         var promise = queryDatasetService.queryEndpointForLiteral($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassDatatypeProperties);
         promise.then(function(response) {
           // nodi, literalNode e linkstoliterals della classe scelta
           var graph = GetJSONfileService.createNodeLiteral(response.data.results.bindings, "soggPropUri0");
           graph.nodes.forEach(function(n){
-            n.group = "1";
+            if(!existsInArray($rootScope.graph.nodes, "id", n.id)){
+              n.group = "1";
+              $rootScope.graph.nodes.push(n);
+            };
           });
-          $rootScope.graph.nodes = removeDuplicates(graph.nodes, "id");
 
           graph.nodeLiteral.forEach(function(nl){
             $rootScope.graph.nodeLiteral.push(nl);
@@ -512,8 +469,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
         });
       };
 
-        if($scope.selectedClassObjectProperties.length != 0){
-        $rootScope.dataInfo.objPropClasse = {};
+      if($scope.selectedClassObjectProperties.length != 0){
         var promise = queryDatasetService.queryEndpointForObject($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassObjectProperties);
         promise.then(function(response) {
           $scope.obj = [];
@@ -521,19 +477,17 @@ contactEndpointModule.controller('contactEndpointCtrl',
             $scope.obj.push(ob.oo.value);
           });
 
-          //
-
-          //
           $scope.queryDatasetValuesObjObjectProperty($scope.obj);
           $scope.queryDatasetValuesObjDatatypeProperty($scope.obj);
 
           // nodi, nodi e linkstoliterals della classe scelta
           var graph = GetJSONfileService.createNodeObject(response.data.results.bindings);
           graph.nodes.forEach(function(n){
-            n.group = "3";
+            if(!existsInArray($rootScope.graph.nodes, "id", n.id)){
+              n.group = "3";
+              $rootScope.graph.nodes.push(n);
+            };
           });
-
-          $rootScope.graph.nodes = removeDuplicates(graph.nodes, "id");
 
           graph.links.forEach(function(l){
             $rootScope.graph.links.push(l);
@@ -545,18 +499,19 @@ contactEndpointModule.controller('contactEndpointCtrl',
               label : prop.label,
               type : 'obj',
               group: 3,
-              color : $scope.objPropClasse
+              color : $scope.objPropClasseColor
             }
           });
         });
-      }
+      };
 
-      $rootScope.dataInfo.litPropObj = [];
-      $rootScope.dataInfo.objPropObj = {};
+      $scope.showSecondSection = true;
     }
 
-
+    // secondo load data
     $scope.queryEndpoint = function(){
+      $rootScope.dataInfo.litPropObj = [];
+      $rootScope.dataInfo.objPropObj = {};
 
       //$rootScope.$digest(); // $apply è già in corso, quindi non si può usare $digest
       if($scope.selectedObjDatatypeProperties.length != 0){
@@ -568,18 +523,17 @@ contactEndpointModule.controller('contactEndpointCtrl',
         promise.then(function(response) {
           // nodi, literalNode e linkstoliterals della classe scelta
           var graph = GetJSONfileService.createNodeLiteral(response.data.results.bindings, "oggPropUri0");
-          
+
           graph.nodeLiteral.forEach(function(node){
             $rootScope.graph.nodeLiteral.push(node);
           });
-          
-          $rootScope.dataInfo.litPropObj = [];
+
           $rootScope.dataInfo.litPropObj.push({
               uri : $scope.selectedObjDatatypeProperties[0].uri,
               label : $scope.selectedObjDatatypeProperties[0].label,
               type : 'lit',
               group: 4,
-              color : $scope.litPropObj
+              color : $scope.litPropObjColor
             });
 
           graph.linksToLiterals.forEach(function(l){
@@ -597,46 +551,76 @@ contactEndpointModule.controller('contactEndpointCtrl',
         promise.then(function(response) {
           // nodi, nodi e linkstoliterals della classe scelta
           var graph = GetJSONfileService.createNodeObject(response.data.results.bindings);
-          graph.nodes.forEach(function(n){
-            n.group = "5";
-            $rootScope.graph.nodes.push(n);
-          });
 
-          $rootScope.graph.nodes = removeDuplicates($rootScope.graph.nodes, "id");
+          graph.nodes.forEach(function(n){
+            if(!existsInArray($rootScope.graph.nodes, "id", n.id)){
+              n.group = "5";
+              $rootScope.graph.nodes.push(n);
+            };
+          });
 
           graph.links.forEach(function(l){
             $rootScope.graph.links.push(l);
           });
-          
-          $rootScope.dataInfo.objPropObj = [];
-          $rootScope.dataInfo.objPropObj.push({
+
+          $rootScope.dataInfo.objPropObj = {
               uri: $scope.selectedObjObjectProperties[0].uri,
               label : $scope.selectedObjObjectProperties[0].label,
               type : 'obj',
               group: 5,
-              color : $scope.objPropObj
-            });
+              color : $scope.objPropObjColor
+            };
         });
       }
     }
 
-    $scope.clearQueryParam = function(){
+    $scope.clearAllClassPropertiesDropown = function(){
+      $('#allClassPropertiesDropdown .ui.dropdown').dropdown('restore placeholder text');
+
       $scope.selectedClass = '';
+      $scope.selectedClassObjectProperties = [];
+      $scope.selectedClassDatatypeProperties = [];
+      $scope.selectedObjDatatypeProperties = [];
+      $scope.selectedObjDatatypeProperties = [];
 
-      $('#allClassPropertiesDropown .ui.dropdown').dropdown('restore placeholder text');
-      $('#allClassDropdown .ui.dropdown').dropdown('restore placeholder text');
+      // $scope.classes = []; COMMENTATO!!!
+      $scope.classDatatypeProperties = [];
+      $scope.classObjectProperties = [];
+      $scope.objDatatypeProperties = [];
+      $scope.objObjectProperties = [];
+    };
 
-      $scope.classObjectProperties.length = 0;
-      $scope.selectedClassObjectProperties.length = 0;
+    // INIT DEEFAULT
+    $('.ui.dropdown').dropdown('restore placeholder text');
+    $scope.restoreALLToDefault();
+    $scope.contactSelectedEndpoint();
+    $scope.queryDatasetClass();
 
-      $scope.classDatatypeProperties.length = 0;
-      $scope.selectedClassDatatypeProperties.length = 0;
 
-      $scope.objObjectProperties.length = 0;
-      $scope.selectedObjObjectProperties.length = 0;
+    //
+    // UTILITIES
+    //
 
-      $scope.objDatatypeProperties.length = 0;
-      $scope.selectedObjDatatypeProperties.length = 0;
+    $scope.convertUriToPrefixProxy = function(classUri, uriToFind, name){  // uri="http://xmlns.com/foaf/0.1/"
+      var promise = ContactSPARQLendpoint.convertUriToPrefixProxy(uriToFind);
+      promise.then(function(data) {
+        var prefix = Object.keys(data)[0];
+        var url = Object.values(data)[0];
+        var prefixUrl = {
+          'prefix' : prefix,
+          'url' : url
+        };
+        if (_.findWhere($rootScope.prefixes, prefixUrl) == null) {
+            $rootScope.prefixes.push(prefixUrl);
+        };
+        $scope.classes.push({
+            uri: classUri,
+            label: prefix + ":" + name
+          });
+        $rootScope.numClasses++;
+      }, function (error) {
+          console.error(error);
+      });
     };
 
     // remove duplicates from array of objects
@@ -644,7 +628,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     // ouput: array of obj with no duplicates
     function removeDuplicates(originalArray, prop) {
       var newArray = [];
-      var lookupObject  = {};
+      var lookupObject = {};
 
       for(var i in originalArray) {
         lookupObject[originalArray[i][prop]] = originalArray[i];
@@ -654,5 +638,30 @@ contactEndpointModule.controller('contactEndpointCtrl',
         newArray.push(lookupObject[i]);
       }
       return newArray;
-   }
+    };
+
+    function existsInArray(originalArray, prop, value){
+      return originalArray.some(function(el) {
+        return el.id === value;
+      });
+    };
+
+    // check if object is empty
+    $scope.isEmpty = function(obj) {
+      for(var prop in obj) {
+          if(obj.hasOwnProperty(prop))
+              return false;
+      }
+      return true;
+    };
+
+    // close semantic ui message
+    $scope.dismissMessage = function(){
+      $('.message').transition('fade');
+    };
+
+    // load more data in dropdown list menu
+    $scope.loadMore = function () {
+      $scope.totalDisplayed += 200;
+    };
 });

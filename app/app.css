@@ -9,7 +9,7 @@ div.ui.top.fixed.menu{
 }
 
 .ui.menu:not(.vertical) .right.item, .ui.menu:not(.vertical) .right.menu{
-  margin-left: 0px !important; 
+  margin-left: 0px !important;
 }
 
 /* logo */
@@ -213,67 +213,6 @@ span.limit-ellipsis {
     transition: background .1s ease;
 }
 
-/*
-.ribbon-label-overrided{
-    display: inline-block;
-    line-height: 1;
-    vertical-align: baseline;
-    margin: 0 .14285714em;
-    background-color: #e8e8e8;
-    background-image: none;
-    padding: .5833em .833em;
-    color: rgba(0,0,0,.6);
-    text-transform: none;
-    font-weight: 700;
-    border: 0 solid transparent;
-    border-radius: .28571429rem;
-    -webkit-transition: background .1s ease;
-    transition: background .1s ease;
-    background-color: #2185d0!important;
-    border-color: #2185d0!important;
-    color: #fff!important;
-    
-    border-color: #1a69a4!important;
-    text-align: left;
-    -webkit-transform: translateX(-100%);
-    transform: translateX(-100%);
-    border-radius: .28571429rem 0 0 .28571429rem;
-    left: calc(100% + 1rem + 1.2em);
-    padding-left: 1.2em;
-    padding-right: calc(1rem + 1.2em);
-    position: relative;
-    margin: 0;
-    min-width: -webkit-max-content;
-    min-width: -moz-max-content;
-    min-width: max-content;
-    border-radius: 0 .28571429rem .28571429rem 0;
-    border-color: rgba(0,0,0,.15);
-    font-size: .85714286rem;
-    margin-bottom: 5px;
-}
-
-.ribbon-label-overrided:after {
-    position: absolute;
-    content: '';
-    top: 100%;
-    left: 0;
-    background-color: transparent!important;
-    border-style: solid;
-    border-width: 0 1.2em 1.2em 0;
-    border-color: transparent;
-    border-right-color: inherit;
-    width: 0;
-    height: 0;
-    left: auto;
-    right: 0;
-    border-style: solid;
-    border-width: 1.2em 1.2em 0 0;
-    border-color: transparent;
-    border-top-color: inherit;
-
-}
-*/
-
 .horizontal-mini-label{
     display: inline-block;
     line-height: 1;
@@ -315,22 +254,22 @@ span.limit-ellipsis {
 }
 
 /* tooltip nodi*/
-div.tooltip { 
-    position: absolute;     
-    text-align: center;     
-    min-width: 200px;          
-    min-height: 150px;         
-    padding: 2px;       
-    font: 12px sans-serif;    
-    background: lightsteelblue; 
-    border: 0px;    
-    border-radius: 8px;     
-    pointer-events: none;     
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    min-width: 200px;
+    min-height: 150px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
 }
 
 
 /*font size di tutta l'app*/
-body p, body h5, body b, body div, body a, body .ui.label, body h5 .ui.header, 
+body p, body h5, body b, body div, body a, body .ui.label, body h5 .ui.header,
 .ui.segment, .ui.segment h5.ui.header{
   font-size: 11px;
   word-wrap: break-word;
@@ -450,4 +389,41 @@ body p, body h5, body b, body div, body a, body .ui.label, body h5 .ui.header,
 
 .color-picker-wrapper .input-group .color-picker-input-swatch{
   width: 140px;
+}
+
+
+/* tooltip */
+.d3-tip {
+  line-height: 1;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips specifically */
+.d3-tip.n:after {
+  margin: -2px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+
+/*LOADING BAR*/
+#loading-bar .bar {
+  position: relative;
 }

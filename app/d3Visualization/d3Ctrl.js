@@ -27,10 +27,10 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 }])
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
-      
+
     //$scope.showLoader = true;
-      
-      if($rootScope.dataInfo == undefined){ 
+
+      if($rootScope.dataInfo == undefined){
         // INFORMAZIONI TBox
         $rootScope.dataInfo = {
           classe : {
@@ -50,8 +50,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             }
           ],
           objPropClasse: {
-            uri : 'http://dbpedia.org/ontology/bandMember',
-            label : 'band member',
+            uri : 'http://dbpedia.org/ontology/formerBandMember',
+            label : 'former band member',
             type : 'obj',
             group: 3,
             color :  '#2ca02c'
@@ -65,15 +65,13 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
               color : '#d62728'
             }
           ],
-          objPropObj: [
-            {
+          objPropObj: {
               uri : '',
               label : '',
-              type : '',
+              type : 'obj',
               group: 5,
               color : '#9467bd'
             }
-          ]
         };
       };
 
@@ -83,7 +81,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
     $scope.showPhoto = {
        value: 'true'
-    };  
+    };
 
     $scope.customise = function(){
       $('.ui.modal').modal('show');
@@ -113,7 +111,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       }
     });
 
-    
+
     $rootScope.$watch('dataInfo', function(){
         $scope.clusterClasse = $rootScope.dataInfo.classe;
         $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
@@ -158,14 +156,15 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             $scope.litPropObj = $rootScope.dataInfo.litPropObj;
             $scope.objPropObj = $rootScope.dataInfo.objPropObj;
 
-            $scope.toggleSelectionClusterOption($scope.litPropClasse[0]);
+            $scope.c = $rootScope.dataInfo.classe.label;
+            $scope.toggleSelectionClusterOption($scope.c, $scope.litPropClasse[0]);
 
         });
-        
+
       } else {
         $scope.graph = $rootScope.graph;
         // photo
-        
+
         $scope.graph.nodes.forEach(function(node){
           var promise = queryDatasetService.queryPhotoFromDB($scope.selectedEndpointUrl, $scope.selectedGraph, node.id);
           promise.then(function(response) {
@@ -176,7 +175,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             node.customProperties[0].value = photoUrl;
           });
         });
-        
+
         $rootScope.nodeLabels = [];
         if($scope.graph != undefined){
           $scope.graph.nodes.forEach(function(node){
@@ -187,7 +186,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $scope.nodeLabels = $rootScope.nodeLabels;
       }
 
-      $scope.toggleSelectionClusterOption($scope.litPropClasse[0]);
+      $scope.c = $rootScope.dataInfo.classe.label;
+      $scope.toggleSelectionClusterOption($scope.c, $scope.litPropClasse[0]);
     }, true);
 
 
@@ -340,8 +340,9 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     };
 
     // opzione cluster
-    $scope.toggleSelectionClusterOption = function toggleSelection(clusterOption) {
+    $scope.toggleSelectionClusterOption = function toggleSelection(c, clusterOption) {
         $scope.selectedClusterOption = clusterOption;
+        $scope.c = c;
     };
 
     // opzioni di visualizzazione (shape)

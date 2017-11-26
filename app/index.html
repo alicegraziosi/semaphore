@@ -17,35 +17,33 @@
 
   <!-- Google font -->
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
- <!-- jQuery -->
+  <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!-- semantic-ui -->
   <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.css">
   <script src="semantic/dist/semantic.js"></script>
-  <script src="semantic/dist/components/image.css"></script>
+
 
   <link rel="stylesheet" href="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.css" />
 
-  <script src="node_modules/tinycolor2/dist/tinycolor-min.js"></script>
-  <script src="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.js"></script>
-  
   <!-- underscore.js -->
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="d3v4-tips.js"></script>
+
+  <!-- per d3v3
+  <script src="node_modules/d3-tip/index.js"></script>-->
+  <link rel='stylesheet' href='node_modules/angular-loading-bar/build/loading-bar.min.css' type='text/css' media='all' />
+
+  <!-- basic style for tooltip -->
+  <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
 
   <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
-  <!-- Rigth Sidebar
-  <div class="ui right sidebar overlay vertical menu">
-    <a class="item">
-      item
-    </a>
-  </div>
-  -->
-
-  <!-- Left Sidebar -->
+ <!-- Left Sidebar -->
   <div class="ui wide left overlay sidebar vertical menu">
     <!-- Accordion -->
     <div class="ui vertical following fluid accordion text menu" ng-controller="contactEndpointCtrl">
@@ -55,17 +53,15 @@
           <i class="dropdown icon"></i>
           <b>Change current SPARQL endpoint or graph</b>
         </a>
-        <div class="content menu" id="endpointandgraph">
+        <div class="content menu" id="endpointGraphDropdown">
           <div class="header">Select a SPARQL endpoint</div>
           <div class="ui fluid search selection dropdown" ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
             <div class="default text">Select a SPARQL endpoint</div>
               <div class="menu">
-                <div 
-                     ng-model="selected" class="item"
-                     ng-click="selectEndpoint(endpoint)"
+                <div class="item"
+                     ng-click="selectEndpoint(endpoint);"
                      ng-repeat="endpoint in endpointList">
-                     
                   <p class="compact">{{endpoint.name}}</p>
                   <p class="compact">{{endpoint.url}}</p>
                 </div>
@@ -73,57 +69,46 @@
             </div>
 
             <div class="header">Select a graph</div>
-            <div class="ui fluid search selection dropdown" ng-click="dropdown();">
+            <div id="graphDropdown">
+             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
               <div class="default text">Select a graph</div>
               <div class="menu">
-                <div
-                     ng-model="graphList" class="item"
+                <div class="item"
                      ng-click="selectGraph(graph)"
                      ng-repeat="graph in graphList">
-                     {{graph}}
+                     <p class="compact">{{graph}}</p>
                 </div>
               </div>
+            </div>
             </div>
 
             <button class="ui mini primary button" ng-click="contactSelectedEndpoint()">
               Ok
-              <!--
-              <i class="icons">
-                <i class="database icon"></i>
-                <i class="corner search icon"></i>
-              </i>
-              -->
             </button>
-            <button class="ui mini button" ng-click="restoreToDefault()">
+            <button class="ui mini button" ng-click="restoreEndpointGraphDropdownToDefault()">
               Clear
             </button>
 
             <div ng-if="successMessageToAppear" class="ui tiny success message">
               <i class="close icon" ng-click="dismissMessage()"></i>
-              <div class="header">
-                SPARQL endpoint succesfully reached!
-              </div>
+              <div class="header">SPARQL endpoint succesfully reached!</div>
               <p>You may now query the dataset.</p>
             </div>
 
             <div ng-if="negativeMessageToAppear" class="ui tiny negative message">
               <i ng-click="dismissMessage()" class="close icon"></i>
-              <div class="header">SPARQL endpoint unreachable :(
-              </div>
+              <div class="header">SPARQL endpoint unreachable :(</div>
               <p>Retry later or choose another one.</p>
             </div>
 
-
             <div ng-if="attentionMessageToAppear" class="ui tiny yellow message">
               <i class="close icon" ng-click="dismissMessage()"></i>
-              <div class="header">
-                Please select a SPARQL endpoint and graph!
-              </div>
+              <div class="header"> Please select a SPARQL endpoint and graph!</div>
             </div>
 
-          </div> <!-- chiude <div class="active content" id="endpointandgraph">-->
-        </div> <!-- chiude <div class="ui item"> -->
+        </div> <!-- chiude <div class="active content" id="endpointandgraph">-->
+      </div> <!-- chiude <div class="ui item"> -->
 
       <div class="ui fitted divider"></div>
 
@@ -134,7 +119,7 @@
         </a>
         <div class="content active menu" id="datasetInfoRichieste">
 
-          <div class="header" ng-show="classes.length!=0">Select a class 
+          <div class="header" ng-show="classes.length!=0">Select a class
             <div class="label-overrided">{{numClasses}}</div>
             <div ng-if="fetchingMessageToAppear" class="ui active inline mini loader"></div>
           </div>
@@ -156,12 +141,8 @@
             </div>
           </div>
 
-          <h6 class="ui header"
-            ng-if="selectedClass!='' &&
-            classDatatypeProperties.length==0 && 
-            classObjectProperties.length==0">
-            No properties found.
-          </h6>
+          <h6 class="ui header" ng-if="selectedClass!='' && classDatatypeProperties.length==0 && classObjectProperties.length==0">
+            No properties found.</h6>
 
           <div id="allClassPropertiesDropown">
           <div class="header" ng-show="classDatatypeProperties.length!=0">
@@ -218,7 +199,15 @@
             </div>
           </div>
 
-          <div ng-show="selectedClass!=''">
+          <div class="header"  ng-show="!isEmpty(objectPropertyRange)">
+            There will be displayed also
+            <div class="label-overrided">
+              {{objectPropertyRange.label}}
+            </div>
+            instances.
+          </div>
+
+          <div ng-show="!isEmpty(selectedClass) && (selectedClassObjectProperties.length!=0 || selectedClassObjectProperties.length!=0)">
             <button class="ui mini button" ng-click="queryEndpointClassProperties()">
               Load data
             </button>
@@ -227,15 +216,16 @@
             </button>
           </div>
 
-          <div class="ui divider" ng-if="objDatatypeProperties.length!=0 || objObjectProperties.length!=0"></div>
+          <div ng-show="showSecondSection && (objDatatypeProperties.length!=0 || objObjectProperties.length!=0)">
+          <div class="ui divider"></div>
 
           <div class="header" ng-if="objDatatypeProperties.length!=0 || objObjectProperties.length!=0"
               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
-              Select 
+              Select
               <div class="label-overrided">{{selectedClassObjectProperty.label}}</div>
               properties
           </div>
-          
+
           <div ng-show="objDatatypeProperties.length!=0">
             <div class="header" >
               Select a datatype property
@@ -260,7 +250,7 @@
               </div>
             </div>
           </div>
-          
+
           <div ng-show="objObjectProperties.length!=0">
 
             <div class="header">
@@ -289,7 +279,15 @@
 
           </div>
           </div>
-          
+
+          <div class="header" ng-show="!isEmpty(objObjectPropertyRange)">
+            There will be displayed also
+            <div class="label-overrided">
+              {{objObjectPropertyRange.label}}
+            </div>
+            instances.
+          </div>
+
           <div ng-show="selectedObjObjectProperties.length!=0 || selectedObjDatatypeProperties.length!=0">
             <button class="ui mini button" ng-click="queryEndpoint()">
               Load data
@@ -298,12 +296,12 @@
               Clear
             </button>
           </div>
-
+        </div>
         </div><!-- chiude <div class="content menu"> -->
       </div><!-- chiude <div class="ui item"> -->
 
       <div class="ui fitted divider"></div>
-      
+
       <!--
       <div class="item">
         <a class="title">
@@ -320,13 +318,13 @@
             </button>
           </div>
         </div>
-      </div> 
+      </div>
       -->
 
     </div> <!--chiude <div class="item"> -->
-  </div> <!-- chiude Left Sidebar --> 
+  </div> <!-- chiude Left Sidebar -->
 
-  <!-- Top Fixed Menu -->
+    <!-- Top Fixed Menu -->
   <div class="ui top fixed stackable menu" ng-app="myApp">
     <a class="item" id="left-sidebar-toggle">
       <i class="large content grey icon" style="margin: 0px;"></i>
@@ -340,68 +338,50 @@
       </div>
     </div>
 
-    <!--
-    <a href="#!/addEndpoint" class="item right">
-      add Endpoint
-    </a>
-    -->
+    <a href="#!/addEndpoint" class="item right">add Endpoint</a>
 
-    <a href="#!/about" class="item right">
-      about
-    </a>
+    <a href="#!/about" class="item right">about</a>
 
     <!--
     <div class="item right" id="toggleRightSidebar">
       <i class="ellipsis vertical medium icon"></i>
     </div>
     -->
-
   </div>
 
   <!-- Site content -->
-  <div class="pusher">
-      <!--
-      <ul>
-        <li><a href="#!/view1">view1</a></li>
-        <li><a href="#!/about">about</a></li>
-        <li><a href="#!/graphvis">graphvis</a></li>
-      </ul>-->
-      <div class="ui sixteen column centered grid" id="menuSwitch">
-        <div ng-if="showSection" class="ui grid">
-          <div class="row">
-            <!--
-            <div class="three wide column">
-              <div class="ui buttons">
-                <button class="mini compact ui button"><i class="mini share alternate icon"></i>Graph InfoViz</button>
-                <div class="or" data-text="or"></div>
-                <button class="mini compact ui button"><i class="mini block layout icon"></i>Clusters InfoViz</button>
-              </div>
-            -->
+<div class="pusher">
+   <!--
+   <ul>
+     <li><a href="#!/view1">view1</a></li>
+     <li><a href="#!/about">about</a></li>
+     <li><a href="#!/graphvis">graphvis</a></li>
+   </ul>-->
+   <div class="ui sixteen column centered grid" id="menuSwitch">
+     <div ng-if="showSection" class="ui grid">
+       <div class="row">
+         <div class="ui secondary pointing compact menu"
+         ng-controller="menuCtrl">
+           <a href="#!/graph" class="item active" id="menuGraph" ng-click="gotoGraph()">
+             Graph InfoViz
+           </a>
+           <a href="#!/cluster" class="item" id="menuCluster" ng-click="gotoCluster()">
+             Cluster InfoViz
+           </a>
+         </div>
+       </div>
+     </div>
+   </div>
 
-            <div class="ui secondary pointing compact menu" 
-            ng-controller="menuCtrl">
-              <a href="#!/graph" class="item active" id="menuGraph" ng-click="gotoGraph()">
-                Graph InfoViz
-              </a>
-              <a href="#!/cluster" class="item" id="menuCluster" ng-click="gotoCluster()">
-                Cluster InfoViz
-              </a>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div ng-view></div>
-  </div>
-
+   <div ng-view></div>
+</div>
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
-  
+
   <script type="text/javascript">
    $(document).ready(function() {
       $('.accordion')
@@ -467,23 +447,24 @@
   <script src="addEndpoint/addEndpointModule.js"></script>
   <script src="customise/customiseDirective.js"></script>
   <script src="customise/customiseModule.js"></script>
-  
+
   <!-- export a svg d3 visualisation to png  -->
   <script src="https://cdn.rawgit.com/eligrey/canvas-toBlob.js/f1a01896135ab378aa5c0118eadd81da55e698d8/canvas-toBlob.js"></script>
   <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
 
   <script src="node_modules/tinycolor2/dist/tinycolor-min.js"></script>
   <script src="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.js"></script>
-  
+
+  <script type='text/javascript' src='node_modules/angular-loading-bar/build/loading-bar.min.js'></script>
+
   <!-- Global Site Tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88652737-2"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments)};
     gtag('js', new Date());
-
     gtag('config', 'UA-88652737-2');
   </script>
-  
+
 </body>
 </html>

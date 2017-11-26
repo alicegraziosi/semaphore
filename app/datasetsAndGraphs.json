@@ -32,6 +32,6 @@
   {
     "endpointUrl": "http://eelst.cs.unibo.it:8094/nd/query",
     "graphs": ["default"],
-    "endpointName": "network dataset (on remote fuseki2)"
+    "endpointName": "network dataset (on remote fuseki1)"
   }
 ]

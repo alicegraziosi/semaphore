@@ -20,7 +20,8 @@
                                  model="$parent"
                                  info="info"
                                  data-info="dataInfo"
-                                 show-photo="showPhoto">
+                                 show-photo="showPhoto"
+                                 c="c">
         </d3-clustervisualization>
       </div>
       <div class="top aligned three wide column">
@@ -42,11 +43,22 @@
 
                   <div class="field" data-value="{{litPropClasse}}" ng-repeat="clusterOption in litPropClasse">
                     <div class="ui radio checkbox checked">
-                      <input type="radio"  checked="" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
+                      <input type="radio"  checked="" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, clusterOption);">
 
                       <label>
                         <div class="ui horizontal label"
                           style="border: 2px solid {{dataInfo.litPropClasse[0].color}};">{{clusterOption.label}}</div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="field" ng-value="{{clusterObj}}">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, clusterObj);">
+
+                      <label>
+                        <div class="ui horizontal label"
+                          style="border: 2px solid {{clusterOption.color}};">{{clusterObj.label}}</div>
                       </label>
                     </div>
                   </div>
@@ -57,7 +69,7 @@
                   </div>
 
                   <b ng-if="litPropObj.length!=0">Cluster
-                  <div class="ui horizontal label" 
+                  <div class="ui horizontal label"
                     style="border: 2px solid {{dataInfo.objPropClasse.color}};">{{clusterObj.label}}</div>
 
                   by</b>
@@ -65,7 +77,7 @@
                   <div
                     class="field" data-value="{{litPropObj}}" ng-repeat="clusterOption in litPropObj">
                     <div class="ui radio checkbox">
-                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);">
+                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, clusterOption);">
                       <label>
                         <div class="ui horizontal label"
                           style="border: 2px solid {{dataInfo.litPropObj[0].color}};">{{clusterOption.label}}
@@ -74,13 +86,13 @@
                     </div>
                   </div>
 
-                <div ng-if="clusterObj.label!='-'" 
-                    class="field" data-value="{{objPropObj}}" ng-repeat="clusterOption in objPropObj">
-                    <div class="ui radio checkbox" ng-if="clusterOption.label!=''">
-                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterOption);" >
+                <div ng-show="clusterOption.label!=''"
+                    class="field" data-value="{{objPropObj}}">
+                    <div class="ui radio checkbox" ng-show="clusterOption.label!=''">
+                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, clusterOption);" >
                       <label>
                          <div class="ui horizontal label"
-                          style="border: 2px solid {{dataInfo.objPropObj[0].color}};">{{clusterOption.label}}
+                          style="border: 2px solid {{dataInfo.objPropObj.color}};">{{objPropObj.label}}
                         </div>
                       </label>
                     </div>
@@ -90,7 +102,6 @@
               </div>
 
             <div ng-include="'d3Visualization/customiseView.html'"></div>
-
       </div>
     </div>
   </div>

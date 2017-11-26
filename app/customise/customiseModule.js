@@ -1,16 +1,72 @@
 'use strict';
 
-var customiseModule = angular.module('customiseModule', ['color.picker']);
+var customiseModule = angular.module('customiseModule', ['color.picker', 'angular-loading-bar']);
 
-customiseModule.controller('customiseCtrl', ['$scope', '$rootScope',
-  function($scope, $rootScope){
+customiseModule.config(['$routeProvider', function($routeProvider) {
+
+  /*
+    attenzione!! se il controller è specificato nel config della route allora non bisogna
+    scriverlo anche nel html altrimenti viene richiamato due volte!!
+  */
+  $routeProvider
+    .when(
+      '/customise', {
+        templateUrl: '/customise/customise.html',
+        controller: 'customiseCtrl'
+      });
+  }]);
+
+  customiseModule.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+    cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
+    cfpLoadingBarProvider.spinnerTemplate = '<div><span class="fa fa-spinner">Custom Loading Message...</div>';
+    cfpLoadingBarProvider.latencyThreshold = 0;
+  }]);
+
+ customiseModule.service('fileUpload', ['$http', '$q', function ($http, $q) {
+    this.uploadFileToUrl = function(file, uploadUrl){
+       var deferred = $q.defer();
+       var formData = new FormData();
+       formData.append('file', file);
+       $http({
+            url: uploadUrl,
+            method: "POST",
+            data: formData,
+            headers: {'Content-Type': undefined}
+       })
+       .then(function(response) {
+          deferred.resolve(response);
+       })
+       .catch(function onError(response) {
+          // Handle error
+          /*
+          var data = response.data;
+          var status = response.status;
+          var statusText = response.statusText;
+          var headers = response.headers;
+          var config = response.config;
+          */
+          deferred.reject(response);
+        });
+       return deferred.promise;
+    }
+ }]);
+
+customiseModule.controller('customiseCtrl', ['$scope', '$http', 'fileUpload', 'cfpLoadingBar',
+  function($scope, $http, fileUpload, cfpLoadingBar){
 
     $scope.localdataInfo = $scope.dataInfo;
-    $scope.image1src = "images/wireframe/image.png"
-    $scope.image2src = "images/wireframe/image.png"
-    $scope.image3src = "images/wireframe/image.png"
+    $scope.restoreDataInfo = $scope.dataInfo;
 
-    $scope.files = [];
+    var location = window.location.href;
+    var defaultPath = "images/";
+    var defaultImageName = "default.png";
+    $scope.image1src = defaultPath + defaultImageName;
+    $scope.image2src = defaultPath + defaultImageName;
+    $scope.image3src = defaultPath + defaultImageName;
+    $scope.imageDefault = defaultPath + defaultImageName;
+
+    $scope.showSuccessMessage = false;
+    $scope.showErrorMessage = false;
 
     $scope.applyAndCloseModal = function(){
       $rootScope.dataInfo = $scope.localdataInfo;
@@ -18,55 +74,50 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope',
     };
 
     $scope.restoreDefault = function(){
-      $scope.localdataInfo = $rootScope.dataInfo;
-      $scope.dataInfo = $rootScope.dataInfo;
+      $scope.localdataInfo = $scope.restoreDataInfo;
+      $scope.dataInfo = $scope.restoreDataInfo;
     };
 
-    $scope.selectImage = function() {
-        var f = document.getElementById('file').files[0],
-            r = new FileReader();
-
-        r.onloadend = function(e) {
-          var data = e.target.result;
-          //send your binary data via $http or $resource or do anything else with it
-        }
-
-        r.readAsBinaryString(f);
-        $scope.files.push(r);
+    $scope.uploadFile1 = function(){
+       $scope.showSuccessMessage = false;
+       $scope.showErrorMessage = false;
+       // file e route
+       var file = document.getElementById('file1').files[0];
+       var uploadUrl = "fileUpload";
+       var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
+       promise.then(function(res) {
+         console.log(res);
+         $scope.image1src = defaultPath + res.data.path;
+         $scope.showSuccessMessage = true;
+       })
+       .catch(function(res){
+         console.log(res);
+         $scope.showErrorMessage = true;
+       });
     };
 
-    // npm http-server does not support POST requests :(
-    $scope.uploadFile = function() {
-        var fd = new FormData()
-        for (var i in $scope.files) {
-            fd.append("uploadedFile", scope.files[i])
-        }
-        var xhr = new XMLHttpRequest()
-        xhr.upload.addEventListener("progress", uploadProgress, false)
-        xhr.addEventListener("load", uploadComplete, false)
-        xhr.addEventListener("error", uploadFailed, false)
-        xhr.addEventListener("abort", uploadCanceled, false)
-        xhr.open("POST", "/fileupload")
-        xhr.send(fd)
-    }
+    $scope.uploadFile2 = function(){
+       $scope.showSuccessMessage = false;
+       $scope.showErrorMessage = false;
+       // file e route
+       var file = document.getElementById('file2').files[0];
+       var uploadUrl = "fileUpload";
+       var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
+       promise.then(function(res) {
+         $scope.image2src = defaultPath + res.data.path;
+       });
+    };
 
+    $scope.uploadFile3 = function(){
+       $scope.showSuccessMessage = false;
+       $scope.showErrorMessage = false;
+       // file e route
+       var file = document.getElementById('file3').files[0];
+       var uploadUrl = "fileUpload";
+       var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
+       promise.then(function(res) {
+         $scope.image3src = defaultPath + res.data.path;
+       });
+    };
 
-    function uploadProgress(evt) {
-
-    }
-
-    function uploadComplete(evt) {
-        /* This event is raised when the server send back a response */
-        alert("server send back a response")
-    }
-
-    function uploadFailed(evt) {
-        alert("There was an error attempting to upload the file.")
-    }
-
-    function uploadCanceled(evt) {
-        alert("The upload has been canceled by the user or the browser dropped the connection.")
-    }
-
-  }
-]);
+}]);

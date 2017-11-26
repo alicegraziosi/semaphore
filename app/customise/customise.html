@@ -14,18 +14,19 @@
       <tbody>
         <tr>
           <td>
-            <div class="ui small aliceImage" ng-click="selectImage();">
-              <img ng-src="http://localhost:8000/{{image1src}}" 
-              alt="images/wireframe/image.png">
+            <div class="ui small aliceImage">
+              <img ng-src="{{image1src}}" alt="images/wireframe/image.png">
             </div>
           </td>
-          <td>
+          <td ng-if="localdataInfo.classe.uri != localdataInfo.objPropClasse.uri">
               <a class="header">Class</a>
               <div class="meta">
                 <span>{{localdataInfo.classe.label}}</span>
+                <span>{{localdataInfo.classe.uri}}</span>
               </div>
-              <input type="file" id="file" name="file"/>
-              <input type="button" ng-click="uploadFile()" value="Upload" />
+              <input type="file" id="file1" name="file">
+              <input type="button" ng-click="uploadFile1()" value="Upload" />
+              <!--<div id="loading-bar-container"></div>-->
           </td>
           <td>
               <div class="ui input">
@@ -35,9 +36,8 @@
         </tr>
         <tr>
           <td>
-            <div class="ui small aliceImage" ng-click="selectImage();">
-              <img ng-src="http://localhost:8000/{{image1src}}" 
-              alt="images/wireframe/image.png">
+            <div class="ui small aliceImage">
+              <img ng-src="{{$scope.imageDefault}}" alt="images/wireframe/image.png">
             </div>
           </td>
           <td>
@@ -52,19 +52,20 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <tr ng-if="localdataInfo.classe.uri != localdataInfo.objPropClasse.uri">
           <td>
             <div class="ui small aliceImage">
-              <img src="images/wireframe/image.png">
+              <img ng-src="{{image2src}}" alt="images/wireframe/image.png">
             </div>
           </td>
           <td>
             <a class="header">Class Object Property</a>
             <div class="meta">
               <span>{{localdataInfo.objPropClasse.label}}</span>
+              <span>{{localdataInfo.objPropClasse.uri}}</span>
             </div>
             <input type="file" id="file2" name="file"/>
-            <input type="button" ng-click="uploadFile()" value="Upload" />
+            <input type="button" ng-click="uploadFile2()" value="Upload" />
           </td>
           <td>
             <div class="ui input">
@@ -74,9 +75,8 @@
         </tr>
         <tr>
           <td>
-            <div class="ui small aliceImage" ng-click="selectImage();">
-              <img ng-src="http://localhost:8000/{{image1src}}" 
-              alt="images/wireframe/image.png">
+            <div class="ui small aliceImage">
+              <img ng-src="{{$scope.imageDefault}}" alt="default.png">
             </div>
           </td>
           <td>
@@ -91,23 +91,22 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <tr ng-if="localdataInfo.objPropObj.uri != '' && (localdataInfo.objPropObj.uri != localdataInfo.classe.uri) && (localdataInfo.objPropObj.uri != localdataInfo.objPropClasse.uri)">
           <td>
             <div class="ui small aliceImage">
-              <img src="images/wireframe/image.png">
+              <img ng-src="{{image3src}}" alt="default.png">
             </div>
           </td>
-          <td>
-            <a class="header">Class Object Property Object Property</a>
+          <td <a class="header">Class Object Property Object Property</a>
             <div class="meta">
-              <span>{{localdataInfo.objPropObj[0].label}}</span>
+              <span>{{localdataInfo.objPropObj.label}}</span>
             </div>
             <input type="file" id="file3" name="file"/>
-            <input type="button" ng-click="uploadFile()" value="Upload" />
+            <input type="button" ng-click="uploadFile3()" value="Upload" />
           </td>
           <td>
             <div class="ui input">
-              <color-picker ng-model="localdataInfo.objPropObj[0].color"></color-picker>
+              <color-picker ng-model="localdataInfo.objPropObj.color"></color-picker>
             </div>
           </td>
         </tr>
@@ -119,5 +118,18 @@
     <button ng-click="restoreDefault()" class="ui button">
       Restore default
     </button>
+    <div class="ui divider"></div>
+    <div class="ui success message" ng-if="showSuccessMessage">
+      <i class="close icon"></i>
+      <div class="header">
+        Upload successful.
+      </div>
+    </div>
+    <div class="ui negative message" ng-if="showErrorMessage">
+      <i class="close icon"></i>
+      <div class="header">
+        Error while uploading.
+      </div>
+    </div>
   </div>
 </div>

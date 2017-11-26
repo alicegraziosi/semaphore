@@ -28,10 +28,11 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                 selectedClusterOption: "=",  // nella view: selected-cluster-option
                 info: "=",
                 dataInfo: "=",  //two-way data binding
-                showPhoto: "="
+                showPhoto: "=",
+                c: "="
             },
             link: function(scope, elem, attrs){
-              
+
                 // quando invoco il provider d3Service viene richiamato this.$get
                 d3Service.then(function(d3) {
                     // now you can use d3 as usual!
@@ -49,19 +50,20 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                             scope.$watch('selectedClusterOption', function(selectedClusterOption) {
                                 if(selectedClusterOption){
                                     $("svg").remove();
-                                    clusterBy(selectedClusterOption);
+                                    clusterBy(scope.c, selectedClusterOption);
                                 } // if (selectedClusterOption)
-                            }); // scope.$watch('selectedClusterOption', function(selectedClusterOption) {
+                            }, true); // scope.$watch('selectedClusterOption', function(selectedClusterOption) {
 
-                            function clusterBy(selectedClusterOption){
+                            function clusterBy(c, selectedClusterOption){
+                              $("svg").remove();
                                 // membri in base alla band (todo)
                                 if(selectedClusterOption.type=="obj"){
 
                                     var nodi_cluster = [];
                                     graph.nodes.forEach(function(n) {
-                                        if(n.type==selectedClusterOption.label) {
-                                            nodi_cluster.push(n);
-                                        }
+                                      if(n.type == c){
+                                        nodi_cluster.push(n);
+                                      }
                                     });
 
                                     // nodi cluster unici, m numero
@@ -73,7 +75,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
                                     var color = d3.scaleOrdinal(d3.schemeCategory10);
-                                        
+
 
                                     // The largest node for each cluster.
                                     var clusters = new Array(m);  //Array di 10 elementi
@@ -95,9 +97,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
 
                                         graph.links.forEach(function(la){
 
-                                            dataInformation.objPropHeadClass.forEach(function(prop){
-
-                                                if(la.source == n.id && la.type==prop.uri){
+                                                if(la.source == n.id && la.type==selectedClusterOption.uri){
 
                                                     unique.forEach(function(elem, index){
 
@@ -112,9 +112,9 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                                         type: "node"
                                                     });
                                                 };
-                                            });
                                         });
                                     });
+
                                     nodi.forEach(function(nodocluster){
                                         if(nodocluster.type=="cluster"){
                                             nodi.forEach(function(nodo){
@@ -124,6 +124,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                             });
                                         }
                                     });
+
+
                                 } else {
                                     // e.g. band in base al genere
 
@@ -140,7 +142,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     var n = graph.nodes.length + m; //19 + 10, // total number of nodes
 
                                     var color = d3.scaleOrdinal(d3.schemeCategory10);
-                                    
+
                                     // The largest node for each cluster.
                                     var clusters = new Array(m);  //Array di 10 elementi
 
@@ -218,6 +220,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     .attr("width", "100%")
                                     .attr("height", height);
 
+
+
                                 svg.append("rect")
                                 .attr("height", height)
                                 .attr("width", '100%')
@@ -263,7 +267,7 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                     .radius(function(d) { return d.radius + 1.5; })
                                     .iterations(1);
 
-                                
+
 
 
                                 /*un rettangolo contenitore per ogni nodo cluster*/
@@ -465,7 +469,8 @@ myAppd3view.directive('d3Clustervisualization', ['d3Service', '$window', '$parse
                                         }
                                     } // if (selectedNodeLabel)
                                 }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
-                            } //update()
+
+                            } //cluster by()
                         } //if(graph)
                     }, true); //scope.$watch('graph', function (graph) {   // true = deep object dirty checking
                 }); // d3Service.then(function(d3) {
