@@ -31,7 +31,7 @@ angular.module('contactEndpointModule', [])
 					timeout: 3000
 				})
 				.success(function(data){
-					console.log("Selected endpoint named " + selectedEndpoint + " - graph " + selectedGraph + " succesfully reached!!!");     
+					console.log("Selected endpoint named " + selectedEndpoint + " - graph " + selectedGraph + " succesfully reached!!!");
         })
 				.error(function(){
 					console.log("Selected endpoint named " + selectedEndpoint + " - graph " + selectedGraph + " unreachable :(");
@@ -51,7 +51,10 @@ angular.module('contactEndpointModule', [])
 
         //Inside then() callback you simply resolve or reject deferred promise.
         //.then(successCallback, errorCallback)
-        $http.get("https://prefix.cc/?q="+uri)
+        $http({
+          url: "https://prefix.cc/?q="+uri,
+          method: "GET"
+        })
         .then(function(response, status, headers, config) {
           //resolving the deferred promise here
 
@@ -92,28 +95,12 @@ angular.module('contactEndpointModule', [])
           method: 'GET',
           url: $rootScope.prefixApiUrl+"label?label="+uri
         })
-        .then(function successCallback(response) { //response status code between 200 and 299
-
-          // this callback will be called asynchronously
-          // when the response is available
-
-          // resolve deferred promise
-          deferred.resolve(response.data);
-
-        }, function errorCallback(response) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-
-          // reject deferred promise
-          deferred.reject('Error occurred ..' + response.status);
-
-          if(response.status == -1){
-            console.log("Prefix api service unreachable.." + response.status + "..request was aborted");
-          } else {
-            console.log("Prefix api service unreachable.." + response.status + ".." + response.statusText);
-          }
+        .then(function(response) {
+           deferred.resolve(response);
         })
-        // The function must return the deferred.promise
+        .catch(function(response) {
+           deferred.reject(response);
+        });
         return deferred.promise;
 
         //Note:
@@ -123,6 +110,19 @@ angular.module('contactEndpointModule', [])
 
         //url da cui è partita la richiesta http preso dagli header della request
         //console.log(config.url); // ritorna https://prefix.cc/?q=http://xmlns.com/foaf/0.1/
+    },
+
+    getPrefixFromFile: function(){
+      var deferred = $q.defer();
+      $http.get('../prefixes.json')
+       .then(function(response) {
+          deferred.resolve(response);
+       })
+       .catch(function(response) {
+          deferred.reject(response);
+       });
+       return deferred.promise;
     }
+
   }
 }]);

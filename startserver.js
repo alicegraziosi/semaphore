@@ -51,14 +51,14 @@ app.post('/fileUpload',function(req, res){
 
 
 // Send all other requests to the Angular app
-app.get('*', (req, res) => {
+app.get('*', function(req, res) { return 
     res.sendFile(path.join(__dirname, 'app/index.html'));
 });
 
 //Set Port
-const port = process.env.PORT || '4000';
+const port = process.env.PORT || '8092';
 app.set('port', port);
 
 const server = http.createServer(app);
 
-server.listen(port, () => console.log(`Running on localhost:${port}`));
+server.listen(port, function(){ console.log('Running on localhost, port ' + port)});

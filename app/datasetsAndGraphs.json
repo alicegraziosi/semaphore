@@ -15,23 +15,8 @@
     "endpointName": "DBpedia"
   },
   {
-    "endpointUrl": "http://192.168.56.1:9999/blazegraph/namespace/nd/query",
-    "graphs": ["default"],
-    "endpointName": "network dataset"
-  },
-  {
-    "endpointUrl": "http://192.168.56.1:3030/nd/query",
-    "graphs": ["default"],
-    "endpointName": "network dataset (on local fuseki2)"
-  },
-  {
-    "endpointUrl": "http://eelst.cs.unibo.it:8093/blazegraph/namespace/nd/",
-    "graphs": ["default"],
-    "endpointName": "network dataset"
-  },
-  {
     "endpointUrl": "http://eelst.cs.unibo.it:8094/nd/query",
     "graphs": ["default"],
-    "endpointName": "network dataset (on remote fuseki1)"
+    "endpointName": "network dataset"
   }
 ]

@@ -23,7 +23,7 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var getDirName = require('path').dirname;
 
-var port = process.env.NODE_PORT  || 9092;  // set our port, locale: 9092;  su eelst: 9092
+var port = process.env.NODE_PORT  || 8095;  // set our port, locale: 8095;  su eelst: 8095
 var host = process.env.NODE_HOST || '130.136.131.42';  // set our host, locale: 127.0.0.1; su eelst: 130.136.131.42
 
 
@@ -157,7 +157,7 @@ app.use(express.static('/public'));
 // NODE_ENV=production
 // node express-server.js
 if(process.env.NODE_ENV === 'production') {
-  app.set('port', 9092);
+  app.set('port', 8095);
   app.set('host', "130.136.131.42");
 }
 
@@ -165,7 +165,7 @@ if(process.env.NODE_ENV === 'production') {
 // set NODE_ENV=development
 // node express-server.js
 if(process.env.NODE_ENV === 'development') {
-  app.set('port', 9092);
+  app.set('port', 8095);
   app.set('host', "127.0.0.1");
 }
 
@@ -175,23 +175,26 @@ if(process.env.NODE_ENV === 'development') {
 // =============================================================================
 
 var server = app.listen(port, host);
-console.log('Express.js server for prefix proxy service listening on: '+host+":"+port+"/api");
+console.log('Express.js server for prefix proxy service listening on: ' + host + ":" + port + "/api");
 
 
 /*
 
 run server in windows:
 
-set NODE_PORT=9092
+set NODE_PORT=8095
 set NODE_HOST=127.0.0.1
 node express-server.js
 
-set NODE_PORT=9092
+set NODE_PORT=8095
 set NODE_HOST=130.136.131.42
 node express-server.js
 
 run server in linux:
+nohup NODE_PORT=8095 NODE_HOST=130.136.131.42 node express-server.js &
+nohup node express-server.js &
 
-NODE_PORT=9092 NODE_HOST=130.136.131.42 node express-server.js
+per killare il processo:
+fuser -k 8095/tcp
 
 */

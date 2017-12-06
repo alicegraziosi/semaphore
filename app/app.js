@@ -10,7 +10,6 @@ angular.module('myApp', [
   'customiseModule',
   'addEndpointModule',
   'd3Module',
-  'myApp.view1',
   'myApp.about',
   'myApp.d3view',
   'myApp.version'
@@ -48,11 +47,7 @@ $http will not respect default setting for timeout set it in httpProvider
   $rootScope.appName = "GIG";
   $rootScope.subtitle = "generating interfaces for RDF graphs";
 
-  // development mode
-  //$rootScope.prefixApiUrl = "http://localhost:8080/api/";
-  //$rootScope.jsonFileServiceUrl = "http://localhost:8080/api/";
-
-  // production mode
-  $rootScope.prefixApiUrl = "http://eelst.cs.unibo.it:9092/api/";
-  $rootScope.jsonFileServiceUrl = "http://eelst.cs.unibo.it:9092/api/";
+  // prefix e file services
+  $rootScope.prefixApiUrl = "http://eelst.cs.unibo.it:8095/api/";
+  $rootScope.jsonFileServiceUrl = "http://eelst.cs.unibo.it:8095/api/";
 });

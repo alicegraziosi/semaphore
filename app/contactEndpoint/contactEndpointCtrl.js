@@ -139,8 +139,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
           $scope.graphList = endpoint.graphs;
         }
       });
-      // TODO non so perchè cazzo non funziona qui, visto che da console va...
-      $('#graphDropdown ui.dropdown').dropdown('restore placeholder text');
+      // TODO non so perché cazzo non funziona quì, visto che da console va...
+      $('#graphDropdown .ui.dropdown').dropdown('restore placeholder text');
     };
 
     // quando si seleziona un grafo
@@ -366,9 +366,17 @@ contactEndpointModule.controller('contactEndpointCtrl',
       // classe range della object property
       var promise = queryDatasetService.queryEndpointForRange($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClassObjectProperties);
         promise.then(function(response) {
+          var uri = response.data.results.bindings[0].rangeUri.value;
+          var schema = getSchemaFromUri(uri);
+          var prefix = getPrefixFromUri(schema);
+          var prefix2 = getPrefix(schema);
+
+          var label = prefix + ":" + getClassNameFromUri(uri);
+
           $scope.objectPropertyRange = {
-            'uri': response.data.results.bindings[0].rangeUri.value,
-            'label':response.data.results.bindings[0].rangeUri.value
+            'uri': uri,
+            'label': label,
+            'name': name
           }
         });
     }
@@ -387,9 +395,13 @@ contactEndpointModule.controller('contactEndpointCtrl',
       // classe range della object property
       var promise = queryDatasetService.queryEndpointForRange($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClassObjectProperties);
         promise.then(function(response) {
+          var uri = response.data.results.bindings[0].rangeUri.value;
+          var schema = getSchemaFromUri(uri);
+          var label = getPrefixFromUri(schema) + ":" + getClassNameFromUri(uri);
           $scope.objObjectPropertyRange = {
-            'uri': response.data.results.bindings[0].rangeUri.value,
-            'label':response.data.results.bindings[0].rangeUri.value
+            'uri': uri,
+            'label': label,
+            'name': name
           }
         });
     }
@@ -406,9 +418,9 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.clearRootScopeDataInfo = function(){
       $rootScope.dataInfo = {};
       $rootScope.dataInfo.classe = {};
-      $rootScope.dataInfo.litPropClasse = [];
+      $rootScope.dataInfo.litPropClasse = {};
       $rootScope.dataInfo.objPropClasse = {};
-      $rootScope.dataInfo.litPropObj = [];
+      $rootScope.dataInfo.litPropObj = {};
       $rootScope.dataInfo.objPropObj = {};
     }
 
@@ -430,7 +442,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
         type : "obj",
         group: 1,
         color : $scope.classeColor
-      }
+      };
 
       if($scope.selectedClassDatatypeProperties.length != 0){
         var promise = queryDatasetService.queryEndpointForLiteral($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassDatatypeProperties);
@@ -458,14 +470,13 @@ contactEndpointModule.controller('contactEndpointCtrl',
         });
 
         $scope.selectedClassDatatypeProperties.forEach(function(prop){
-          $rootScope.dataInfo.litPropClasse.push(
-            {
+          $rootScope.dataInfo.litPropClasse = {
               uri : prop.uri,
               label : prop.label,
               type : 'lit',
               group: 2,
               color : $scope.litPropClasseColor
-            });
+            };
         });
       };
 
@@ -484,7 +495,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
           var graph = GetJSONfileService.createNodeObject(response.data.results.bindings);
           graph.nodes.forEach(function(n){
             if(!existsInArray($rootScope.graph.nodes, "id", n.id)){
-              n.group = "3";
+              //n.group = "3";
               $rootScope.graph.nodes.push(n);
             };
           });
@@ -494,7 +505,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
           });
 
           $scope.selectedClassObjectProperties.forEach(function(prop){
-            $rootScope.dataInfo.objPropClasse =  {
+            $rootScope.dataInfo.objPropClasse = {
               uri: prop.uri,
               label : prop.label,
               type : 'obj',
@@ -506,11 +517,28 @@ contactEndpointModule.controller('contactEndpointCtrl',
       };
 
       $scope.showSecondSection = true;
+
+      $rootScope.dataInfo.litPropObj = {
+          uri : ' ',
+          label : ' ',
+          type : ' ',
+          group: 4,
+          color : ' ',
+          range : ' '
+        };
+      $rootScope.dataInfo.objPropObj = {
+          uri : ' ',
+          label : ' ',
+          type : ' ',
+          group: 5,
+          color : ' ',
+          range : ' '
+        };
     }
 
     // secondo load data
     $scope.queryEndpoint = function(){
-      $rootScope.dataInfo.litPropObj = [];
+      $rootScope.dataInfo.litPropObj = {};
       $rootScope.dataInfo.objPropObj = {};
 
       //$rootScope.$digest(); // $apply è già in corso, quindi non si può usare $digest
@@ -528,13 +556,14 @@ contactEndpointModule.controller('contactEndpointCtrl',
             $rootScope.graph.nodeLiteral.push(node);
           });
 
-          $rootScope.dataInfo.litPropObj.push({
+          $rootScope.dataInfo.litPropObj = {
               uri : $scope.selectedObjDatatypeProperties[0].uri,
               label : $scope.selectedObjDatatypeProperties[0].label,
               type : 'lit',
               group: 4,
-              color : $scope.litPropObjColor
-            });
+              color : $scope.litPropObjColor,
+              range : ' '
+            };
 
           graph.linksToLiterals.forEach(function(l){
             $rootScope.graph.linksToLiterals.push(l);
@@ -568,7 +597,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
               label : $scope.selectedObjObjectProperties[0].label,
               type : 'obj',
               group: 5,
-              color : $scope.objPropObjColor
+              color : $scope.objPropObjColor,
+              range : ' '
             };
         });
       }
@@ -621,6 +651,49 @@ contactEndpointModule.controller('contactEndpointCtrl',
       }, function (error) {
           console.error(error);
       });
+    };
+
+    var getPrefixFromUri = function(uri){
+      var promise = ContactSPARQLendpoint.convertUriToPrefixProxy(uri);
+      promise.then(function(res) {
+        var prefix = Object.keys(res.data)[0];
+        console.log(prefix);
+        return prefix;
+      });
+    };
+
+    var getPrefix = function(url){
+      var prefixes = [];
+      var promise = ContactSPARQLendpoint.getPrefixFromFile();
+      promise.then(function(res) {
+        prefixes = res.data;
+        var object = _.find(prefixes, function(obj) { return obj.url == url });
+        return object.prefix;
+      });
+    };
+
+    var getClassNameFromUri = function(uri){
+      var lastSlash = uri.lastIndexOf('/');
+      var lastHash = uri.lastIndexOf('#');
+      var name = ""; // nome classe
+      if(lastHash>lastSlash){
+        name = uri.substring(lastHash+1, uri.length);
+      } else {
+        name = uri.substring(lastSlash+1, uri.length);
+      }
+      return name;
+    };
+
+    var getSchemaFromUri = function(uri){
+      var lastSlash = uri.lastIndexOf('/');
+      var lastHash = uri.lastIndexOf('#');
+      var schema = ""; // nome classe
+      if(lastHash>lastSlash){
+        schema = uri.substring(0, lastHash+1);
+      } else {
+        schema = uri.substring(0, lastSlash+1);
+      }
+      return schema;
     };
 
     // remove duplicates from array of objects

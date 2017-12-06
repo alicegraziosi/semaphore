@@ -32,18 +32,24 @@ myAppd3view.directive('d3Graphvisualization',
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3) {
           // now you can use d3 as usual!
-          scope.$watch('showPhoto', function (showPhoto) {
-            if(showPhoto.value=="false"){
-              //d3.selectAll(".immagini").attr("visibility", "hidden");
-              d3.selectAll("circle").attr("fill", function(d) { return colorOfNode(d.group)});
-            } else {
-              //d3.selectAll(".immagini").attr("visibility", "visible");
-              d3.selectAll("circle").attr("fill", function(d, i) {
-                if(d.photoUrl!=''){
-                  return ("url(#"+i+"-icon)");
-                } else {
-                  return colorOfNode(d.group)};
-                });
+
+
+        scope.$watch('dataInfo', function(newValue, oldValue) {
+          console.log("I see a data change!");
+        }, true);
+
+        scope.$watch('showPhoto', function (showPhoto) {
+          if(showPhoto.value=="false"){
+            //d3.selectAll(".immagini").attr("visibility", "hidden");
+            d3.selectAll("circle").attr("fill", function(d) { return colorOfNode(d.group)});
+          } else {
+            //d3.selectAll(".immagini").attr("visibility", "visible");
+            d3.selectAll("circle").attr("fill", function(d, i) {
+              if(d.photoUrl!=''){
+                return ("url(#"+i+"-icon)");
+              } else {
+                return colorOfNode(d.group)};
+              });
             }
           }, true);
 
@@ -77,20 +83,12 @@ myAppd3view.directive('d3Graphvisualization',
             .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
           }
 
-          function colorOfNode(group){
-              if(group==1) return '#1f77b4';
-              else if(group==2) return '#ff7f0e';
-              else if(group==3) return '#2ca02c';
-              else if(group==4) return '#d62728';
-              else return '#9467bd';
-          }
-
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
-
                 clearAll();
                 update();
+
 
                 function update(){
                   var links = [];

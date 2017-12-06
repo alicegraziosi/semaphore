@@ -41,13 +41,13 @@
 
                   by</b>
 
-                  <div class="field" data-value="{{litPropClasse}}" ng-repeat="clusterOption in litPropClasse">
+                  <div class="field" data-value="litPropClasse">
                     <div class="ui radio checkbox checked">
-                      <input type="radio"  checked="" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, clusterOption);">
+                      <input type="radio"  checked="" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, litPropClasse);">
 
                       <label>
                         <div class="ui horizontal label"
-                          style="border: 2px solid {{dataInfo.litPropClasse[0].color}};">{{clusterOption.label}}</div>
+                          style="border: 2px solid {{dataInfo.litPropClasse.color}};">{{litPropClasse.label}}</div>
                       </label>
                     </div>
                   </div>
@@ -71,25 +71,24 @@
                   <b ng-if="litPropObj.length!=0">Cluster
                   <div class="ui horizontal label"
                     style="border: 2px solid {{dataInfo.objPropClasse.color}};">{{clusterObj.label}}</div>
-
                   by</b>
 
                   <div
-                    class="field" data-value="{{litPropObj}}" ng-repeat="clusterOption in litPropObj">
+                    class="field" data-value="{{litPropObj}}">
                     <div class="ui radio checkbox">
-                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, clusterOption);">
+                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, litPropObj);">
                       <label>
                         <div class="ui horizontal label"
-                          style="border: 2px solid {{dataInfo.litPropObj[0].color}};">{{clusterOption.label}}
+                          style="border: 2px solid {{dataInfo.litPropObj.color}};">{{litPropObj.label}}
                         </div>
                       </label>
                     </div>
                   </div>
 
-                <div ng-show="clusterOption.label!=''"
-                    class="field" data-value="{{objPropObj}}">
-                    <div class="ui radio checkbox" ng-show="clusterOption.label!=''">
-                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, clusterOption);" >
+                <div ng-show="objPropObj.label!=' '"
+                    class="field" data-value="objPropObj">
+                    <div class="ui radio checkbox" ng-show="objPropObj.label!=''">
+                      <input type="radio" name="clusterOption" ng-click="toggleSelectionClusterOption(clusterClasse.label, objPropObj);" >
                       <label>
                          <div class="ui horizontal label"
                           style="border: 2px solid {{dataInfo.objPropObj.color}};">{{objPropObj.label}}

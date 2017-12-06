@@ -22,7 +22,7 @@
 
   <!-- semantic-ui -->
   <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.css">
-  <script src="semantic/dist/semantic.js"></script>
+  <script type="text/javascript" src="semantic/dist/semantic.js"></script>
 
 
   <link rel="stylesheet" href="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.css" />
@@ -30,8 +30,8 @@
   <!-- underscore.js -->
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 
-  <script src="https://d3js.org/d3.v4.js"></script>
-  <script src="d3v4-tips.js"></script>
+  <script type="text/javascript"  src="https://d3js.org/d3.v4.js"></script>
+  <script type="text/javascript" src="d3v4-tips.js"></script>
 
   <!-- per d3v3
   <script src="node_modules/d3-tip/index.js"></script>-->
@@ -146,7 +146,7 @@
 
           <div id="allClassPropertiesDropown">
           <div class="header" ng-show="classDatatypeProperties.length!=0">
-            Select a class datatype property
+            Select a datatype property of {{selectedClass.label}}
             <div class="label-overrided">
               {{numClassDatatypeProperties}}
             </div>
@@ -156,7 +156,7 @@
           <div ng-show="classDatatypeProperties.length!=0">
             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select a class datatype property
+              <div class="default text">Select a datatype property
               </div>
               <div class="menu">
                 <div ng-model="classDatatypeProperties" class="item"
@@ -172,7 +172,7 @@
           </div>
 
           <div class="header" ng-show="classObjectProperties.length!=0">
-            Select a class object property
+              Select an object property of {{selectedClass.label}}
             <div class="label-overrided">
               {{numClassObjectProperties}}
             </div>
@@ -184,7 +184,7 @@
               <div class="ui fluid search selection dropdown"
                 ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select a class object property
+              <div class="default text">Select an object property
               </div>
               <div class="menu">
                 <div class="item" ng-model="classObjectProperty" class="item"
@@ -199,7 +199,7 @@
             </div>
           </div>
 
-          <div class="header"  ng-show="!isEmpty(objectPropertyRange)">
+          <div class="ui compact message" ng-show="!isEmpty(objectPropertyRange)">
             There will be displayed also
             <div class="label-overrided">
               {{objectPropertyRange.label}}
@@ -221,14 +221,12 @@
 
           <div class="header" ng-if="objDatatypeProperties.length!=0 || objObjectProperties.length!=0"
               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
-              Select
-              <div class="label-overrided">{{selectedClassObjectProperty.label}}</div>
-              properties
+              Select properties of {{objectPropertyRange.label}}
           </div>
 
           <div ng-show="objDatatypeProperties.length!=0">
             <div class="header" >
-              Select a datatype property
+              Select a datatype property of {{objectPropertyRange.label}}
               <div class="label-overrided">
                 {{numObjDatatypeProperties}}
               </div>
@@ -252,9 +250,8 @@
           </div>
 
           <div ng-show="objObjectProperties.length!=0">
-
             <div class="header">
-              Select an object property
+              Select an object property of {{objectPropertyRange.label}}
               <div class="label-overrided">
                 {{numObjObjectProperties}}
               </div>
@@ -280,7 +277,7 @@
           </div>
           </div>
 
-          <div class="header" ng-show="!isEmpty(objObjectPropertyRange)">
+          <div class="ui compact message" ng-show="!isEmpty(objObjectPropertyRange)">>
             There will be displayed also
             <div class="label-overrided">
               {{objObjectPropertyRange.label}}
@@ -326,7 +323,7 @@
 
     <!-- Top Fixed Menu -->
   <div class="ui top fixed stackable menu" ng-app="myApp">
-    <a class="item" id="left-sidebar-toggle">
+    <a class="ui item data-content"  id="left-sidebar-toggle" data-content="Change dataset and explore data">
       <i class="large content grey icon" style="margin: 0px;"></i>
     </a>
 
@@ -362,10 +359,10 @@
        <div class="row">
          <div class="ui secondary pointing compact menu"
          ng-controller="menuCtrl">
-           <a href="#!/graph" class="item active" id="menuGraph" ng-click="gotoGraph()">
+           <a href="#!/graph" class="item active data-content" id="menuGraph" ng-click="gotoGraph()" data-content="Switch to graph visualisation">
              Graph InfoViz
            </a>
-           <a href="#!/cluster" class="item" id="menuCluster" ng-click="gotoCluster()">
+           <a href="#!/cluster" class="item data-content" id="menuCluster" ng-click="gotoCluster()" data-content="Switch to cluster visualisation">
              Cluster InfoViz
            </a>
          </div>
@@ -413,8 +410,17 @@
       //  Attaches sidebar action to given selector. Default event if none specified is toggle
       $('.ui.left.sidebar').sidebar('attach events', '#left-sidebar-toggle', 'toggle');
       $('.ui.right.sidebar').sidebar('attach events', '#toggleRightSidebar', 'toggle');
-    });
 
+      $('.data-content')
+        .popup({
+          on: 'hover'
+      });
+
+      $('.ui.modal').modal({
+          detachable: false,
+        });
+
+      });
 
     /*
     The <script src=...> blocks the browser while
@@ -425,8 +431,6 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="app.js"></script>
-  <script src="menu.js"></script>
-  <script src="view1/view1.js"></script>
   <script src="about/about.js"></script>
   <script src="datasetsAndGraphs/datasetsAndGraphs.js"></script>
   <script src="version/version.js"></script>
@@ -434,7 +438,6 @@
   <script src="version/interpolate-filter.js"></script>
   <script src="contactEndpoint/contactEndpointService.js"></script>
   <script src="contactEndpoint/contactEndpointCtrl.js"></script>
-  <script src="searchableMultiselect/searchableMultiselectDirective.js"></script>
   <script src="d3Visualization/d3Service.js"></script>
   <script src="d3Visualization/d3Ctrl.js"></script>
   <script src="d3Visualization/d3ClusterDirective.js"></script>
@@ -454,7 +457,7 @@
 
   <script src="node_modules/tinycolor2/dist/tinycolor-min.js"></script>
   <script src="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.js"></script>
-
+  <script src="node_modules/angular-modal-service/dst/angular-modal-service.min.js"></script>
   <script type='text/javascript' src='node_modules/angular-loading-bar/build/loading-bar.min.js'></script>
 
   <!-- Global Site Tag (gtag.js) - Google Analytics -->

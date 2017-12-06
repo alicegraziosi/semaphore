@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'contactEndpointModule'])
+angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'contactEndpointModule', 'angularModalService'])
 
 .config(['$routeProvider', function($routeProvider) {
 
@@ -26,7 +26,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     });
 }])
 .controller('D3viewCtrl',
-  function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service) {
+  function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service, ModalService) {
 
     //$scope.showLoader = true;
 
@@ -40,39 +40,39 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             group: 1,
             color :'#1f77b4'
           },
-          litPropClasse: [
-            {
-              uri : 'http://dbpedia.org/property/genre',
-              label : 'genre',
-              type : 'lit',
-              group: 2,
-              color : '#ff7f0e'
-            }
-          ],
+          litPropClasse: {
+            uri : 'http://dbpedia.org/property/genre',
+            label : 'genre',
+            type : 'lit',
+            group: 2,
+            color : '#ff7f0e'
+          },
           objPropClasse: {
             uri : 'http://dbpedia.org/ontology/formerBandMember',
             label : 'former band member',
             type : 'obj',
             group: 3,
-            color :  '#2ca02c'
+            color :  '#2ca02c',
           },
-          litPropObj: [
-            {
+          litPropObj: {
               uri : 'http://dbpedia.org/property/yearsActive',
               label : 'years active',
               type : 'lit',
               group: 4,
-              color : '#d62728'
-            }
-          ],
+              color : '#d62728',
+              range: 'former band member'
+          },
           objPropObj: {
-              uri : '',
-              label : '',
+              uri : ' ',
+              label : ' ',
               type : 'obj',
               group: 5,
-              color : '#9467bd'
+              color : '#9467bd',
+              range: 'former band member'
             }
         };
+
+        $scope.dataInfo = $rootScope.dataInfo;
       };
 
     $scope.selectedEndpointUrl = "https://dbpedia.org/sparql";
@@ -81,10 +81,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
     $scope.showPhoto = {
        value: 'true'
-    };
-
-    $scope.customise = function(){
-      $('.ui.modal').modal('show');
     };
 
     $rootScope.$watch(function() {
@@ -119,6 +115,14 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $scope.litPropObj = $rootScope.dataInfo.litPropObj;
         $scope.objPropObj = $rootScope.dataInfo.objPropObj;
     });
+
+    $scope.$watch('dataInfo', function(){
+        console.log("test1");
+    }, true);
+
+     $scope.$watch('showPhoto', function(){
+        console.log("test2");
+    }, true);
 
 
     $rootScope.$watch('graph', function(graph) {
@@ -352,5 +356,9 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
     $scope.selectDataTypeShape = function(shape) {
       $scope.datatypeShape = shape;
+    };
+
+    $scope.customise = function(){
+      $('.ui.modal').modal('show');
     };
 });

@@ -52,6 +52,7 @@ sudo npm install -g http-server
 Alternatively, you can choose to configure your own web server, such as Apache or Nginx. Just
 configure your server to serve the files under the `app/` directory.
 
+OLD
 We have preconfigured the project with a simple development web server. The simplest way to start
 this server is:
 
@@ -75,10 +76,26 @@ App online on:
 http://localhost:8000/
 
 
-### Deploy app in production mode
+NEW
+You can start the web server locally by running:
+```
+node startserver.js
+```
+App online on:
+http://localhost:8092
+
+### Deploy app in production mode (OLD)
 
 You can start the web server in production by running:
 
 ```
 http-server -a [host ip (default 0.0.0.0)] -p [port(default 8080)]
+```
+
+### Deploy app in production mode (NEW)
+
+You can start the web server in production by running:
+
+```
+node startserver.js
 ```

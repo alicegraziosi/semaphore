@@ -8,12 +8,14 @@ customiseModule.config(['$routeProvider', function($routeProvider) {
     attenzione!! se il controller è specificato nel config della route allora non bisogna
     scriverlo anche nel html altrimenti viene richiamato due volte!!
   */
+
   $routeProvider
     .when(
       '/customise', {
-        templateUrl: '/customise/customise.html',
-        controller: 'customiseCtrl'
+        templateUrl: '/customise/customiseModal.html',
+        controller: 'customiseModalCtrl'
       });
+
   }]);
 
   customiseModule.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
@@ -34,6 +36,9 @@ customiseModule.config(['$routeProvider', function($routeProvider) {
             headers: {'Content-Type': undefined}
        })
        .then(function(response) {
+          /*
+          var data = response.data;
+          */
           deferred.resolve(response);
        })
        .catch(function onError(response) {
@@ -52,10 +57,15 @@ customiseModule.config(['$routeProvider', function($routeProvider) {
  }]);
 
 customiseModule.controller('customiseCtrl', ['$scope', '$http', 'fileUpload', 'cfpLoadingBar',
-  function($scope, $http, fileUpload, cfpLoadingBar){
+   function($scope, $http, fileUpload, cfpLoadingBar){
 
     $scope.localdataInfo = $scope.dataInfo;
     $scope.restoreDataInfo = $scope.dataInfo;
+
+    $scope.$watch('dataInfo', function(){
+        console.log("test1 from customiseCtrl");
+        $scope.localdataInfo = $scope.dataInfo;
+    }, true);
 
     var location = window.location.href;
     var defaultPath = "images/";
@@ -77,6 +87,8 @@ customiseModule.controller('customiseCtrl', ['$scope', '$http', 'fileUpload', 'c
       $scope.localdataInfo = $scope.restoreDataInfo;
       $scope.dataInfo = $scope.restoreDataInfo;
     };
+
+    $scope.close = close;
 
     $scope.uploadFile1 = function(){
        $scope.showSuccessMessage = false;

@@ -3,7 +3,7 @@
 angular.module('getJSONfileModule', [])
 
 .factory('GetJSONfileService', ['$http', function($http){
-    var get = function(filename){
+   var get = function(filename){
       return $http.get(filename); // this will return a promise to controller
     }
 
@@ -233,20 +233,27 @@ angular.module('getJSONfileModule', [])
     // In an HTTP POST request, the parameters are not sent along with the URI.
     $http({
         method: 'POST',
-        url: $rootScope.jsonFileServiceUrl+"savetofile",
+        //url: $rootScope.jsonFileServiceUrl+"savetofile",
+        url: "http://eelst.cs.unibo.it:8095/api/savetofile",
         // use $.param jQuery function to serialize data from JSON
         data: $.param(jsonData),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
     }).then(
-      function(response){
+      function successCallback(response){
         // success callback
         var filename = response.data;
-        window.open($rootScope.jsonFileServiceUrl+"download?filename="+filename);
+        //window.open($rootScope.jsonFileServiceUrl+"download?filename="+filename);
+        window.open("http://eelst.cs.unibo.it:8095/api/download?filename="+filename);
       },
-      function(response){
+      function errorCallback(response){
         // failure callback
         console.log('ERROR: could not download file');
+        if(response.status == -1){
+          console.log("Prefix api service unreachable.." + response.status + "..request was aborted");
+        } else {
+          console.log("Prefix api service unreachable.." + response.status + ".." + response.statusText);
+        }
       }
     );
   }

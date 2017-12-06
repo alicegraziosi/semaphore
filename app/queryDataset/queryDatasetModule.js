@@ -319,7 +319,7 @@ angular.module('queryDatasetModule', [])
     var queryDatasetValuesObjObjectProperty = function(endpoint, graph, obj){
       var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel ';
       if(graph != "default"){
-        query += ' FROM <' + graph + '> { ';
+        query += ' FROM <' + graph + '> ';
       }
       //  query += ' VALUES ?soggetto { '; // Old
       query += ' WHERE { VALUES ?soggetto { ';
@@ -375,7 +375,7 @@ angular.module('queryDatasetModule', [])
     var queryDatasetValuesObjDatatypeProperty = function(endpoint, graph, obj){
       var query = 'SELECT DISTINCT ?propertyUri ?propertyLabel ';
       if(graph != "default"){
-        query += ' FROM <' + graph + '> {';
+        query += ' FROM <' + graph + '> ';
       }
       //query += ' VALUES ?soggetto { '; // OLD
       query += ' WHERE { VALUES ?soggetto { ';

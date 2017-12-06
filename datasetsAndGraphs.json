@@ -15,8 +15,8 @@
     "endpointName": "DBpedia"
   },
   {
-    "endpointUrl": "http://eelst.cs.unibo.it:8093/blazegraph/namespace/nd/",
-    "graphs": ["nd"],
+    "endpointUrl": "http://eelst.cs.unibo.it:8094/nd/query",
+    "graphs": ["default"],
     "endpointName": "network dataset"
   }
 ]
