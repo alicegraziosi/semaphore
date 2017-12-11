@@ -58,7 +58,220 @@
             </a>
           </div>
 
-          <div ng-include="'d3Visualization/customiseView.html'"></div>
+          <div class="ui darkRedBorderTop segment">
+              <!--<div class="ribbon-label-overrided">Customise data displayed</div>-->
+              <div class="ui-blue-right-ribbon-label-override">
+              <!--<div class="ui blue right ribbon label">-->
+              Customise data displayed</div>
+
+              <button ng-click="customise();"
+                class="ui red mini basic button">
+                Customise
+              </button>
+
+              <div id="data_info" class="ui list" ng-model="dataInfo">
+
+                  <div class="item">
+
+                    <svg height="20" width="20">
+                      <circle cx="10" cy="10" r="8" fill="{{dataInfo.classe.color}}" />
+                    </svg>
+
+                    <h5>
+                      <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.classe.color}}">
+                          {{numClasses}}
+                      </div>-->
+                      Class {{dataInfo.classe.label}}
+                    </h5>
+                    <p>{{dataInfo.classe.uri}}</p>
+                  </div>
+
+                  <div class="item" ng-if="dataInfo.litPropClasse.label != ' ' ">
+
+                    <svg width="20" height="20">
+                      <rect width="20" height="15" style="top: 5px; fill:{{dataInfo.litPropClasse.color}};" />
+                    </svg>
+
+                    <h5 class="header">
+                      <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropClasse[0].color}}" >    {{numClassDatatypeProperties}}
+                      </div>-->
+                      Property {{dataInfo.litPropClasse.label}} of {{dataInfo.classe.label}}
+                    </h5>
+                    <p>{{dataInfo.litPropClasse.uri}}</p>
+                  </div>
+
+                  <div class="item" ng-if="dataInfo.objPropClasse.label != ' ' ">
+                    <svg height="20" width="20">
+                      <circle cx="10" cy="10" r="8" ng-if="dataInfo.objPropClasse.color" fill="{{dataInfo.objPropClasse.color}}" />
+                    </svg>
+
+                    <h5 class="header">
+                      <!--
+                      <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropClasse.color}}">    {{numClassDatatypeProperties}}
+                      </div>-->
+                      Property {{dataInfo.objPropClasse.label}} of {{dataInfo.classe.label}}
+                    </h5>
+                    <p>{{dataInfo.objPropClasse.uri}}</p>
+                  </div>
+
+                  <div class="item" ng-if="dataInfo.litPropObj.label != ' ' ">
+                    <svg width="20" height="20">
+                      <rect width="20" height="15" ng-if="dataInfo.litPropObj.color" fill="{{dataInfo.litPropObj.color}}" />
+                    </svg>
+                    <h5 class="header">
+                      <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropObj[0].color}}" > {{numObjDatatypeProperties}}
+                      </div>-->
+                     Property {{dataInfo.litPropObj.label}} of {{dataInfo.objPropObj.range}}
+                    </h5>
+                    <p>{{dataInfo.litPropObj.uri}}</p>
+                  </div>
+
+                  <div class="item" ng-show="dataInfo.objPropObj.label != ' ' ">
+                    <svg height="20" width="20">
+                      <circle cx="10" cy="10" r="8" ng-if="dataInfo.objPropObj.color" fill="{{dataInfo.objPropObj.color}}" />
+                    </svg>
+                    <h5 class="header">
+                      <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropObj[0].color}}">{{numObjObjectProperties}}
+                      </div>-->
+                      Property {{dataInfo.objPropObj.label}} of {{dataInfo.objPropObj.range}}
+                     </h5>
+                     <p>{{dataInfo.objPropObj.uri}}</p>
+                     </div>
+                  </div>
+              </div>
+          </div>
+          <div class="ui modal" ng-controller="customiseCtrl">
+            <i class="close icon" ng-click="closeModal()"></i>
+            <div class="header">Customise view</div>
+            <div class="content">
+              <h4 class="ui dividing header">Customise images and colors</h4>
+              <table class="ui very basic table">
+                <thead>
+                  <tr>
+                    <th>Images</th>
+                    <th></th>
+                    <th>Colors</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="ui small aliceImage">
+                        <img ng-src="{{image1src}}" alt="images/wireframe/image.png">
+                      </div>
+                    </td>
+                    <td ng-if="localdataInfo.classe.uri != localdataInfo.objPropClasse.uri">
+                        <a class="header">Class {{localdataInfo.classe.label}}</a>
+                        <div class="meta">
+                          <span>{{localdataInfo.classe.uri}}</span>
+                        </div>
+                        <input type="file" id="file1" name="file">
+                        <input type="button" ng-click="uploadFile1()" value="Upload" />
+                        <!--<div id="loading-bar-container"></div>-->
+                    </td>
+                    <td>
+                        <div class="ui input">
+                          <color-picker ng-model="localdataInfo.classe.color"></color-picker>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr ng-if="localdataInfo.litPropClasse.label != ' ' ">
+                    <td>
+
+                    </td>
+                    <td>
+                      <a class="header">Property {{localdataInfo.litPropClasse.label}} of {{localdataInfo.classe.label}}</a>
+                        <div class="meta">
+                          <span>{{localdataInfo.litPropClasse.uri}}</span>
+                        </div>
+                    </td>
+                    <td>
+                      <div class="ui input">
+                        <color-picker ng-model="localdataInfo.litPropClasse.color"></color-picker>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr ng-if="localdataInfo.objPropClasse.label != ' ' ">
+                    <td>
+                      <div class="ui small aliceImage">
+                        <img ng-src="{{image2src}}" alt="default.png">
+                      </div>
+                    </td>
+                    <td>
+                      <a class="header">Property {{localdataInfo.objPropClasse.label}} of {{localdataInfo.classe.label}}</a>
+                      <div class="meta">
+                        <span>{{localdataInfo.objPropClasse.uri}}</span>
+                      </div>
+                      <input type="file" id="file2" name="file"/>
+                      <input type="button" ng-click="uploadFile2()" value="Upload" />
+                    </td>
+                    <td>
+                      <div class="ui input">
+                        <color-picker ng-model="localdataInfo.objPropClasse.color"></color-picker>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr ng-if="localdataInfo.litPropObj.label != ' ' ">
+                    <td>
+
+                    </td>
+                    <td>
+                      <a class="header">Property {{localdataInfo.litPropObj.label}} of {{localdataInfo.litPropObj.range}}
+                      </a>
+                      <div class="meta">
+                        <span>{{localdataInfo.litPropObj.uri}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="ui input">
+                        <color-picker ng-model="localdataInfo.litPropObj.color"></color-picker>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr ng-if="localdataInfo.objPropObj.label != ' ' ">
+                    <td>
+                      <div class="ui small aliceImage">
+                        <img ng-src="{{image3src}}" alt="default.png">
+                      </div>
+                    </td>
+                    <td>
+                      <a class="header">Property {{localdataInfo.objPropObj.label}} of {{localdataInfo.objPropObj.range}}</a>
+                      <div class="meta">
+                        <span>{{localdataInfo.objPropObj.uri}}</span>
+                      </div>
+                      <input type="file" id="file3" name="file"/>
+                      <input type="button" ng-click="uploadFile3()" value="Upload" />
+                    </td>
+                    <td>
+                      <div class="ui input">
+                        <color-picker ng-model="localdataInfo.objPropObj.color"></color-picker>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button ng-click="applyAndCloseModal()" class="ui primary button">
+                Apply
+              </button>
+              <button ng-click="restoreDefault()" class="ui button">
+                Cancel
+              </button>
+              <div class="ui divider" ng-if="showSuccessMessage || showErrorMessage" ></div>
+              <div class="ui success message" ng-if="showSuccessMessage">
+                <i class="close icon"></i>
+                <div class="header">
+                  Upload successful.
+                </div>
+              </div>
+              <div class="ui negative message" ng-if="showErrorMessage">
+                <i class="close icon"></i>
+                <div class="header">
+                  Error while uploading.
+                </div>
+              </div>
+            </div>
+          </div>
+
       </div>
     </div>
   </div>

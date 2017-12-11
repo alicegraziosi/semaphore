@@ -346,8 +346,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
       $scope.numObjObjectProperties = 0;
       $scope.numObjDatatypeProperties = 0;
-      $scope.objDatatypeProperties.length = 0;
-      $scope.objObjectProperties.length = 0;
+      $scope.objDatatypeProperties.splice(0,$scope.objDatatypeProperties.length);
+      $scope.objObjectProperties.splice(0, $scope.objObjectProperties.length);
       $scope.selectedObjDatatypeProperties.length = 0;
       $scope.selectedObjObjectProperties.length = 0;
 
@@ -488,8 +488,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
             $scope.obj.push(ob.oo.value);
           });
 
-          $scope.queryDatasetValuesObjObjectProperty($scope.obj);
-          $scope.queryDatasetValuesObjDatatypeProperty($scope.obj);
 
           // nodi, nodi e linkstoliterals della classe scelta
           var graph = GetJSONfileService.createNodeObject(response.data.results.bindings);
@@ -562,7 +560,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
               type : 'lit',
               group: 4,
               color : $scope.litPropObjColor,
-              range : ' '
+              range : $scope.objObjectPropertyRange.label
             };
 
           graph.linksToLiterals.forEach(function(l){
@@ -598,7 +596,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
               type : 'obj',
               group: 5,
               color : $scope.objPropObjColor,
-              range : ' '
+              range : $scope.objObjectPropertyRange.label
             };
         });
       }
@@ -606,7 +604,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     $scope.clearAllClassPropertiesDropown = function(){
       $('#allClassPropertiesDropdown .ui.dropdown').dropdown('restore placeholder text');
-
+      $('#allClassDropdown .ui.dropdown').dropdown('restore placeholder text');
       $scope.selectedClass = '';
       $scope.selectedClassObjectProperties = [];
       $scope.selectedClassDatatypeProperties = [];
@@ -618,6 +616,9 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.classObjectProperties = [];
       $scope.objDatatypeProperties = [];
       $scope.objObjectProperties = [];
+
+      $scope.objectPropertyRange = {};
+      $scope.objObjectPropertyRange = {};
     };
 
     // INIT DEEFAULT

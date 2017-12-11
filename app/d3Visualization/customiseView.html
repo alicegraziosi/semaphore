@@ -9,7 +9,7 @@
       Customise
     </button>
 
-    <div id="data_info" class="ui list">
+    <div id="data_info" class="ui list" ng-model="dataInfo">
 
         <div class="item">
 
@@ -61,19 +61,19 @@
           <h5 class="header">
             <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropObj[0].color}}" > {{numObjDatatypeProperties}}
             </div>-->
-           Property {{dataInfo.litPropObj.label}} of {{dataInfo.litPropObj.range}}
+           Property {{dataInfo.litPropObj.label}} of {{dataInfo.objPropObj.range}}
           </h5>
           <p>{{dataInfo.litPropObj.uri}}</p>
         </div>
 
-        <div class="item" ng-if="dataInfo.objPropObj.label != ' ' ">
+        <div class="item" ng-show="dataInfo.objPropObj.label != ' ' ">
           <svg height="20" width="20">
             <circle cx="10" cy="10" r="8" ng-if="dataInfo.objPropObj.color" fill="{{dataInfo.objPropObj.color}}" />
           </svg>
           <h5 class="header">
             <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropObj[0].color}}">{{numObjObjectProperties}}
             </div>-->
-            Property {{dataInfo.objPropObj.label}} of  {{dataInfo.objPropObj.range}}
+            Property {{dataInfo.objPropObj.label}} of {{dataInfo.objPropObj.range}}
            </h5>
            <p>{{dataInfo.objPropObj.uri}}</p>
            </div>

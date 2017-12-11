@@ -56,16 +56,14 @@ customiseModule.config(['$routeProvider', function($routeProvider) {
     }
  }]);
 
-customiseModule.controller('customiseCtrl', ['$scope', '$http', 'fileUpload', 'cfpLoadingBar',
-   function($scope, $http, fileUpload, cfpLoadingBar){
+customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'fileUpload', 'cfpLoadingBar',
+   function($scope, $rootScope, $http, fileUpload, cfpLoadingBar){
 
-    $scope.localdataInfo = $scope.dataInfo;
-    $scope.restoreDataInfo = $scope.dataInfo;
+    $('.ui.modal').modal('allowMultiple', false);
+    $('.ui.modal').modal('hide all');
 
-    $scope.$watch('dataInfo', function(){
-        console.log("test1 from customiseCtrl");
-        $scope.localdataInfo = $scope.dataInfo;
-    }, true);
+    // https://stackoverflow.com/questions/29893496/angular-save-scope-value-to-variable-but-not-update-it-when-scope-updates
+    $scope.localdataInfo = angular.copy($scope.dataInfo);
 
     var location = window.location.href;
     var defaultPath = "images/";
@@ -79,16 +77,19 @@ customiseModule.controller('customiseCtrl', ['$scope', '$http', 'fileUpload', 'c
     $scope.showErrorMessage = false;
 
     $scope.applyAndCloseModal = function(){
-      $rootScope.dataInfo = $scope.localdataInfo;
-      $('.ui.modal').modal('hide');
+      // apply changes
+      $rootScope.dataInfo = angular.copy($scope.localdataInfo);
+      $scope.closeModal();
+    };
+
+    // close all modal (si sovrappongono in semantic ui)
+    $scope.closeModal = function(){
+      $('.ui.modal').modal('hide all');
     };
 
     $scope.restoreDefault = function(){
-      $scope.localdataInfo = $scope.restoreDataInfo;
-      $scope.dataInfo = $scope.restoreDataInfo;
+      $scope.localdataInfo = angular.copy($scope.dataInfo);
     };
-
-    $scope.close = close;
 
     $scope.uploadFile1 = function(){
        $scope.showSuccessMessage = false;

@@ -90,7 +90,7 @@
               Clear
             </button>
 
-            <div ng-if="successMessageToAppear" class="ui tiny success message">
+            <div ng-show="successMessageToAppear" class="ui tiny success message">
               <i class="close icon" ng-click="dismissMessage()"></i>
               <div class="header">SPARQL endpoint succesfully reached!</div>
               <p>You may now query the dataset.</p>
@@ -211,7 +211,7 @@
             <button class="ui mini button" ng-click="queryEndpointClassProperties()">
               Load data
             </button>
-            <button class="ui mini button" ng-click="clearQueryParam()">
+            <button class="ui mini button" ng-click="clearAllClassPropertiesDropown()">
               Clear
             </button>
           </div>
@@ -277,7 +277,7 @@
           </div>
           </div>
 
-          <div class="ui compact message" ng-show="!isEmpty(objObjectPropertyRange)">>
+          <div class="ui compact message" ng-show="!isEmpty(objObjectPropertyRange)">
             There will be displayed also
             <div class="label-overrided">
               {{objObjectPropertyRange.label}}
@@ -418,6 +418,7 @@
 
       $('.ui.modal').modal({
           detachable: false,
+          allowMultiple: false
         });
 
       });

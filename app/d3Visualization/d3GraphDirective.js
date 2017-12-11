@@ -28,18 +28,20 @@ myAppd3view.directive('d3Graphvisualization',
           showLoader: "="
 
       },
+      controller: controller,
       link: function(scope, elem, attrs){
+
+        scope.$watch('graph.dataInfo', function(dataInfo) {
+          console.log("I see a data change!");
+        });
+
+
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3) {
-          // now you can use d3 as usual!
 
-
-        scope.$watch('dataInfo', function(newValue, oldValue) {
-          console.log("I see a data change!");
-        }, true);
-
-        scope.$watch('showPhoto', function (showPhoto) {
-          if(showPhoto.value=="false"){
+        // now you can use d3 as usual!
+        scope.$watch('showPhoto', function (showPhoto){
+         if(showPhoto.value=="false"){
             //d3.selectAll(".immagini").attr("visibility", "hidden");
             d3.selectAll("circle").attr("fill", function(d) { return colorOfNode(d.group)});
           } else {
@@ -52,6 +54,22 @@ myAppd3view.directive('d3Graphvisualization',
               });
             }
           }, true);
+
+          // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
+          function colorOfNode(group){
+              /*
+              if(group==1) return '#1f77b4';
+              if(group==2) return '#ff7f0e';
+              if(group==3) return '#2ca02c';
+              if(group==4) return '#d62728';
+              if(group==5) return '#9467bd';
+              */
+              if(group==1) return graph.dataInfo.classe.color;
+              if(group==2) return graph.dataInfo.litPropClasse.color;
+              if(group==3) return graph.dataInfo.objPropClasse.color;
+              if(group==4) return graph.dataInfo.litPropObj.color;
+              if(group==5) return graph.dataInfo.objPropObj.color;
+          };
 
           var width = 960,
              height = 800;
@@ -161,19 +179,27 @@ myAppd3view.directive('d3Graphvisualization',
                     .selectAll("path")
                     .data(links) //.data(graph.links)
                     .enter().append("line") //.enter().append("path")
-                      .attr("id",function(d,i) { return "linkId_" + i; })
+                      .attr("id",function(d, i) { return "linkId_" + i; })
                       .on("mouseover", function(d){
                         d3.select(this).style('stroke-width', 1.2);
                         node.style('stroke', function(n) {
                           if (n === d.source || n === d.target)
                             return colorOfNode(n.group);
                           });
+                          node.style('stroke-width', function(n) {
+                            if (n === d.source || n === d.target)
+                              return 3;
+                            });
                       })
                       .on("mouseout", function(d){
                         d3.select(this).style('stroke-width', 1);
                         node.style('stroke', function(n) {
                           if (n === d.source || n === d.target)
-                            return '#ffffff';
+                            return colorOfNode(n.group);
+                          });
+                        node.style('stroke-width', function(n) {
+                          if (n === d.source || n === d.target)
+                            return 2;
                           });
                       })
                       .attr("marker-end",function(d){  //frecce dei links
@@ -191,7 +217,7 @@ myAppd3view.directive('d3Graphvisualization',
                         {return document.createElementNS('http://www.w3.org/2000/svg', 'circle')}
                       if(d.shape=="rectangle")
                         {return document.createElementNS('http://www.w3.org/2000/svg', 'rect')}})
-                        .attr("height", 8)  //if rect
+                        .attr("height", 10)  //if rect
                         .attr("r", function(d) { return d.radius; }) // if circle
                         .attr("fill", function(d) { return colorOfNode(d.group)})
                         .attr("fill", function(d, i) {
@@ -206,9 +232,9 @@ myAppd3view.directive('d3Graphvisualization',
                             .on("drag", dragged)
                             .on("end", dragended))
                         .on("mouseover", function(d){
-                          d3.select(this).style("stroke", '#ffffff');
                           d3.select(this).style("cursor", "pointer");
                           d3.select(this).style("stroke", colorOfNode(d.group));
+                          d3.select(this).style("stroke-width", "3px");
                           scope.$apply(function () {
                             $parse(attrs.selectedItem).assign(scope.$parent, d);
                           });
@@ -223,7 +249,8 @@ myAppd3view.directive('d3Graphvisualization',
                           tool_tip.show();
                         })
                         .on("mouseout", function(d){
-                          d3.select(this).style("stroke", '#ffffff');
+                          d3.select(this).style("stroke", colorOfNode(d.group));
+                          d3.select(this).style("stroke-width", "2px");
                           d3.select(this).style("cursor", "default");
 
                           div.transition()
@@ -232,7 +259,9 @@ myAppd3view.directive('d3Graphvisualization',
 
                           tool_tip.hide;
                         })
-                        .on('dblclick', connectedNodes);
+                        .on('dblclick', connectedNodes)
+                        .style("stroke", function(d) { return colorOfNode(d.group)})
+                        .style("stroke-width", "2px");
 
                   var div =  d3.select(elem[0]).append("div")
                       .attr("class", "tooltip")
@@ -296,7 +325,6 @@ myAppd3view.directive('d3Graphvisualization',
                           .on("drag", dragged)
                           .on("end", dragended))
                       .on("mouseover", function(d){
-                        d3.selectAll("circle").style("stroke", '#ffffff');
                         d3.select(this).style("stroke", color(d.group));
                         d3.select(this).style("cursor", "pointer");
                         scope.$apply(function () {
@@ -304,7 +332,6 @@ myAppd3view.directive('d3Graphvisualization',
                         });
                       })
                       .on("mouseout", function(d){
-                        d3.selectAll("circle").style("stroke", '#ffffff');
                         d3.select(this).style("cursor", "default");
                       });
 
@@ -452,7 +479,11 @@ myAppd3view.directive('d3Graphvisualization',
                   if(selectedNodeLabel){
                     //var node = svg.selectAll(".node");
                     if (selectedNodeLabel == "none") {
-                        node.style("stroke", "white").style("stroke-width", "1");
+                        node.style("stroke-width", "2");
+
+                        node.style('stroke', function(n) {
+                            return colorOfNode(n.group);
+                          });
                     } else {
                         var selected = node.filter(function (d, i) {
                             return d.label != selectedNodeLabel;
@@ -489,11 +520,18 @@ myAppd3view.directive('d3Graphvisualization',
 
               // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
               function colorOfNode(group){
+                  /*
                   if(group==1) return '#1f77b4';
                   if(group==2) return '#ff7f0e';
                   if(group==3) return '#2ca02c';
                   if(group==4) return '#d62728';
                   if(group==5) return '#9467bd';
+                  */
+                  if(group==1) return graph.dataInfo.classe.color;
+                  if(group==2) return graph.dataInfo.litPropClasse.color;
+                  if(group==3) return graph.dataInfo.objPropClasse.color;
+                  if(group==4) return graph.dataInfo.litPropObj.color;
+                  if(group==5) return graph.dataInfo.objPropObj.color;
               };
 
             } // if(graph)
@@ -501,4 +539,13 @@ myAppd3view.directive('d3Graphvisualization',
         }); // d3Service.then(function(d3) {
       } // link
     } // return
+
+    controller.$inject = ['$scope'];
+
+  function controller($scope) {
+    $scope.$watch('dataInfo', function(projectIds) {
+      console.log(projectIds);
+    });
+  }
+
 }]); //directive function

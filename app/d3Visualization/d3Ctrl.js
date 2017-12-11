@@ -83,6 +83,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
        value: 'true'
     };
 
+
     $rootScope.$watch(function() {
       return $rootScope.selectedEndpointUrl;
     }, function() {
@@ -107,23 +108,18 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       }
     });
 
-
     $rootScope.$watch('dataInfo', function(){
+
+      $scope.dataInfo = $rootScope.dataInfo;
+
         $scope.clusterClasse = $rootScope.dataInfo.classe;
         $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
         $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
         $scope.litPropObj = $rootScope.dataInfo.litPropObj;
         $scope.objPropObj = $rootScope.dataInfo.objPropObj;
+
+
     });
-
-    $scope.$watch('dataInfo', function(){
-        console.log("test1");
-    }, true);
-
-     $scope.$watch('showPhoto', function(){
-        console.log("test2");
-    }, true);
-
 
     $rootScope.$watch('graph', function(graph) {
       if($rootScope.graph == undefined){
@@ -150,6 +146,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             graph2.nodeLiteral.forEach(function(nl){
               graph1.nodeLiteral.push(nl);
             });
+            graph1.dataInfo =  $rootScope.dataInfo;
             $rootScope.graph = graph1;
             $scope.graph = $rootScope.graph;
             $rootScope.nodeLabels = $rootScope.nodeLabels.sort();
@@ -161,12 +158,12 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             $scope.objPropObj = $rootScope.dataInfo.objPropObj;
 
             $scope.c = $rootScope.dataInfo.classe.label;
-            $scope.toggleSelectionClusterOption($scope.c, $scope.litPropClasse[0]);
+            $scope.toggleSelectionClusterOption($scope.c, $scope.litPropClasse);
 
         });
 
       } else {
-        $scope.graph = $rootScope.graph;
+        $scope.graph = angular.copy($rootScope.graph);
         // photo
 
         $scope.graph.nodes.forEach(function(node){
@@ -191,13 +188,14 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       }
 
       $scope.c = $rootScope.dataInfo.classe.label;
-      $scope.toggleSelectionClusterOption($scope.c, $scope.litPropClasse[0]);
+      $scope.toggleSelectionClusterOption($scope.c, $scope.litPropClasse);
     }, true);
 
 
     $rootScope.$watch('dataInfo', function(dataInfo, dataInfoOld) {
-      $scope.dataInfo = $rootScope.dataInfo;
-      console.log("controller datainfo changed" + $scope.dataInfo);
+      $scope.dataInfo = angular.copy($rootScope.dataInfo);
+      $scope.graph.dataInfo =  $rootScope.dataInfo;
+      console.log("I see a dataaaaaaaa change!1");
     }, true);
 
     $scope.selected = " ";
@@ -348,6 +346,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $scope.selectedClusterOption = clusterOption;
         $scope.c = c;
     };
+
 
     // opzioni di visualizzazione (shape)
     $scope.selectObjectShape = function(shape) {
