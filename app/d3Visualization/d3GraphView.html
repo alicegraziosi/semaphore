@@ -30,7 +30,8 @@
                                  datatype-shape="datatypeShape"
                                  data-info="dataInfo"
                                  show-photo="showPhoto"
-                                 show-loader="showLoader">
+                                 show-loader="showLoader"
+                                 checkbox-model="checkboxModel">
           </d3-graphvisualization>
 
         </div>
@@ -78,24 +79,29 @@
                     </svg>
 
                     <h5>
-                      <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.classe.color}}">
-                          {{numClasses}}
-                      </div>-->
-                      Class {{dataInfo.classe.label}}
+                      <div class="ui slider checkbox">
+                        <input type="checkbox" ng-model="checkboxModel.value1"
+                        ng-true-value="true" ng-false-value="false">
+                        <label>Class {{dataInfo.classe.label}}</label>
+                      </div>
+                      
                     </h5>
                     <p>{{dataInfo.classe.uri}}</p>
                   </div>
 
                   <div class="item" ng-if="dataInfo.litPropClasse.label != ' ' ">
 
+                    <h5 class="header">
                     <svg width="20" height="20">
                       <rect width="20" height="15" style="top: 5px; fill:{{dataInfo.litPropClasse.color}};" />
                     </svg>
-
-                    <h5 class="header">
                       <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropClasse[0].color}}" >    {{numClassDatatypeProperties}}
                       </div>-->
-                      Property {{dataInfo.litPropClasse.label}} of {{dataInfo.classe.label}}
+                      <div class="ui slider checkbox">
+                        <input type="checkbox" ng-model="checkboxModel.value2"
+                        ng-true-value="true" ng-false-value="false">
+                        <label>Property {{dataInfo.litPropClasse.label}} of {{dataInfo.classe.label}}</label>
+                      </div>
                     </h5>
                     <p>{{dataInfo.litPropClasse.uri}}</p>
                   </div>
@@ -109,7 +115,11 @@
                       <!--
                       <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropClasse.color}}">    {{numClassDatatypeProperties}}
                       </div>-->
-                      Property {{dataInfo.objPropClasse.label}} of {{dataInfo.classe.label}}
+                      <div class="ui slider checkbox">
+                        <input type="checkbox" ng-model="checkboxModel.value3"
+                        ng-true-value="true" ng-false-value="false">
+                        <label>Property {{dataInfo.objPropClasse.label}} of {{dataInfo.classe.label}}</label>
+                      </div>
                     </h5>
                     <p>{{dataInfo.objPropClasse.uri}}</p>
                   </div>
@@ -121,7 +131,12 @@
                     <h5 class="header">
                       <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropObj[0].color}}" > {{numObjDatatypeProperties}}
                       </div>-->
-                     Property {{dataInfo.litPropObj.label}} of {{dataInfo.objPropObj.range}}
+                      <div class="ui slider checkbox">
+                        <input type="checkbox" ng-model="checkboxModel.value4"
+                        ng-true-value="true" ng-false-value="false">
+                        <label>Property {{dataInfo.litPropObj.label}} of {{dataInfo.objPropObj.range}}</label>
+                      </div>
+                     
                     </h5>
                     <p>{{dataInfo.litPropObj.uri}}</p>
                   </div>
@@ -133,7 +148,11 @@
                     <h5 class="header">
                       <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropObj[0].color}}">{{numObjObjectProperties}}
                       </div>-->
-                      Property {{dataInfo.objPropObj.label}} of {{dataInfo.objPropObj.range}}
+                      <div class="ui slider checkbox">
+                        <input type="checkbox" ng-model="checkboxModel.value5"
+                        ng-true-value="true" ng-false-value="false">
+                        <label>Property {{dataInfo.objPropObj.label}} of {{dataInfo.objPropObj.range}}</label>
+                      </div>
                      </h5>
                      <p>{{dataInfo.objPropObj.uri}}</p>
                      </div>

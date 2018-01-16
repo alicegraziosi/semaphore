@@ -25,7 +25,8 @@ myAppd3view.directive('d3Graphvisualization',
           datatypeShape: "=",  // nella view: datatype-shape
           dataInfo: "=",
           showPhoto: "=",
-          showLoader: "="
+          showLoader: "=",
+          checkboxModel: "="
 
       },
       controller: controller,
@@ -35,6 +36,7 @@ myAppd3view.directive('d3Graphvisualization',
           console.log("I see a data change!");
         });
 
+    
 
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3) {
@@ -54,6 +56,9 @@ myAppd3view.directive('d3Graphvisualization',
               });
             }
           }, true);
+
+          
+
 
           // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
           function colorOfNode(group){
@@ -107,6 +112,17 @@ myAppd3view.directive('d3Graphvisualization',
                 clearAll();
                 update();
 
+              scope.$watch('checkboxModel', function(checkboxModel) {
+
+                if(checkboxModel.value1==false)
+                  checkboxModel.value2=false;
+                if(checkboxModel.value3==false) {
+                  checkboxModel.value4=false;
+                  checkboxModel.value4=false;
+                };
+                clearAll();
+                update();
+              }, true); // anche i value1, value2...
 
                 function update(){
                   var links = [];
@@ -114,24 +130,89 @@ myAppd3view.directive('d3Graphvisualization',
                   var radius = 20;
 
                   graph.links.forEach(function(l) {
+
+                    
+                    var visible = true;
+                    
+                    graph.nodes.forEach(function(n) {
+
+                      if(l.source == n.id || l.target == n.id){
+                        if(n.group == '1' && scope.checkboxModel.value1==false) { 
+                          visible = false;
+                        };
+
+                        if(n.group == '3' && scope.checkboxModel.value3==false) { 
+                          visible = false;
+                        };
+
+                        if(n.group == '5' && scope.checkboxModel.value5==false) { 
+                          visible = false;
+                        };
+                      }
+                    });
+                    
+
                     links.push({
                       source: l.source,
                       target: l.target,
                       type: l.type,
-                      label: l.label
+                      label: l.label, 
+                      visible: visible
                     });
                   });
 
                   graph.linksToLiterals.forEach(function(l) {
+
+                    var visible = true;
+
+                    graph.nodeLiteral.forEach(function(n) {
+
+                      if(l.source == n.id || l.target == n.id){
+                        if(n.group == '1' && scope.checkboxModel.value1==false) { 
+                          visible = false;
+                        };
+
+                        if(n.group == '3' && scope.checkboxModel.value3==false) { 
+                          visible = false;
+                        };
+
+                        if(n.group == '5' && scope.checkboxModel.value5==false) { 
+                          visible = false;
+                        };
+
+                        if(n.group == '2' && scope.checkboxModel.value2==false) { 
+                          visible = false;
+                        };
+
+                        if(n.group == '4' && scope.checkboxModel.value4==false) { 
+                          visible = false;
+                        };
+                      }
+                    });
+
                     links.push({
                       source: l.source,
                       target: l.target,
                       type: l.type,
-                      label: l.label
+                      label: l.label, 
+                      visible: visible
                     });
                   });
 
                   graph.nodes.forEach(function(n) {
+                    var visible = true;
+                    if(n.group == '1' && scope.checkboxModel.value1==false) { 
+                      visible = false;
+                    };
+
+                    if(n.group == '3' && scope.checkboxModel.value3==false) { 
+                      visible = false;
+                    };
+
+                    if(n.group == '5' && scope.checkboxModel.value5==false) { 
+                      visible = false;
+                    };
+                
                     nodes.push({
                       id: n.id,
                       label: n.label,
@@ -140,11 +221,22 @@ myAppd3view.directive('d3Graphvisualization',
                       group: n.group,
                       photoUrl: n.customProperties[0].value,
                       shape: n.shape,
-                      radius: n.radius
+                      radius: n.radius, 
+                      visible: visible
                     });
                   });
 
                   graph.nodeLiteral.forEach(function(n) {
+
+                    var visible = true;
+                    if(n.group == '2' && scope.checkboxModel.value2==false) { 
+                      visible = false;
+                    };
+
+                    if(n.group == '4' && scope.checkboxModel.value4==false) { 
+                      visible = false;
+                    };
+
                     nodes.push({
                       id: n.id,
                       label: n.label,
@@ -152,10 +244,10 @@ myAppd3view.directive('d3Graphvisualization',
                       url: n.url,
                       group: n.group,
                       photoUrl: " ",
-                      shape: n.shape
+                      shape: n.shape,
+                      visible: visible
                     });
                   });
-
 
                   var forceCollide = d3.forceCollide()
                       .radius(function(d) { return d.radius + 10; })
@@ -177,7 +269,10 @@ myAppd3view.directive('d3Graphvisualization',
                   var link = gzoom.append("g")
                     .attr("class", "links")
                     .selectAll("path")
-                    .data(links) //.data(graph.links)
+                    //.data(links) //.data(graph.links)
+                    .data(links.filter(function(link) {
+                      return link.visible == true;
+                    }))
                     .enter().append("line") //.enter().append("path")
                       .attr("id",function(d, i) { return "linkId_" + i; })
                       .on("mouseover", function(d){
@@ -210,7 +305,9 @@ myAppd3view.directive('d3Graphvisualization',
                   var node = gzoom.append("g")
                     .attr("class", "nodes")
                     .selectAll("g")
-                    .data(nodes) //.data(graph.nodes)
+                    .data(nodes.filter(function(node) {
+                      return node.visible == true;
+                    }))//.data(graph.nodes)
                     .enter() //.append("g")
                     .append(function(d){
                       if(d.shape=="circle")
@@ -271,7 +368,9 @@ myAppd3view.directive('d3Graphvisualization',
                   var label = gzoom.append("g")
                     .attr("class", "nodesLabel")
                     .selectAll("g")
-                    .data(nodes) //.data(graph.nodes)
+                     .data(nodes.filter(function(node) {
+                      return node.visible == true;
+                    }))
                     .enter().append("g")
                       .append("text")
                       .text(function (d) { return d.label; })  // literal
@@ -290,7 +389,10 @@ myAppd3view.directive('d3Graphvisualization',
                     gzoom.append("g")
                     .attr("class", "nodesLabel")
                     .selectAll("g")
-                    .data(nodes) //.data(graph.nodes)
+                    //.data(nodes) //.data(graph.nodes)
+                    .data(nodes.filter(function(node) {
+                      return node.visible == true;
+                    }))//.data(graph.nodes)
                     .enter().append("g")
                     .append('defs')
                     .append('pattern')
@@ -339,7 +441,10 @@ myAppd3view.directive('d3Graphvisualization',
                   var rect = gzoom.append("g")
                     .attr("class", "rectLabel")
                     .selectAll("g")
-                    .data(links) //.data(graph.links)
+                    //.data(links) //.data(graph.links)
+                    .data(links.filter(function(link) {
+                      return link.visible == true;
+                    }))
                     .enter().append("g");
 
                   var rects = rect.append("rect")

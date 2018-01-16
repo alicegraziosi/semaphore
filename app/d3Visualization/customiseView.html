@@ -9,20 +9,24 @@
       Customise
     </button>
 
-    <div id="data_info" class="ui list" ng-model="dataInfo">
+    <div id="data_info" ng-model="dataInfo">
+
 
         <div class="item">
+
 
           <svg height="20" width="20">
             <circle cx="10" cy="10" r="8" fill="{{dataInfo.classe.color}}" />
           </svg>
 
+
           <h5>
             <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.classe.color}}">
                 {{numClasses}}
             </div>-->
-            Class {{dataInfo.classe.label}}
+          Classe {{dataInfo.classe.label}}
           </h5>
+
           <p>{{dataInfo.classe.uri}}</p>
         </div>
 

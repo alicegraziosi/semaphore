@@ -63,7 +63,7 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
     $('.ui.modal').modal('hide all');
 
     // https://stackoverflow.com/questions/29893496/angular-save-scope-value-to-variable-but-not-update-it-when-scope-updates
-    $scope.localdataInfo = angular.copy($scope.dataInfo);
+    $scope.localdataInfo = angular.copy($rootScope.dataInfo);
 
     var location = window.location.href;
     var defaultPath = "images/";
@@ -88,7 +88,7 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
     };
 
     $scope.restoreDefault = function(){
-      $scope.localdataInfo = angular.copy($scope.dataInfo);
+      $scope.localdataInfo = angular.copy($rootScope.dataInfo);
     };
 
     $scope.uploadFile1 = function(){

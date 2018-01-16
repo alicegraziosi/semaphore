@@ -28,6 +28,16 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 .controller('D3viewCtrl',
   function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service, ModalService) {
 
+    $scope.checkboxModel = {
+      value1 : true,
+      value2 : true,
+      value3 : true,
+      value4 : true,
+      value5 : true
+     };
+
+     
+
     //$scope.showLoader = true;
 
       if($rootScope.dataInfo == undefined){

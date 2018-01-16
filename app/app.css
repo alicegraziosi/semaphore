@@ -269,8 +269,8 @@ div.tooltip {
 
 
 /*font size di tutta l'app*/
-body p, body h5, body b, body div, body a, body .ui.label, body h5 .ui.header,
-.ui.segment, .ui.segment h5.ui.header{
+body p, body h5, body b, body div, body a, body label, body .ui.label, body h5 .ui.header,
+.ui.segment, .ui.segment h5.ui.header, .ui.checkbox label{
   font-size: 11px;
   word-wrap: break-word;
 }

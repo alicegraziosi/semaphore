@@ -28206,7 +28206,11 @@ a.ui.card:hover,
   font-size: 1rem;
   line-height: 17px;
   min-width: 17px;
+  /* word-break:  break-all; */
+  word-wrap: break-word;
 }
+
+.ui.slider.checkbox {}
 
 /* HTML Checkbox */
 
@@ -28234,7 +28238,7 @@ a.ui.card:hover,
   display: block;
   padding-left: 1.85714em;
   outline: none;
-  font-size: 1em;
+  /* font-size: 1em; */
 }
 
 .ui.checkbox .box:before,
@@ -28549,14 +28553,16 @@ a.ui.card:hover,
 ---------------*/
 
 .ui.slider.checkbox {
-  min-height: 1.25rem;
+  min-height: 1rem;
+  line-height:  normal;
+  /* float: left; */
 }
 
 /* Input */
 
 .ui.slider.checkbox input {
-  width: 3.5rem;
-  height: 1.25rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 /* Label */
@@ -28566,6 +28572,7 @@ a.ui.card:hover,
   padding-left: 4.5rem;
   line-height: 1rem;
   color: rgba(0, 0, 0, 0.4);
+  float: left;
 }
 
 /* Line */

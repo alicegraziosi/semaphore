@@ -48,12 +48,32 @@
     <!-- Accordion -->
     <div class="ui vertical following fluid accordion text menu" ng-controller="contactEndpointCtrl">
 
-      <div class="item">
+      <div class=" active item">
         <a class="title">
           <i class="dropdown icon"></i>
           <b>Change current SPARQL endpoint or graph</b>
         </a>
         <div class="content menu" id="endpointGraphDropdown">
+           <div class="ui checkbox">
+            <input type="checkbox" name="example">
+            <label>Make my profile visible</label>
+          </div>
+
+          <div class="ui segment">
+            <div class="item">
+                <h5 class="header">Current SPARQL endpoint name</h5>
+                <p>{{$root.selectedEndpointName}}</p>
+            </div>
+            <div class="item">
+                <h5 class="header">Current SPARQL endpoint URL</h5>
+                <p>{{$root.selectedEndpointUrl}}</p>
+            </div>
+            <div class="item">
+                <h5 class="header">Current Graph</h5>
+                <p>{{$root.selectedGraph}}</p>
+            </div>
+          </div>
+
           <div class="header">Select a SPARQL endpoint</div>
           <div class="ui fluid search selection dropdown" ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
@@ -90,7 +110,7 @@
               Clear
             </button>
 
-            <div ng-show="successMessageToAppear" class="ui tiny success message">
+            <div ng-if="true" ng-model="successMessageToAppear" class="ui tiny success message">
               <i class="close icon" ng-click="dismissMessage()"></i>
               <div class="header">SPARQL endpoint succesfully reached!</div>
               <p>You may now query the dataset.</p>
@@ -105,6 +125,11 @@
             <div ng-if="attentionMessageToAppear" class="ui tiny yellow message">
               <i class="close icon" ng-click="dismissMessage()"></i>
               <div class="header"> Please select a SPARQL endpoint and graph!</div>
+            </div>
+
+            <div  ng-if="true" ng-model="successMessageToAppear" class="ui tiny yellow message">
+              <i class="close icon" ng-click="dismissMessage()"></i>
+              <div class="header"> Current endpoint and graph will change after query submission!</div>
             </div>
 
         </div> <!-- chiude <div class="active content" id="endpointandgraph">-->

@@ -35,6 +35,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.successMessageToAppear = false;
     $scope.negativeMessageToAppear = false;
     $scope.attentionMessageToAppear = false;
+    $scope.endpointChangeMessageToAppear = false;
 
     $scope.fetchingMessageToAppear = false;
     $scope.classDatatypePropertiesLoading = false;
@@ -75,6 +76,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
         $scope.successMessageToAppear = false;
         $scope.negativeMessageToAppear = false;
         $scope.attentionMessageToAppear = false;
+        $scope.endpointChangeMessageToAppear = false;
         $scope.fetchingMessageToAppear = false;
         $scope.classDatatypePropertiesLoading = false;
 
@@ -139,7 +141,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
           $scope.graphList = endpoint.graphs;
         }
       });
-      // TODO non so perché cazzo non funziona quì, visto che da console va...
+
+      // TODO
       $('#graphDropdown .ui.dropdown').dropdown('restore placeholder text');
     };
 
@@ -157,6 +160,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
         ContactSPARQLendpoint.contactSelectedEndpoint($scope.selectedEndpointUrl, $scope.selectedGraph)
           .success(function(data, status, headers, config){
             $scope.successMessageToAppear = true;
+            $scope.endpointChangeMessageToAppear = true;
             $scope.queryDatasetClass();
             $('#datasetInfoRichieste').addClass("active");
             $('#allClassDropdown .ui.dropdown').dropdown('restore placeholder text');
@@ -176,6 +180,11 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
       $rootScope.selectedEndpointName = $scope.selectedEndpointName;
       $rootScope.selectedGraph = $scope.selectedGraph;
+
+      $scope.successMessageToAppear = false;
+      $scope.negativeMessageToAppear = false;
+      $scope.attentionMessageToAppear = false;
+      $scope.endpointChangeMessageToAppear = false;
     }
 
     // classi del dataset
@@ -187,10 +196,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
       promise.then(function(response) {
 
-        // aggiorno variabili di scope
-        $rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
-        $rootScope.selectedEndpointName = $scope.selectedEndpointName;
-        $rootScope.selectedGraph = $scope.selectedGraph;
+        
 
 
         $scope.numClasses = 0;
@@ -426,6 +432,11 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // primo load data
     $scope.queryEndpointClassProperties = function(){
+
+      // aggiorno variabili di scope
+      $rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
+      $rootScope.selectedEndpointName = $scope.selectedEndpointName;
+      $rootScope.selectedGraph = $scope.selectedGraph;
 
       $scope.classeColor = '#1f77b4';
       $scope.litPropClasseColor = '#ff7f0e';
