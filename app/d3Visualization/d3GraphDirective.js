@@ -32,48 +32,38 @@ myAppd3view.directive('d3Graphvisualization',
       controller: controller,
       link: function(scope, elem, attrs){
 
+        /*
         scope.$watch('graph.dataInfo', function(dataInfo) {
           console.log("I see a data change!");
         });
-
-    
+        */
 
         // quando invoco il provider d3Service viene richiamato this.$get
         d3Service.then(function(d3) {
 
-        // now you can use d3 as usual!
-        scope.$watch('showPhoto', function (showPhoto){
-         if(showPhoto.value=="false"){
-            //d3.selectAll(".immagini").attr("visibility", "hidden");
-            d3.selectAll("circle").attr("fill", function(d) { return colorOfNode(d.group)});
-          } else {
-            //d3.selectAll(".immagini").attr("visibility", "visible");
-            d3.selectAll("circle").attr("fill", function(d, i) {
-              if(d.photoUrl!=''){
-                return ("url(#"+i+"-icon)");
-              } else {
-                return colorOfNode(d.group)};
-              });
-            }
-          }, true);
-
-          
-
+          // now you can use d3 as usual!
+          scope.$watch('showPhoto', function (showPhoto){
+           if(showPhoto.value=="false"){
+              //d3.selectAll(".immagini").attr("visibility", "hidden");
+              d3.selectAll("circle").attr("fill", function(d) { return colorOfNode(d.group)});
+            } else {
+              //d3.selectAll(".immagini").attr("visibility", "visible");
+              d3.selectAll("circle").attr("fill", function(d, i) {
+                if(d.photoUrl!=''){
+                  return ("url(#"+i+"-icon)");
+                } else {
+                  return colorOfNode(d.group)};
+                });
+              }
+            }, true);
 
           // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
           function colorOfNode(group){
-              /*
-              if(group==1) return '#1f77b4';
-              if(group==2) return '#ff7f0e';
-              if(group==3) return '#2ca02c';
-              if(group==4) return '#d62728';
-              if(group==5) return '#9467bd';
-              */
-              if(group==1) return graph.dataInfo.classe.color;
-              if(group==2) return graph.dataInfo.litPropClasse.color;
-              if(group==3) return graph.dataInfo.objPropClasse.color;
-              if(group==4) return graph.dataInfo.litPropObj.color;
-              if(group==5) return graph.dataInfo.objPropObj.color;
+              if(group==1) return scope.graph.dataInfo.classe.color;
+              if(group==2) return scope.graph.dataInfo.litPropClasse.color;
+              if(group==3) return scope.graph.dataInfo.objPropClasse.color;
+              if(group==4) return scope.graph.dataInfo.litPropObj.color;
+              if(group==5) return scope.graph.dataInfo.objPropObj.color;
           };
 
           var width = 960,
@@ -83,6 +73,8 @@ myAppd3view.directive('d3Graphvisualization',
           var svg = d3.select(elem[0]).append("svg")
             .attr("height", height)
             .attr("width", '100%');
+            // Simplest possible buttons
+        
 
           svg.append("rect")
             .attr("height", height)
@@ -93,6 +85,10 @@ myAppd3view.directive('d3Graphvisualization',
                     .scaleExtent([1/2, 4])
                     .on("zoom", zoomed));
 
+          var _zoom = d3.zoom()
+            .scaleExtent([1/2, 4])
+            .on("zoom", zoomed);
+
           /* svg > gzoom */
           var gzoom = svg.append("g");
 
@@ -100,11 +96,8 @@ myAppd3view.directive('d3Graphvisualization',
             gzoom.attr("transform", d3.event.transform);
           }
 
-          function zoomFunction() {
-            var transform = d3.zoomTransform(this);
-            d3.select(elem[0])
-            .attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
-          }
+          d3.select('#zoom_in').on('click',  function() { _zoom.scaleBy(svg, 2); });
+          d3.select('#zoom_out').on('click',  function() { _zoom.scaleBy(svg, 0.5); })
 
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph) {
@@ -112,7 +105,7 @@ myAppd3view.directive('d3Graphvisualization',
                 clearAll();
                 update();
 
-              scope.$watch('checkboxModel', function(checkboxModel) {
+                scope.$watch('checkboxModel', function(checkboxModel) {
 
                 if(checkboxModel.value1==false)
                   checkboxModel.value2=false;
@@ -129,11 +122,12 @@ myAppd3view.directive('d3Graphvisualization',
                   var nodes = [];
                   var radius = 20;
 
-                  graph.links.forEach(function(l) {
+                  if(graph.nodes.length==0){
+                    alert("no data");
+                  };
 
-                    
+                  graph.links.forEach(function(l) {
                     var visible = true;
-                    
                     graph.nodes.forEach(function(n) {
 
                       if(l.source == n.id || l.target == n.id){
@@ -201,6 +195,17 @@ myAppd3view.directive('d3Graphvisualization',
 
                   graph.nodes.forEach(function(n) {
                     var visible = true;
+                    var photo = '';
+                    if(n.group == '1'){
+                      photo=scope.graph.dataInfo.classe.photo;
+                    }
+                    if(n.group == '3'){
+                      photo=scope.graph.dataInfo.objPropClasse.photo;
+                    }
+                    if(n.group == '5'){
+                      photo=scope.graph.dataInfo.objPropObj.photo;
+                    }
+
                     if(n.group == '1' && scope.checkboxModel.value1==false) { 
                       visible = false;
                     };
@@ -220,6 +225,7 @@ myAppd3view.directive('d3Graphvisualization',
                       url: n.url,
                       group: n.group,
                       photoUrl: n.customProperties[0].value,
+                      photo: photo,
                       shape: n.shape,
                       radius: n.radius, 
                       visible: visible
@@ -318,7 +324,10 @@ myAppd3view.directive('d3Graphvisualization',
                         .attr("r", function(d) { return d.radius; }) // if circle
                         .attr("fill", function(d) { return colorOfNode(d.group)})
                         .attr("fill", function(d, i) {
-                          if(d.shape=="circle" && d.photoUrl!='') {
+                          if(d.shape=="circle" && d.photo!='') {
+                            return ("url(#"+i+"-icon)")
+                          }
+                          else if(d.shape=="circle" && d.photoUrl!='') {
                             return ("url(#"+i+"-icon)")
                           } else {
                             return colorOfNode(d.group)
@@ -336,6 +345,7 @@ myAppd3view.directive('d3Graphvisualization',
                             $parse(attrs.selectedItem).assign(scope.$parent, d);
                           });
 
+                          /*
                           div.transition()
                               .duration(200)
                               .style("opacity", .9);
@@ -344,17 +354,20 @@ myAppd3view.directive('d3Graphvisualization',
                              .style("top",  d3.select(this).attr('cy') + "50px");
 
                           tool_tip.show();
+                          */
                         })
                         .on("mouseout", function(d){
                           d3.select(this).style("stroke", colorOfNode(d.group));
                           d3.select(this).style("stroke-width", "2px");
                           d3.select(this).style("cursor", "default");
 
+                          /*
                           div.transition()
                             .duration(500)
                             .style("opacity", 0);
 
                           tool_tip.hide;
+                          */
                         })
                         .on('dblclick', connectedNodes)
                         .style("stroke", function(d) { return colorOfNode(d.group)})
@@ -403,7 +416,12 @@ myAppd3view.directive('d3Graphvisualization',
                     .attr("y", "0")
                     .attr('patternContentUnits', 'objectBoundingBox')
                     .append("svg:image")
-                        .attr("xlink:href", function(d) { return (d.photoUrl);})
+                        .attr("xlink:href", function(d) { 
+                          if(d.photo!=''){
+                            return d.photo;
+                          } else {
+                            return (d.photoUrl);
+                          } })
                         .attr("height", 1)
                         .attr("width", 1)
                         .attr("x", "0")
@@ -418,7 +436,9 @@ myAppd3view.directive('d3Graphvisualization',
                     .enter().append("g")
                       .append("image")
                       .attr("class", "immagini")
-                      .attr("xlink:href", function (d) { return d.photoUrl; })
+                      .attr("xlink:href", function (d) { if(d.photo != ''){
+                        return d.photo
+                      } else {return d.photoUrl;} })
                       .attr("width", 12)
                       .attr("height", 12)
                       .attr("visibility", "hidden")
@@ -475,19 +495,22 @@ myAppd3view.directive('d3Graphvisualization',
 
                 //text.text(function(d){return d.label;});
 
-                // tooltip (solo teso) di nodi e link
+                // tooltip (solo testo) di nodi e link
                 node.append("title").text(function(d) { return d.id + "\nEntity " + d.label + " is instance of " + d.type; });
                 link.append("title").text(function(d) { return d.label; });
 
                 // Setup the tool tip.  Note that this is just one example, and that many styling options are available.
                 // See original documentation for more details on styling: http://labratrevenge.com/d3-tip/
+                /*
                 var tool_tip = d3.tip()
                   .attr("class", "d3-tip")
                   .offset([-8, 0])
                   .html(function(d) { return "Radius: " + d; });
 
                 d3.select("svg").call(tool_tip);
+                */
 
+               
                 function ticked() {
                   link.attr("x1", function(d) { return d.source.x; })
                       .attr("y1", function(d) { return d.source.y; })
@@ -567,7 +590,6 @@ myAppd3view.directive('d3Graphvisualization',
                         rect.style("opacity", function (o) {
                             return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
                         });
-                        //Reduce the op
                         toggle = 1;
                     } else {
                         //Put them back to opacity=1
@@ -599,7 +621,6 @@ myAppd3view.directive('d3Graphvisualization',
                         label.style("opacity", "0");
                         rect.style("opacity", "0");
 
-                        //Put them back to opacity=1
                         node.transition().duration(5000).style("opacity", 1);
                         link.transition().duration(5000).style("opacity", 1);
                         image.transition().duration(5000).style("opacity", 1);
@@ -608,8 +629,6 @@ myAppd3view.directive('d3Graphvisualization',
                     }
                   } // if (selectedNodeLabel)
                 }); // scope.$watch('selectedNodeLabel', function (selectedNodeLabel) {
-
-
               } //update()
 
               function clearAll() {
@@ -625,20 +644,12 @@ myAppd3view.directive('d3Graphvisualization',
 
               // rimpiazza: var color = d3.scaleOrdinal(d3.schemeCategory10);
               function colorOfNode(group){
-                  /*
-                  if(group==1) return '#1f77b4';
-                  if(group==2) return '#ff7f0e';
-                  if(group==3) return '#2ca02c';
-                  if(group==4) return '#d62728';
-                  if(group==5) return '#9467bd';
-                  */
                   if(group==1) return graph.dataInfo.classe.color;
                   if(group==2) return graph.dataInfo.litPropClasse.color;
                   if(group==3) return graph.dataInfo.objPropClasse.color;
                   if(group==4) return graph.dataInfo.litPropObj.color;
                   if(group==5) return graph.dataInfo.objPropObj.color;
               };
-
             } // if(graph)
           }, true); // scope.$watch('graph', function (graph) { con  deep dirty checking
         }); // d3Service.then(function(d3) {
@@ -648,7 +659,7 @@ myAppd3view.directive('d3Graphvisualization',
     controller.$inject = ['$scope'];
 
   function controller($scope) {
-    $scope.$watch('dataInfo', function(projectIds) {
+    $scope.$watch('graph.dataInfo', function(projectIds) {
       console.log(projectIds);
     });
   }

@@ -40,6 +40,24 @@
     </div>
 </div>
 
+<div class="ui darkRedBorderTop segment">
+  <div class="ui-blue-ribbon-label-override">Import data</div>
+  <input type="file" id="fileImport" name="file"/>
+  <input type="button" ng-click="importJSON()" value="Upload" />
+  <div class="ui success message" ng-if="showSuccessMessage">
+      <i class="close icon"></i>
+      <div class="header">
+        Upload successful.
+      </div>
+    </div>
+    <div class="ui negative message" ng-if="showErrorMessage">
+      <i class="close icon"></i>
+      <div class="header">
+        Error while uploading.
+      </div>
+    </div>
+</div>
+
 <div id="prefixesBox" class="ui darkRedBorderTop segment">
    <!-- <div class="ribbon-label-overrided left">Prefixes</div>-->
    <div class="ui-blue-ribbon-label-override">Prefixes</div>

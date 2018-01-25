@@ -131,19 +131,18 @@ contactEndpointModule.controller('contactEndpointCtrl',
     // quando si seleziona uno sparql endopoint
     $scope.selectEndpoint = function (endpoint) {
       // graph default text
-
       $scope.selectedEndpointUrl = endpoint.url;
       $scope.selectedEndpointName = endpoint.name;
-      $scope.selectedGraph = "";
+      $scope.selectedGraph = '';
 
       $scope.datasetsAndGraphs.forEach(function(endpoint){
         if(endpoint.endpointUrl === $scope.selectedEndpointUrl){
           $scope.graphList = endpoint.graphs;
+          if($scope.graphList.length==1){
+            $scope.selectGraph($scope.graphList[0]);
+          }
         }
       });
-
-      // TODO
-      $('#graphDropdown .ui.dropdown').dropdown('restore placeholder text');
     };
 
     // quando si seleziona un grafo
@@ -167,24 +166,36 @@ contactEndpointModule.controller('contactEndpointCtrl',
             $scope.restoreALLToDefault();
           })
           .error(function(data, status, headers, config){
+            $scope.successMessageToAppear = false;
+            $scope.attentionMessageToAppear = false;
             $scope.negativeMessageToAppear = true;
+            $scope.endpointChangeMessageToAppear = false;
           });
         } else {  // se non è stato selezionato l'endpoint o il grafo
           $scope.attentionMessageToAppear = true;
+          $scope.successMessageToAppear = false;
+          $scope.negativeMessageToAppear = false;
+          $scope.endpointChangeMessageToAppear = false;
         }
     };
 
     // clear button
     $scope.restoreEndpointGraphDropdownToDefault = function(){
-      $('#endpointGraphDropdown .ui.dropdown').dropdown('restore placeholder text');
-      $rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
-      $rootScope.selectedEndpointName = $scope.selectedEndpointName;
-      $rootScope.selectedGraph = $scope.selectedGraph;
+      $('#endpointGraphDropdown .ui.dropdown').dropdown('set placeholder text', ' ')
+      //$rootScope.selectedEndpointUrl = $scope.selectedEndpointUrl;
+      //$rootScope.selectedEndpointName = $scope.selectedEndpointName;
+      //$rootScope.selectedGraph = $scope.selectedGraph;
+
+      $scope.selectedEndpointUrl = '';
+      $scope.selectedEndpointName = '';
+      $scope.selectedGraph = '';
 
       $scope.successMessageToAppear = false;
       $scope.negativeMessageToAppear = false;
       $scope.attentionMessageToAppear = false;
       $scope.endpointChangeMessageToAppear = false;
+
+      $scope.graphList = [];
     }
 
     // classi del dataset

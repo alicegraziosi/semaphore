@@ -43,13 +43,14 @@ rm nohup.out
 nohup java -server -Xmx4g -Djetty.port=8093 -jar blazegraph.jar &
 
 ***run fuseki server
+cd /var/www/graziosi/
 cd fuseki\ 1/springer 
-nohup ./fuseki-server --port=8094
+nohup ./fuseki-server --port=8094 &
 
 per killare il processo:
 fuser -k 8094/tcp
 
-*** start app script
+*** start app script nuovo
 cd /var/www/graziosi/garrproject/semaphore
 ./startApp.bat
 

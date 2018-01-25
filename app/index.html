@@ -48,17 +48,17 @@
     <!-- Accordion -->
     <div class="ui vertical following fluid accordion text menu" ng-controller="contactEndpointCtrl">
 
-      <div class=" active item">
+      <div class="active item">
+       
         <a class="title">
           <i class="dropdown icon"></i>
+          <div class="label-overrided label-overrided-red">
+          1
+          </div>
           <b>Change current SPARQL endpoint or graph</b>
         </a>
         <div class="content menu" id="endpointGraphDropdown">
-           <div class="ui checkbox">
-            <input type="checkbox" name="example">
-            <label>Make my profile visible</label>
-          </div>
-
+         
           <div class="ui segment">
             <div class="item">
                 <h5 class="header">Current SPARQL endpoint name</h5>
@@ -77,7 +77,7 @@
           <div class="header">Select a SPARQL endpoint</div>
           <div class="ui fluid search selection dropdown" ng-click="dropdown();">
             <i class="dropdown icon" ng-click="dropdown();"></i>
-            <div class="default text">Select a SPARQL endpoint</div>
+            <div class="default text">{{selectedEndpointName}}</div>
               <div class="menu">
                 <div class="item"
                      ng-click="selectEndpoint(endpoint);"
@@ -92,7 +92,7 @@
             <div id="graphDropdown">
              <div class="ui fluid search selection dropdown" ng-click="dropdown();">
               <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select a graph</div>
+              <div class="default text">{{selectedGraph}}</div>
               <div class="menu">
                 <div class="item"
                      ng-click="selectGraph(graph)"
@@ -110,19 +110,19 @@
               Clear
             </button>
 
-            <div ng-if="true" ng-model="successMessageToAppear" class="ui tiny success message">
+            <div ng-show="successMessageToAppear == true" class="ui tiny success message">
               <i class="close icon" ng-click="dismissMessage()"></i>
               <div class="header">SPARQL endpoint succesfully reached!</div>
               <p>You may now query the dataset.</p>
             </div>
 
-            <div ng-if="negativeMessageToAppear" class="ui tiny negative message">
+            <div ng-if="true" ng-model="negativeMessageToAppear" class="ui tiny negative message">
               <i ng-click="dismissMessage()" class="close icon"></i>
               <div class="header">SPARQL endpoint unreachable :(</div>
               <p>Retry later or choose another one.</p>
             </div>
 
-            <div ng-if="attentionMessageToAppear" class="ui tiny yellow message">
+            <div ng-if="true" ng-model="attentionMessageToAppear" class="ui tiny yellow message">
               <i class="close icon" ng-click="dismissMessage()"></i>
               <div class="header"> Please select a SPARQL endpoint and graph!</div>
             </div>
@@ -140,6 +140,9 @@
       <div class="active item">
         <a class="title active">
           <i class="dropdown icon"></i>
+          <div class="label-overrided label-overrided-red">
+          2
+          </div>
           <b>Select data</b>
         </a>
         <div class="content active menu" id="datasetInfoRichieste">
@@ -360,7 +363,9 @@
       </div>
     </div>
 
+    <!--
     <a href="#!/addEndpoint" class="item right">add Endpoint</a>
+    -->
 
     <a href="#!/about" class="item right">about</a>
 

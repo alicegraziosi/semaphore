@@ -213,6 +213,11 @@ span.limit-ellipsis {
     transition: background .1s ease;
 }
 
+.label-overrided-red{
+  background-color: #b92b27;
+  color: white;
+}
+
 .horizontal-mini-label{
     display: inline-block;
     line-height: 1;
@@ -426,4 +431,13 @@ body p, body h5, body b, body div, body a, body label, body .ui.label, body h5 .
 /*LOADING BAR*/
 #loading-bar .bar {
   position: relative;
+}
+
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+button {
+  padding: 10px 20px;
 }

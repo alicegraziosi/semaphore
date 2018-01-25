@@ -79,7 +79,6 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
     $scope.applyAndCloseModal = function(){
       // apply changes
       $rootScope.dataInfo = angular.copy($scope.localdataInfo);
-      $scope.closeModal();
     };
 
     // close all modal (si sovrappongono in semantic ui)
@@ -99,12 +98,11 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
        var uploadUrl = "fileUpload";
        var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
        promise.then(function(res) {
-         console.log(res);
          $scope.image1src = defaultPath + res.data.path;
+         $scope.localdataInfo.classe.photo = $scope.image1src;
          $scope.showSuccessMessage = true;
        })
        .catch(function(res){
-         console.log(res);
          $scope.showErrorMessage = true;
        });
     };
@@ -118,6 +116,8 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
        var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
        promise.then(function(res) {
          $scope.image2src = defaultPath + res.data.path;
+         $scope.localdataInfo.objPropClasse.photo = $scope.image2src;
+         $scope.showSuccessMessage = true;
        });
     };
 
@@ -130,6 +130,8 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
        var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
        promise.then(function(res) {
          $scope.image3src = defaultPath + res.data.path;
+         $scope.localdataInfo.objPropObj.photo = $scope.image3src;
+         $scope.showSuccessMessage = true;
        });
     };
 

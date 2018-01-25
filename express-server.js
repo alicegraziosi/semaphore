@@ -122,6 +122,7 @@ router.post('/savetofile', function(request, response) {
 // Return the generated file for download
 router.get("/download", function (req, res) {
     var filename = req.query.filename;
+    var path = __dirname + "/" + filename;
     var path = __dirname + "\\" + filename;
     console.log("file richiesto : " + filename + "...");
     res.download(path, filename, function(err){

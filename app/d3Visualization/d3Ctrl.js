@@ -36,8 +36,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       value5 : true
      };
 
-     
-
     //$scope.showLoader = true;
 
       if($rootScope.dataInfo == undefined){
@@ -48,7 +46,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             label : 'Band',
             type : "obj",
             group: 1,
-            color :'#1f77b4'
+            color :'#1f77b4',
+            photo : ''
           },
           litPropClasse: {
             uri : 'http://dbpedia.org/property/genre',
@@ -63,23 +62,25 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             type : 'obj',
             group: 3,
             color :  '#2ca02c',
+            photo : ''
           },
           litPropObj: {
-              uri : 'http://dbpedia.org/property/yearsActive',
-              label : 'years active',
-              type : 'lit',
-              group: 4,
-              color : '#d62728',
-              range: 'former band member'
+            uri : 'http://dbpedia.org/property/yearsActive',
+            label : 'years active',
+            type : 'lit',
+            group: 4,
+            color : '#d62728',
+            range: 'former band member'
           },
           objPropObj: {
-              uri : ' ',
-              label : ' ',
-              type : 'obj',
-              group: 5,
-              color : '#9467bd',
-              range: 'former band member'
-            }
+            uri : ' ',
+            label : ' ',
+            type : 'obj',
+            group: 5,
+            color : '#9467bd',
+            range: 'former band member',
+            photo : ''
+          }
         };
 
         $scope.dataInfo = $rootScope.dataInfo;
@@ -122,13 +123,11 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
       $scope.dataInfo = $rootScope.dataInfo;
 
-        $scope.clusterClasse = $rootScope.dataInfo.classe;
-        $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
-        $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
-        $scope.litPropObj = $rootScope.dataInfo.litPropObj;
-        $scope.objPropObj = $rootScope.dataInfo.objPropObj;
-
-
+      $scope.clusterClasse = $rootScope.dataInfo.classe;
+      $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
+      $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
+      $scope.litPropObj = $rootScope.dataInfo.litPropObj;
+      $scope.objPropObj = $rootScope.dataInfo.objPropObj;
     });
 
     $rootScope.$watch('graph', function(graph) {
@@ -216,6 +215,10 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
     $scope.exportJSON = function () {
         GetJSONfileService.exportJSON($rootScope.graph);
+    };
+
+    $scope.importJSON = function () {
+        GetJSONfileService.importJSON($rootScope.graph);
     };
 
     $scope.exportPNG = function(){

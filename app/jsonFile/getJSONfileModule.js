@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('getJSONfileModule', [])
+angular.module('getJSONfileModule', ['customiseModule'])
 
-.factory('GetJSONfileService', ['$http', function($http){
+.factory('GetJSONfileService', ['$http', 'fileUpload', function($http, fileUpload){
    var get = function(filename){
       return $http.get(filename); // this will return a promise to controller
     }
@@ -235,6 +235,7 @@ angular.module('getJSONfileModule', [])
         method: 'POST',
         //url: $rootScope.jsonFileServiceUrl+"savetofile",
         url: "http://eelst.cs.unibo.it:8095/api/savetofile",
+        //url: "http://localhost:8095/api/savetofile",
         // use $.param jQuery function to serialize data from JSON
         data: $.param(jsonData),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -245,6 +246,7 @@ angular.module('getJSONfileModule', [])
         var filename = response.data;
         //window.open($rootScope.jsonFileServiceUrl+"download?filename="+filename);
         window.open("http://eelst.cs.unibo.it:8095/api/download?filename="+filename);
+        //window.open("http://localhost:8095/api/download?filename="+filename);
       },
       function errorCallback(response){
         // failure callback
@@ -258,12 +260,29 @@ angular.module('getJSONfileModule', [])
     );
   }
 
+  var importJSON = function(jsonData) {
+    var file = document.getElementById('fileImport').files[0];
+    var uploadUrl = "fileUpload";
+    var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
+    var defaultPath = "files/";
+    promise.then(function(res) {
+      var fileImport = defaultPath + res.data.path;
+      console.log(fileImport);
+      //$scope.showSuccessMessage = true;
+    })
+    .catch(function(res){
+      //$scope.showErrorMessage = true;
+      console.log("no");
+    });
+};
+
   return {
     get: get,
     createJsonFile: createJsonFile,
     createNodeLiteral: createNodeLiteral,
     createNodeObject: createNodeObject,
-    exportJSON: exportJSON
+    exportJSON: exportJSON,
+    importJSON: importJSON
   };
 }])
 

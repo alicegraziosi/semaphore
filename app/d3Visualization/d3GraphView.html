@@ -21,8 +21,14 @@
             class="ui active inverted dimmer">
             <div class="ui large text loader">Loading</div>
           </div>
-
-
+          <div class="ui icon buttons">
+            <button id="zoom_in" class="ui button">
+              <i class="zoom icon"></i>
+            </button>
+            <button id="zoom_out" class="ui button">
+              <i class="zoom out icon"></i>
+            </button>
+          </div>
           <d3-graphvisualization graph="graph"
                                  selected-item="selected"
                                  selected-node-label="selectedNodeLabel"
@@ -79,7 +85,7 @@
                     </svg>
 
                     <h5>
-                      <div class="ui slider checkbox">
+                      <div class="ui checkbox">
                         <input type="checkbox" ng-model="checkboxModel.value1"
                         ng-true-value="true" ng-false-value="false">
                         <label>Class {{dataInfo.classe.label}}</label>
@@ -97,7 +103,7 @@
                     </svg>
                       <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropClasse[0].color}}" >    {{numClassDatatypeProperties}}
                       </div>-->
-                      <div class="ui slider checkbox">
+                      <div class="ui checkbox">
                         <input type="checkbox" ng-model="checkboxModel.value2"
                         ng-true-value="true" ng-false-value="false">
                         <label>Property {{dataInfo.litPropClasse.label}} of {{dataInfo.classe.label}}</label>
@@ -115,7 +121,7 @@
                       <!--
                       <div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropClasse.color}}">    {{numClassDatatypeProperties}}
                       </div>-->
-                      <div class="ui slider checkbox">
+                      <div class="ui checkbox">
                         <input type="checkbox" ng-model="checkboxModel.value3"
                         ng-true-value="true" ng-false-value="false">
                         <label>Property {{dataInfo.objPropClasse.label}} of {{dataInfo.classe.label}}</label>
@@ -131,7 +137,7 @@
                     <h5 class="header">
                       <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.litPropObj[0].color}}" > {{numObjDatatypeProperties}}
                       </div>-->
-                      <div class="ui slider checkbox">
+                      <div class="ui checkbox">
                         <input type="checkbox" ng-model="checkboxModel.value4"
                         ng-true-value="true" ng-false-value="false">
                         <label>Property {{dataInfo.litPropObj.label}} of {{dataInfo.objPropObj.range}}</label>
@@ -148,7 +154,7 @@
                     <h5 class="header">
                       <!--<div class="label-overrided horizontal-mini-label" style="background-color: {{dataInfo.objPropObj[0].color}}">{{numObjObjectProperties}}
                       </div>-->
-                      <div class="ui slider checkbox">
+                      <div class="ui checkbox">
                         <input type="checkbox" ng-model="checkboxModel.value5"
                         ng-true-value="true" ng-false-value="false">
                         <label>Property {{dataInfo.objPropObj.label}} of {{dataInfo.objPropObj.range}}</label>
