@@ -261,7 +261,7 @@ angular.module('queryDatasetModule', [])
         query += ' FROM <' + graph + '> ';
       }
 
-      query += `{ ?classe a ?classUri. } LIMIT 500`;
+      query += `{ ?classe a ?classUri. } LIMIT 1500`;
 
       //Va bene sia per dbpedia che per semanticLancet
       console.log("Query classi: " + query);
@@ -293,14 +293,21 @@ angular.module('queryDatasetModule', [])
                   'FILTER(!isLiteral(?propertyUri)) ' +
                   '}';
       */
-      query += '{ ?propertyUri rdfs:domain  ?superclass; '+
-                  'rdfs:label ?propertyLabel '+
+      if(endpoint!='http://two.eelst.cs.unibo.it:8181/data/query'){
+        query += '{ ?propertyUri rdfs:domain  ?superclass. '+
+                  'OPTIONAL { ?propertyUri rdfs:label ?propertyLabel. } '+
                   'FILTER (lang(?propertyLabel) = "en") '+
                   '<'+ selectedClass +'> rdfs:subClassOf* ?superclass. ' +
                   'FILTER(!isLiteral(?propertyUri)) ' +
                   '}';
-      console.log("queryDatasetClassObjectProperty");
-      console.log(prefixes + " " + query)
+      } else {
+        query += 'WHERE { ?s a <'+ selectedClass +'>. '+
+                  '?s ?propertyUri ?o. '+
+                  'OPTIONAL { ?propertyUri rdfs:label ?propertyLabel. }'+
+                  'FILTER(!isLiteral(?o)) '+
+                  '} LIMIT 100';
+      }
+      console.log(prefixes + " " + query);
       var encodedquery = encodeURIComponent(prefixes + query);
       //var format = "application/sparql-results+json";
       //var endcodedformat = encodeURIComponent(format);
@@ -326,11 +333,19 @@ angular.module('queryDatasetModule', [])
       obj.forEach(function(ob, index){
         query += '<' + ob + '> ';
       });
-      query +=    ' } ?soggetto ?propertyUri ?p. '+
-                  'FILTER(!isLiteral(?p)) ' +
-                  '?propertyUri rdfs:label ?propertyLabel. '+
-                  'FILTER (lang(?propertyLabel) = "en")'+
-                  '}';
+
+      if(endpoint!='http://two.eelst.cs.unibo.it:8181/data/query'){
+        query +=    ' } ?soggetto ?propertyUri ?p. '+
+                    'FILTER(!isLiteral(?p)) ' +
+                    '?propertyUri rdfs:label ?propertyLabel. '+
+                    'FILTER (lang(?propertyLabel) = "en")'+
+                    '}';
+      } else {
+        query +=    ' } ?soggetto ?propertyUri ?p. '+
+                    'FILTER(!isLiteral(?p)) ' +
+                    'OPTIONAL {?propertyUri rdfs:label ?propertyLabel.} '+
+                    '}';
+      }
       console.log(query);
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       //var format = "application/sparql-results+json";
@@ -351,12 +366,22 @@ angular.module('queryDatasetModule', [])
       if(graph != "default"){
         query += ' FROM <' + graph + '> ';
       }
-      query += 'WHERE { ?s a <'+ selectedClass +'>. '+
+      if(endpoint!='http://two.eelst.cs.unibo.it:8181/data/query'){
+        query += 'WHERE { ?s a <'+ selectedClass +'>. '+
+                    '?s ?propertyUri ?o. '+
+                    'OPTIONAL { ?propertyUri rdfs:label ?propertyLabel. }'+
+                    'FILTER(isLiteral(?o) || ?o = xsd:string ) '+
+                    'FILTER (lang(?propertyLabel) = "en") '+
+                    '} LIMIT 100';
+      } else {
+
+        query += 'WHERE { ?s a <'+ selectedClass +'>. '+
                   '?s ?propertyUri ?o. '+
-                  '?propertyUri rdfs:label ?propertyLabel. '+
+                  'OPTIONAL { ?propertyUri rdfs:label ?propertyLabel. }'+
                   'FILTER(isLiteral(?o) || ?o = xsd:string ) '+
-                  'FILTER (lang(?propertyLabel) = "en") '+
                   '} LIMIT 100';
+      }
+
       console.log(query);
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
@@ -382,11 +407,18 @@ angular.module('queryDatasetModule', [])
       obj.forEach(function(ob, index){
         query += '<' + ob + '>';
       });
-      query += '} ?soggetto ?propertyUri ?o. '+
-                  '?propertyUri rdfs:label ?propertyLabel. '+
-                  'FILTER(isLiteral(?o)) '+
-                  'FILTER (lang(?propertyLabel) = "en") '+
-                  '}';
+      if(endpoint!='http://two.eelst.cs.unibo.it:8181/data/query'){
+        query += '} ?soggetto ?propertyUri ?o. '+
+                    '?propertyUri rdfs:label ?propertyLabel. '+
+                    'FILTER(isLiteral(?o)) '+
+                    'FILTER (lang(?propertyLabel) = "en") '+
+                    '}';
+      } else {
+        query += '} ?soggetto ?propertyUri ?o. '+
+                    '?propertyUri rdfs:label ?propertyLabel. '+
+                    'FILTER(isLiteral(?o)) '+
+                    '}';
+      }
       console.log(query);
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
@@ -409,19 +441,33 @@ angular.module('queryDatasetModule', [])
       if(graph != "default"){
         query += ' FROM <' + graph + '> ';
       }
-      query += ' WHERE { ' +
-               '?sogg a <' + selectedClass + '>; ' +
-                      'rdfs:label ?soggLabel. '+
-               '<' + selectedClass + '> rdfs:label ?soggType. ';
 
-      classDatatypeProperties.forEach(function(classDatatypeProperty, index){
-        query += '?sogg <' + classDatatypeProperty.uri + '> ?soggPropUri' + index + '. ';
-        query += '<' + classDatatypeProperty.uri + '> rdfs:label ?propType. ';
-        query += 'OPTIONAL{ ?soggPropUri' + index + ' rdfs:label ?soggPropLabel' + index + '. ';
-        query += 'FILTER(lang(?soggPropLabel' + index + ') = "en")} '
-      });
+      if(endpoint!='http://two.eelst.cs.unibo.it:8181/data/query'){
+        query += ' WHERE { ' +
+                 '?sogg a <' + selectedClass + '>; ' +
+                        'rdfs:label ?soggLabel. '+
+                 '<' + selectedClass + '> rdfs:label ?soggType. ';
 
-      query += 'FILTER(lang(?soggType) = "en") FILTER(lang(?propType) = "en") FILTER(lang(?soggLabel) = "en")} LIMIT 50';
+        classDatatypeProperties.forEach(function(classDatatypeProperty, index){
+          query += '?sogg <' + classDatatypeProperty.uri + '> ?soggPropUri' + index + '. ';
+          query += '<' + classDatatypeProperty.uri + '> rdfs:label ?propType. ';
+          query += 'OPTIONAL{ ?soggPropUri' + index + ' rdfs:label ?soggPropLabel' + index + '. ';
+          query += 'FILTER(lang(?soggPropLabel' + index + ') = "en")} '
+        });
+
+        query += 'FILTER(lang(?soggType) = "en") FILTER(lang(?propType) = "en") FILTER(lang(?soggLabel) = "en")} LIMIT 50';
+      } else {
+        query += ' WHERE { ' +
+                 '?sogg a <' + selectedClass + '>. ' +
+                 'OPTIONAL{ ?sogg rdfs:label ?soggLabel. } '+
+                 'OPTIONAL{ <' + selectedClass + '> rdfs:label ?soggType. }';
+
+        classDatatypeProperties.forEach(function(classDatatypeProperty, index){
+          query += '?sogg <' + classDatatypeProperty.uri + '> ?soggPropUri' + index + '. ';
+          query += 'OPTIONAL{ <' + classDatatypeProperty.uri + '> rdfs:label ?propType. } ';
+          query += 'OPTIONAL{ ?soggPropUri' + index + ' rdfs:label ?soggPropLabel' + index + '. } } LIMIT 50';
+        });
+      }
       console.log(query);
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
@@ -441,18 +487,27 @@ angular.module('queryDatasetModule', [])
       if(graph != "default"){
         query += ' FROM <' + graph + '> ';
       }
-      query += ' WHERE { ' +
-                    '?sogg a <' + selectedClass + '>; ' +
-                          'rdfs:label ?soggLabel; ' +
-                          '?p ?oo. ?p rdfs:label ?pLabel. ' +
-                    '?oo rdfs:label ?ooLabel. ' +
-                    '<' + selectedClass + '> rdfs:label ?soggType. '+
-                    'FILTER(lang(?soggLabel) = "en") ' +
-                    'FILTER(lang(?pLabel) = "en") ' +
-                    'FILTER(lang(?ooLabel) = "en") ' +
-                    'FILTER(lang(?soggType) = "en") ' +
-                    'FILTER ( ';
-
+      if(endpoint!='http://two.eelst.cs.unibo.it:8181/data/query'){
+        query += ' WHERE { ' +
+                      '?sogg a <' + selectedClass + '>; ' +
+                            'rdfs:label ?soggLabel; ' +
+                            '?p ?oo. ?p rdfs:label ?pLabel. ' +
+                      '?oo rdfs:label ?ooLabel. ' +
+                      '<' + selectedClass + '> rdfs:label ?soggType. '+
+                      'FILTER(lang(?soggLabel) = "en") ' +
+                      'FILTER(lang(?pLabel) = "en") ' +
+                      'FILTER(lang(?ooLabel) = "en") ' +
+                      'FILTER(lang(?soggType) = "en") ' +
+                      'FILTER ( ';
+      } else {
+        query += ' WHERE { ' +
+                      '?sogg a <' + selectedClass + '>. ' +
+                            'OPTIONAL{?sogg rdfs:label ?soggLabel } ' +
+                            '?sogg ?p ?oo. OPTIONAL{ ?p rdfs:label ?pLabel.' +
+                      '?oo rdfs:label ?ooLabel. ' +
+                      '<' + selectedClass + '> rdfs:label ?soggType. }'+
+                      'FILTER ( ';
+      }
       classObjectProperties.forEach(function(classObjectProperty){
         query += '?p = <' + classObjectProperty.uri + '> ';
         if(classObjectProperties.indexOf(classObjectProperty)!=classObjectProperties.length-1){
@@ -545,22 +600,40 @@ angular.module('queryDatasetModule', [])
       if(graph != "default"){
         query += ' FROM <' + graph + '> ';
       }
-      query += 'WHERE { ';
-      query += 'VALUES ?sogg { ';
-        obj.forEach(function(ob, index){
-          query += '<' + ob + '>';
+      if(endpoint!='http://two.eelst.cs.unibo.it:8181/data/query'){
+          query += 'WHERE { ';
+          query += 'VALUES ?sogg { ';
+            obj.forEach(function(ob, index){
+              query += '<' + ob + '>';
+            });
+            query += ' } ?sogg rdfs:label ?soggLabel. '+
+                   '<' + selectedClass + '> rdfs:label ?soggType. ';
+
+
+
+          classDatatypeProperties.forEach(function(classDatatypeProperty, index){
+            query += '?sogg <' + classDatatypeProperty.uri + '> ?soggPropUri' + index + '. ';
+            query += '<' + classDatatypeProperty.uri + '> rdfs:label ?propType. ';
+            query += 'OPTIONAL{ ?soggPropUri' + index + ' rdfs:label ?soggPropLabel' + index + '. ';
+            query += 'FILTER(lang(?soggPropLabel' + index + ') = "en")} '
+          });
+
+          query += 'FILTER(lang(?soggType) = "en") FILTER(lang(?propType) = "en") FILTER(lang(?soggLabel) = "en")}';
+      } else {
+        query += 'WHERE { ';
+        query += 'VALUES ?sogg { ';
+          obj.forEach(function(ob, index){
+            query += '<' + ob + '>';
+          });
+          query += ' } OPTIONAL { ?sogg rdfs:label ?soggLabel. ' +
+                 '<' + selectedClass + '> rdfs:label ?soggType. } ';
+
+        classDatatypeProperties.forEach(function(classDatatypeProperty, index){
+          query += '?sogg <' + classDatatypeProperty.uri + '> ?soggPropUri' + index + '. ';
+          query += 'OPTIONAL{ <' + classDatatypeProperty.uri + '> rdfs:label ?propType. }';
+          query += 'OPTIONAL{ ?soggPropUri' + index + ' rdfs:label ?soggPropLabel' + index + '. } } '
         });
-        query += ' } ?sogg rdfs:label ?soggLabel. '+
-               '<' + selectedClass + '> rdfs:label ?soggType. ';
-
-      classDatatypeProperties.forEach(function(classDatatypeProperty, index){
-        query += '?sogg <' + classDatatypeProperty.uri + '> ?soggPropUri' + index + '. ';
-        query += '<' + classDatatypeProperty.uri + '> rdfs:label ?propType. ';
-        query += 'OPTIONAL{ ?soggPropUri' + index + ' rdfs:label ?soggPropLabel' + index + '. ';
-        query += 'FILTER(lang(?soggPropLabel' + index + ') = "en")} '
-      });
-
-      query += 'FILTER(lang(?soggType) = "en") FILTER(lang(?propType) = "en") FILTER(lang(?soggLabel) = "en")}';
+      }
 
       var encodedquery = encodeURIComponent(prefixes + " " + query);
       var format = "application/sparql-results+json";
@@ -584,16 +657,26 @@ angular.module('queryDatasetModule', [])
         obj.forEach(function(ob, index){
           query += '<' + ob + '>';
         });
-        query +='} ?sogg rdfs:label ?soggLabel; ' +
-                      '<' + classObjectProperties[0].uri + '> ?oo; ' +
-                      '?p ?oo. '+
-                      '<' + classObjectProperties[0].uri + '> rdfs:label ?pLabel. ' +
-                    '?oo rdfs:label ?ooLabel. ' +
-                    '<' + selectedClass + '> rdfs:label ?soggType. ';
+        if(endpoint!='http://two.eelst.cs.unibo.it:8181/data/query'){
 
-      query +=      'FILTER(lang(?soggLabel) = "en") ' +
-                    'FILTER(lang(?pLabel) = "en") ' +
-                    'FILTER(lang(?ooLabel) = "en") FILTER(lang(?soggType) = "en")';
+          query +='} ?sogg rdfs:label ?soggLabel; ' +
+                        '<' + classObjectProperties[0].uri + '> ?oo; ' +
+                        '?p ?oo. '+
+                        '<' + classObjectProperties[0].uri + '> rdfs:label ?pLabel. ' +
+                      '?oo rdfs:label ?ooLabel. ' +
+                      '<' + selectedClass + '> rdfs:label ?soggType. ';
+
+         query +=     'FILTER(lang(?soggLabel) = "en") ' +
+                      'FILTER(lang(?pLabel) = "en") ' +
+                      'FILTER(lang(?ooLabel) = "en") FILTER(lang(?soggType) = "en")';
+      } else {
+         query +='} OPTIONAL { ?sogg rdfs:label ?soggLabel. } ' +
+                      '?sogg <' + classObjectProperties[0].uri + '> ?oo; ' +
+                      '?p ?oo. '+
+                      'OPTIONAL { <' + classObjectProperties[0].uri + '> rdfs:label ?pLabel. ' +
+                    '?oo rdfs:label ?ooLabel. ' +
+                    '<' + selectedClass + '> rdfs:label ?soggType. } ';
+      }
 
       query += '}';
       console.log(query);
@@ -654,7 +737,7 @@ angular.module('queryDatasetModule', [])
         query += ' FROM <' + graph + '> ';
       }
       query += 'WHERE { <' + classObjectProperties[0].uri + '> rdfs:range ?rangeUri. }';
-
+      console.log(query);
       var encodedquery = encodeURIComponent(prefixes + query);
       var format = "application/sparql-results+json";
       var endcodedformat = encodeURIComponent(format);

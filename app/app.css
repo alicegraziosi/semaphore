@@ -62,11 +62,6 @@ div.pusher{
   box-shadow: none;
 }
 
-/* dropdown menu */
-.ui.selection.dropdown{
-  border: none;
-}
-
 /* d3 visualization styles */
 #graph_box{
   background-color: rgb(251, 251, 251);
@@ -440,4 +435,14 @@ body p, body h5, body b, body div, body a, body label, body .ui.label, body h5 .
 }
 button {
   padding: 10px 20px;
+}
+
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }

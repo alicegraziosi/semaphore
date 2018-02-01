@@ -16,6 +16,10 @@
           <h5 class="header">Graph</h5>
           <p>{{selectedGraph}}</p>
       </div>
+
+      <button class="ui mini button" id="left-sidebar-toggle-button" ng-click="openMenu()">
+        Change dataset and explore data
+      </button>
   </div>
 </div>
 
@@ -34,17 +38,26 @@
 
 <div class="ui darkRedBorderTop segment">
   <!--<div class="ribbon-label-overrided left">Export data</div>-->
-  <div class="ui-blue-ribbon-label-override">Export data</div>
-    <div class="ui mini button" download ng-click="exportJSON(); exportPNG();">
-      <i class="small download icon"></i>Export data as JSON and visualisation as PNG
-    </div>
-</div>
+  <div class="ui-blue-ribbon-label-override">Export and import data</div>
 
-<div class="ui darkRedBorderTop segment">
-  <div class="ui-blue-ribbon-label-override">Import data</div>
-  <input type="file" id="fileImport" name="file"/>
-  <input type="button" ng-click="importJSON()" value="Upload" />
-  <div class="ui success message" ng-if="showSuccessMessage">
+  <div class="ui fluid mini basic button" download ng-click="exportJSON(); exportPNG();">
+    <i class="ui download icon"></i>Export data as JSON and visualisation as PNG
+  </div>
+
+  <div class="ui divider"></div>
+
+  <label for="embedpollfileinput" class="ui left attached mini basic button">
+    Choose file
+  </label>
+
+  <input type="file" (change)="fileEvent($event)" class="inputfile" id="embedpollfileinput" />
+  <div class="right attached ui mini basic button" ng-click="importJSON()">
+    <i class="ui upload icon"></i>
+    Upload
+  </div>
+  <div>{{fileName}}</div>
+
+    <div class="ui success message" ng-if="showSuccessMessage">
       <i class="close icon"></i>
       <div class="header">
         Upload successful.
@@ -56,6 +69,7 @@
         Error while uploading.
       </div>
     </div>
+
 </div>
 
 <div id="prefixesBox" class="ui darkRedBorderTop segment">

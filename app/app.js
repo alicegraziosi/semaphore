@@ -11,8 +11,8 @@ angular.module('myApp', [
   'addEndpointModule',
   'd3Module',
   'myApp.about',
-  'myApp.d3view',
-  'myApp.version'
+  'myApp.d3view'
+  //'myApp.version'
 ])
 
 .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

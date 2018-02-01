@@ -34,7 +34,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       value3 : true,
       value4 : true,
       value5 : true
-     };
+    };
 
     //$scope.showLoader = true;
 
@@ -133,6 +133,14 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     $rootScope.$watch('graph', function(graph) {
       if($rootScope.graph == undefined){
 
+        $scope.checkboxModel = {
+          value1 : true,
+          value2 : true,
+          value3 : true,
+          value4 : true,
+          value5 : true
+        };
+
         // wait for all promises
         $q.all([
           queryDatasetService.queryDataset(),
@@ -194,7 +202,10 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
           $scope.nodeLabels = $scope.nodeLabels.sort();
         }
         $scope.nodeLabels = $rootScope.nodeLabels;
+
+        $rootScope.graph = $scope.graph;
       }
+
 
       $scope.c = $rootScope.dataInfo.classe.label;
       $scope.toggleSelectionClusterOption($scope.c, $scope.litPropClasse);
@@ -204,7 +215,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     $rootScope.$watch('dataInfo', function(dataInfo, dataInfoOld) {
       $scope.dataInfo = angular.copy($rootScope.dataInfo);
       $scope.graph.dataInfo =  $rootScope.dataInfo;
-      console.log("I see a dataaaaaaaa change!1");
     }, true);
 
     $scope.selected = " ";
@@ -218,7 +228,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     };
 
     $scope.importJSON = function () {
-        GetJSONfileService.importJSON($rootScope.graph);
+        GetJSONfileService.importJSON();
+        $scope.fileName = document.getElementById('embedpollfileinput').files[0];
     };
 
     $scope.exportPNG = function(){
@@ -373,4 +384,9 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     $scope.customise = function(){
       $('.ui.modal').modal('show');
     };
+
+    $scope.openMenu = function(){
+      $('.ui.left.sidebar').sidebar('toggle');
+    };
+
 });

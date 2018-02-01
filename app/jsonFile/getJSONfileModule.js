@@ -106,11 +106,15 @@ angular.module('getJSONfileModule', ['customiseModule'])
     data.forEach(function(d){
       if (nodesArray.indexOf(d.sogg.value)==-1){
         nodesArray.push(d.sogg.value);
+        var soggType = "";
+        if(d.soggType != undefined){
+          soggType = d.soggType.value;
+        }
         var node = {
           id: d.sogg.value,
           label: d.soggLabel.value,
           url: d.sogg.value,
-          type: d.soggType.value,
+          type: soggType,
           group: 1,
           shape: "circle",
           radius: 20,
@@ -128,27 +132,38 @@ angular.module('getJSONfileModule', ['customiseModule'])
     var literalNodesObj = [];
     var linksToLiteralsObj = [];
     data.forEach(function(d, index){
-      var soggproplabel0 = "";
+      var soggproplabel0 = d.soggPropUri0.value;
       if(d.soggPropLabel0 !== undefined){
         soggproplabel0 = d.soggPropLabel0.value;
-      } else {
-        soggproplabel0 = d.soggPropUri0.value;
+      }
+      var propType = "";
+      if(d.propType != undefined){
+        propType = d.propType.value;
       }
       var literalNode = {
         id: label+index, // soggPropUri0
         url: d.soggPropUri0.value, //
         label: soggproplabel0,
-        type: d.propType.value,
+        type: propType,
         group: 2,
         shape: "rectangle"
       }
       literalNodesObj.push(literalNode);
 
+      var propType = "";
+      if(d.propType != undefined){
+        propType = d.propType.value;
+      }
+
+      var propType = "";
+      if(d.propType != undefined){
+        propType = d.propType.value;
+      }
       var linkToLiteral = {
         target: label+index, // soggPropUri0
         source: d.sogg.value,
-        type: d.propType.value,
-        label: d.propType.value
+        type: propType,
+        label: propType
       }
       linksToLiteralsObj.push(linkToLiteral);
     });
@@ -169,11 +184,15 @@ angular.module('getJSONfileModule', ['customiseModule'])
     data.forEach(function(d){
       if (nodesArray.indexOf(d.sogg.value)==-1){
         nodesArray.push(d.sogg.value);
+        var soggType = "";
+        if(d.soggType != undefined){
+          soggType = d.soggType.value;
+        }
         var node = {
           id: d.sogg.value,
           label: d.soggLabel.value,
-          type: d.soggType.value,
-          group: 3,
+          type: soggType,
+          group: 1, // o 3???????????????????????????????????????????????????????????
           shape: "circle",
           radius: 20,
           customProperties : [
@@ -188,10 +207,20 @@ angular.module('getJSONfileModule', ['customiseModule'])
       if (nodesArray.indexOf(d.oo.value)==-1){
         // nodi object property della classe scelta
         nodesArray.push(d.oo.value);
+
+        var ooLabel = "";
+        if(d.ooLabel!=undefined){
+          ooLabel = d.ooLabel.value;
+        }
+
+        var ooType = "";
+        if(d.ooType != undefined){
+          ooType = d.ooType.value;
+        }
         var node = {
           id: d.oo.value,
-          label: d.ooLabel.value,
-          type: d.ooLabel.value,
+          label: ooLabel,
+          type: ooType,
           group: 3, // qui è giusto 3
           shape: "circle",
           radius: 20,
@@ -208,11 +237,15 @@ angular.module('getJSONfileModule', ['customiseModule'])
     // link
     var linksObj = [];
     data.forEach(function(d, index){
+      var pLabel = "";
+      if(d.pLabel != undefined){
+        pLabel = d.pLabel.value;
+      }
       var link = {
         target: d.sogg.value,
         source: d.oo.value,
         type: d.p.value,
-        label: d.pLabel.value
+        label: pLabel
       }
       if (_.findWhere(linksObj, link) == null) {
           linksObj.push(link);
@@ -260,19 +293,21 @@ angular.module('getJSONfileModule', ['customiseModule'])
     );
   }
 
-  var importJSON = function(jsonData) {
-    var file = document.getElementById('fileImport').files[0];
+  var importJSON = function() {
+    var file = document.getElementById('embedpollfileinput').files[0];
     var uploadUrl = "fileUpload";
     var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
     var defaultPath = "files/";
     promise.then(function(res) {
       var fileImport = defaultPath + res.data.path;
       console.log(fileImport);
+      return true;
       //$scope.showSuccessMessage = true;
     })
     .catch(function(res){
       //$scope.showErrorMessage = true;
       console.log("no");
+      return false;
     });
 };
 

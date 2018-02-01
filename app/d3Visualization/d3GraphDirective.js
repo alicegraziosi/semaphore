@@ -74,7 +74,7 @@ myAppd3view.directive('d3Graphvisualization',
             .attr("height", height)
             .attr("width", '100%');
             // Simplest possible buttons
-        
+
 
           svg.append("rect")
             .attr("height", height)
@@ -122,35 +122,31 @@ myAppd3view.directive('d3Graphvisualization',
                   var nodes = [];
                   var radius = 20;
 
-                  if(graph.nodes.length==0){
-                    alert("no data");
-                  };
-
                   graph.links.forEach(function(l) {
                     var visible = true;
                     graph.nodes.forEach(function(n) {
 
                       if(l.source == n.id || l.target == n.id){
-                        if(n.group == '1' && scope.checkboxModel.value1==false) { 
+                        if(n.group == '1' && scope.checkboxModel.value1==false) {
                           visible = false;
                         };
 
-                        if(n.group == '3' && scope.checkboxModel.value3==false) { 
+                        if(n.group == '3' && scope.checkboxModel.value3==false) {
                           visible = false;
                         };
 
-                        if(n.group == '5' && scope.checkboxModel.value5==false) { 
+                        if(n.group == '5' && scope.checkboxModel.value5==false) {
                           visible = false;
                         };
                       }
                     });
-                    
+
 
                     links.push({
                       source: l.source,
                       target: l.target,
                       type: l.type,
-                      label: l.label, 
+                      label: l.label,
                       visible: visible
                     });
                   });
@@ -162,23 +158,23 @@ myAppd3view.directive('d3Graphvisualization',
                     graph.nodeLiteral.forEach(function(n) {
 
                       if(l.source == n.id || l.target == n.id){
-                        if(n.group == '1' && scope.checkboxModel.value1==false) { 
+                        if(n.group == '1' && scope.checkboxModel.value1==false) {
                           visible = false;
                         };
 
-                        if(n.group == '3' && scope.checkboxModel.value3==false) { 
+                        if(n.group == '3' && scope.checkboxModel.value3==false) {
                           visible = false;
                         };
 
-                        if(n.group == '5' && scope.checkboxModel.value5==false) { 
+                        if(n.group == '5' && scope.checkboxModel.value5==false) {
                           visible = false;
                         };
 
-                        if(n.group == '2' && scope.checkboxModel.value2==false) { 
+                        if(n.group == '2' && scope.checkboxModel.value2==false) {
                           visible = false;
                         };
 
-                        if(n.group == '4' && scope.checkboxModel.value4==false) { 
+                        if(n.group == '4' && scope.checkboxModel.value4==false) {
                           visible = false;
                         };
                       }
@@ -188,7 +184,7 @@ myAppd3view.directive('d3Graphvisualization',
                       source: l.source,
                       target: l.target,
                       type: l.type,
-                      label: l.label, 
+                      label: l.label,
                       visible: visible
                     });
                   });
@@ -206,18 +202,18 @@ myAppd3view.directive('d3Graphvisualization',
                       photo=scope.graph.dataInfo.objPropObj.photo;
                     }
 
-                    if(n.group == '1' && scope.checkboxModel.value1==false) { 
+                    if(n.group == '1' && scope.checkboxModel.value1==false) {
                       visible = false;
                     };
 
-                    if(n.group == '3' && scope.checkboxModel.value3==false) { 
+                    if(n.group == '3' && scope.checkboxModel.value3==false) {
                       visible = false;
                     };
 
-                    if(n.group == '5' && scope.checkboxModel.value5==false) { 
+                    if(n.group == '5' && scope.checkboxModel.value5==false) {
                       visible = false;
                     };
-                
+
                     nodes.push({
                       id: n.id,
                       label: n.label,
@@ -227,7 +223,7 @@ myAppd3view.directive('d3Graphvisualization',
                       photoUrl: n.customProperties[0].value,
                       photo: photo,
                       shape: n.shape,
-                      radius: n.radius, 
+                      radius: n.radius,
                       visible: visible
                     });
                   });
@@ -235,11 +231,11 @@ myAppd3view.directive('d3Graphvisualization',
                   graph.nodeLiteral.forEach(function(n) {
 
                     var visible = true;
-                    if(n.group == '2' && scope.checkboxModel.value2==false) { 
+                    if(n.group == '2' && scope.checkboxModel.value2==false) {
                       visible = false;
                     };
 
-                    if(n.group == '4' && scope.checkboxModel.value4==false) { 
+                    if(n.group == '4' && scope.checkboxModel.value4==false) {
                       visible = false;
                     };
 
@@ -416,7 +412,7 @@ myAppd3view.directive('d3Graphvisualization',
                     .attr("y", "0")
                     .attr('patternContentUnits', 'objectBoundingBox')
                     .append("svg:image")
-                        .attr("xlink:href", function(d) { 
+                        .attr("xlink:href", function(d) {
                           if(d.photo!=''){
                             return d.photo;
                           } else {
@@ -510,7 +506,7 @@ myAppd3view.directive('d3Graphvisualization',
                 d3.select("svg").call(tool_tip);
                 */
 
-               
+
                 function ticked() {
                   link.attr("x1", function(d) { return d.source.x; })
                       .attr("y1", function(d) { return d.source.y; })

@@ -17,6 +17,7 @@
         <!-- d3-visualization = directive -->
 
         <div class="ui segment">
+
           <div ng-if="showLoader"
             class="ui active inverted dimmer">
             <div class="ui large text loader">Loading</div>
@@ -29,7 +30,8 @@
               <i class="zoom out icon"></i>
             </button>
           </div>
-          <d3-graphvisualization graph="graph"
+
+          <d3-graphvisualization graph="$root.graph"
                                  selected-item="selected"
                                  selected-node-label="selectedNodeLabel"
                                  object-shape="objectShape"
@@ -44,12 +46,12 @@
       </div>
 
 
-        <div class="ui top aligned three wide column">
+        <div class="ui three wide column">
           <h5 class="ui header">
             <input type="checkbox" ng-model="showPhoto.value"
                    ng-true-value="'true'" ng-false-value="'false'">
             Show photograph
-            </h5>
+          </h5>
 
           <div class="ui segment">
             <h5 class="ui header">Hover over node for item information</h5>
@@ -90,12 +92,12 @@
                         ng-true-value="true" ng-false-value="false">
                         <label>Class {{dataInfo.classe.label}}</label>
                       </div>
-                      
+
                     </h5>
                     <p>{{dataInfo.classe.uri}}</p>
                   </div>
 
-                  <div class="item" ng-if="dataInfo.litPropClasse.label != ' ' ">
+                  <div class="item" ng-show="dataInfo.litPropClasse.label != ' ' ">
 
                     <h5 class="header">
                     <svg width="20" height="20">
@@ -111,6 +113,12 @@
                     </h5>
                     <p>{{dataInfo.litPropClasse.uri}}</p>
                   </div>
+
+                  <div class="item" ng-if="dataInfo.litPropClasse.label == ' ' ">
+
+
+                  </div>
+
 
                   <div class="item" ng-if="dataInfo.objPropClasse.label != ' ' ">
                     <svg height="20" width="20">
@@ -142,7 +150,7 @@
                         ng-true-value="true" ng-false-value="false">
                         <label>Property {{dataInfo.litPropObj.label}} of {{dataInfo.objPropObj.range}}</label>
                       </div>
-                     
+
                     </h5>
                     <p>{{dataInfo.litPropObj.uri}}</p>
                   </div>
@@ -165,6 +173,7 @@
                   </div>
               </div>
           </div>
+
           <div class="ui modal" ng-controller="customiseCtrl">
             <i class="close icon" ng-click="closeModal()"></i>
             <div class="header">Customise view</div>
@@ -296,6 +305,7 @@
               </div>
             </div>
           </div>
+
 
       </div>
     </div>

@@ -49,16 +49,16 @@
     <div class="ui vertical following fluid accordion text menu" ng-controller="contactEndpointCtrl">
 
       <div class="active item">
-       
+
         <a class="title">
           <i class="dropdown icon"></i>
           <div class="label-overrided label-overrided-red">
           1
           </div>
-          <b>Change current SPARQL endpoint or graph</b>
+          <div class="ui small header">Change current SPARQL endpoint or graph</div>
         </a>
         <div class="content menu" id="endpointGraphDropdown">
-         
+
           <div class="ui segment">
             <div class="item">
                 <h5 class="header">Current SPARQL endpoint name</h5>
@@ -74,10 +74,10 @@
             </div>
           </div>
 
-          <div class="header">Select a SPARQL endpoint</div>
-          <div class="ui fluid search selection dropdown" ng-click="dropdown();">
-            <i class="dropdown icon" ng-click="dropdown();"></i>
-            <div class="default text">{{selectedEndpointName}}</div>
+          <div class="ui small header">Select a SPARQL endpoint</div>
+          <div class="ui fluid search selection dropdown">
+            <i class="dropdown icon"></i>
+            <div class="default text"></div>
               <div class="menu">
                 <div class="item"
                      ng-click="selectEndpoint(endpoint);"
@@ -88,11 +88,11 @@
               </div>
             </div>
 
-            <div class="header">Select a graph</div>
+            <div class="ui small header">Select a graph</div>
             <div id="graphDropdown">
-             <div class="ui fluid search selection dropdown" ng-click="dropdown();">
-              <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">{{selectedGraph}}</div>
+             <div class="ui fluid search selection dropdown">
+              <i class="dropdown icon"></i>
+              <div class="default text"></div>
               <div class="menu">
                 <div class="item"
                      ng-click="selectGraph(graph)"
@@ -110,26 +110,9 @@
               Clear
             </button>
 
-            <div ng-show="successMessageToAppear == true" class="ui tiny success message">
+            <div class="ui tiny info message">
               <i class="close icon" ng-click="dismissMessage()"></i>
-              <div class="header">SPARQL endpoint succesfully reached!</div>
-              <p>You may now query the dataset.</p>
-            </div>
-
-            <div ng-if="true" ng-model="negativeMessageToAppear" class="ui tiny negative message">
-              <i ng-click="dismissMessage()" class="close icon"></i>
-              <div class="header">SPARQL endpoint unreachable :(</div>
-              <p>Retry later or choose another one.</p>
-            </div>
-
-            <div ng-if="true" ng-model="attentionMessageToAppear" class="ui tiny yellow message">
-              <i class="close icon" ng-click="dismissMessage()"></i>
-              <div class="header"> Please select a SPARQL endpoint and graph!</div>
-            </div>
-
-            <div  ng-if="true" ng-model="successMessageToAppear" class="ui tiny yellow message">
-              <i class="close icon" ng-click="dismissMessage()"></i>
-              <div class="header"> Current endpoint and graph will change after query submission!</div>
+              <div class="header">{{message}}</div>
             </div>
 
         </div> <!-- chiude <div class="active content" id="endpointandgraph">-->
@@ -140,40 +123,35 @@
       <div class="active item">
         <a class="title active">
           <i class="dropdown icon"></i>
-          <div class="label-overrided label-overrided-red">
-          2
-          </div>
-          <b>Select data</b>
+
+          <div class="ui small header">
+            <div class="label-overrided label-overrided-red">
+            2
+            </div>Select data</div>
         </a>
         <div class="content active menu" id="datasetInfoRichieste">
 
-          <div class="header" ng-show="classes.length!=0">Select a class
+          <div class="ui small header" ng-show="classes.length!=0">Select a class
             <div class="label-overrided">{{numClasses}}</div>
             <div ng-if="fetchingMessageToAppear" class="ui active inline mini loader"></div>
           </div>
 
-          <div ng-show="classes.length!=0" id="allClassDropdown">
-            <div class="ui fluid search selection dropdown" ng-click="dropdown();">
-              <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select a class</div>
+          <div class="ui fluid search selection dropdown">
+              <i class="dropdown icon"></i>
+              <div class="default text">Search</div>
               <div class="menu">
-                <div ng-model="classes" class="item"
-                     ng-click="selectClass(class)"
+                <div class="item" data-value="class.label" ng-click="selectClass(class)"
                      ng-repeat="class in classes | limitTo:totalDisplayed">
                      {{class.label}}
                 </div>
-                <div ng-show="classes.length>totalDisplayed" class="ui center aligned segment">
-                  <button class="fluid ui mini white button" ng-click="loadMore()">Load more</button>
-                </div>
               </div>
-            </div>
           </div>
 
-          <h6 class="ui header" ng-if="selectedClass!='' && classDatatypeProperties.length==0 && classObjectProperties.length==0">
+          <h6 class="ui header" ng-if="selectedClass!=' ' && classDatatypeProperties.length==0 && classObjectProperties.length==0">
             No properties found.</h6>
 
           <div id="allClassPropertiesDropown">
-          <div class="header" ng-show="classDatatypeProperties.length!=0">
+          <div class="ui small header" ng-show="classDatatypeProperties.length!=0">
             Select a datatype property of {{selectedClass.label}}
             <div class="label-overrided">
               {{numClassDatatypeProperties}}
@@ -182,12 +160,11 @@
           </div>
 
           <div ng-show="classDatatypeProperties.length!=0">
-            <div class="ui fluid search selection dropdown" ng-click="dropdown();">
-              <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select a datatype property
-              </div>
+            <div class="ui fluid search selection dropdown">
+              <i class="dropdown icon"></i>
+              <div class="default text">Search</div>
               <div class="menu">
-                <div ng-model="classDatatypeProperties" class="item"
+                <div class="item"
                     ng-click="selectClassDatatypeProperty(classDatatypeProperty);"
                     ng-repeat="classDatatypeProperty in classDatatypeProperties | limitTo:totalDisplayed">
                     {{classDatatypeProperty.label}}
@@ -199,7 +176,7 @@
             </div>
           </div>
 
-          <div class="header" ng-show="classObjectProperties.length!=0">
+          <div class="ui small header" ng-show="classObjectProperties.length!=0">
               Select an object property of {{selectedClass.label}}
             <div class="label-overrided">
               {{numClassObjectProperties}}
@@ -209,13 +186,11 @@
           <div ng-show="classObjectProperties.length!=0">
             <!--<div class="ui fluid multiple search normal selection dropdown"
               ng-click="dropdown();">-->
-              <div class="ui fluid search selection dropdown"
-                ng-click="dropdown();">
-              <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select an object property
-              </div>
+              <div class="ui fluid search selection dropdown">
+              <i class="dropdown icon"></i>
+              <div class="default text">Search</div>
               <div class="menu">
-                <div class="item" ng-model="classObjectProperty" class="item"
+                <div class="item" class="item"
                     ng-click="selectClassObjectProperty(classObjectProperty);"
                     ng-repeat="classObjectProperty in classObjectProperties">
                     {{classObjectProperty.label}}
@@ -235,7 +210,7 @@
             instances.
           </div>
 
-          <div ng-show="!isEmpty(selectedClass) && (selectedClassObjectProperties.length!=0 || selectedClassObjectProperties.length!=0)">
+          <div ng-show="!isEmpty(selectedClass) && (selectedClassDatatypeProperties.length!=0 || selectedClassObjectProperties.length!=0)">
             <button class="ui mini button" ng-click="queryEndpointClassProperties()">
               Load data
             </button>
@@ -247,13 +222,13 @@
           <div ng-show="showSecondSection && (objDatatypeProperties.length!=0 || objObjectProperties.length!=0)">
           <div class="ui divider"></div>
 
-          <div class="header" ng-if="objDatatypeProperties.length!=0 || objObjectProperties.length!=0"
+          <div class="ui small header" ng-if="objDatatypeProperties.length!=0 || objObjectProperties.length!=0"
               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
               Select properties of {{objectPropertyRange.label}}
           </div>
 
           <div ng-show="objDatatypeProperties.length!=0">
-            <div class="header" >
+            <div class="ui small header" >
               Select a datatype property of {{objectPropertyRange.label}}
               <div class="label-overrided">
                 {{numObjDatatypeProperties}}
@@ -261,11 +236,11 @@
               <div class="ui inline mini loader"></div>
             </div>
 
-            <div class="ui fluid search selection dropdown" ng-click="dropdown();">
-              <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select a datatype property</div>
+            <div class="ui fluid search selection dropdown">
+              <i class="dropdown icon"></i>
+              <div class="default text">Search</div>
               <div class="menu">
-                <div ng-model="objDatatypeProperties" class="item"
+                <div class="item"
                     ng-click="selectObjDatatypeProperty(prop)"
                     ng-repeat="prop in objDatatypeProperties | limitTo:totalDisplayed">
                     {{prop.label}}
@@ -278,7 +253,7 @@
           </div>
 
           <div ng-show="objObjectProperties.length!=0">
-            <div class="header">
+            <div class="ui small header">
               Select an object property of {{objectPropertyRange.label}}
               <div class="label-overrided">
                 {{numObjObjectProperties}}
@@ -286,11 +261,11 @@
               <div class="ui inline mini loader"></div>
             </div>
 
-            <div class="ui fluid search selection dropdown" ng-click="dropdown();">
-              <i class="dropdown icon" ng-click="dropdown();"></i>
-              <div class="default text">Select an object property</div>
+            <div class="ui fluid search selection dropdown">
+              <i class="dropdown icon"></i>
+              <div class="default text">Search</div>
               <div class="menu">
-                <div ng-model="objObjectProperties" class="item"
+                <div class="item"
                     ng-click="selectObjObjectProperty(prop)"
                     ng-repeat="prop in objObjectProperties | limitTo:totalDisplayed">
                     {{prop.label}}
@@ -305,7 +280,7 @@
           </div>
           </div>
 
-          <div class="ui compact message" ng-show="!isEmpty(objObjectPropertyRange)">
+          <div class="ui compact message" ng-show="!isEmpty(objObjectPropertyRange)">objObjectPropertyRange.label!=undefined">
             There will be displayed also
             <div class="label-overrided">
               {{objObjectPropertyRange.label}}
@@ -433,13 +408,16 @@
         closable: false
       });
 
-      $('.ui.dropdown').dropdown();
-
       $('.ui.accordion').accordion('refresh');
 
       //  Attaches sidebar action to given selector. Default event if none specified is toggle
       $('.ui.left.sidebar').sidebar('attach events', '#left-sidebar-toggle', 'toggle');
       $('.ui.right.sidebar').sidebar('attach events', '#toggleRightSidebar', 'toggle');
+
+
+          $('.ui.dropdown').dropdown({'fullTextSearch': 'exact'});
+          $('.ui.dropdown').dropdown({forceSelection: false});
+
 
       $('.data-content')
         .popup({
@@ -453,6 +431,7 @@
 
       });
 
+
     /*
     The <script src=...> blocks the browser while
     document.createElement('script') loads the JavaScript asynchronously
@@ -464,8 +443,9 @@
   <script src="app.js"></script>
   <script src="about/about.js"></script>
   <script src="datasetsAndGraphs/datasetsAndGraphs.js"></script>
+  <!--
   <script src="version/version.js"></script>
-  <script src="version/version-directive.js"></script>
+  <script src="version/version-directive.js"></script>-->
   <script src="version/interpolate-filter.js"></script>
   <script src="contactEndpoint/contactEndpointService.js"></script>
   <script src="contactEndpoint/contactEndpointCtrl.js"></script>

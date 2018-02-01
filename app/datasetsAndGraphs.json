@@ -5,11 +5,6 @@
     "endpointName": "Semantic Lancet"
   },
   {
-    "endpointUrl": "http://opencitations.net/sparql",
-    "graphs": ["default"],
-    "endpointName": "OpenCitation Corpus"
-  },
-  {
     "endpointUrl": "https://dbpedia.org/sparql",
     "graphs": ["http://dbpedia.org", "default", "http://wikidata.dbpedia.org"],
     "endpointName": "DBpedia"

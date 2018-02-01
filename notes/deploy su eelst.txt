@@ -49,6 +49,7 @@ nohup ./fuseki-server --port=8094 &
 
 per killare il processo:
 fuser -k 8094/tcp
+fuser -k 8095/tcp
 
 *** start app script nuovo
 cd /var/www/graziosi/garrproject/semaphore
