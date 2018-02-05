@@ -52,10 +52,15 @@
 
         <a class="title">
           <i class="dropdown icon"></i>
-          <div class="label-overrided label-overrided-red">
-          1
+
+
+          <div class="ui small header">
+            <div class="label-overrided label-overrided-red">
+            1
+            </div>
+          Change current SPARQL endpoint or graph data
           </div>
-          <div class="ui small header">Change current SPARQL endpoint or graph</div>
+
         </a>
         <div class="content menu" id="endpointGraphDropdown">
 
@@ -127,7 +132,9 @@
           <div class="ui small header">
             <div class="label-overrided label-overrided-red">
             2
-            </div>Select data</div>
+            </div>
+            Select data
+          </div>
         </a>
         <div class="content active menu" id="datasetInfoRichieste">
 
@@ -141,7 +148,7 @@
               <div class="default text">Search</div>
               <div class="menu">
                 <div class="item" data-value="class.label" ng-click="selectClass(class)"
-                     ng-repeat="class in classes | limitTo:totalDisplayed">
+                     ng-repeat="class in classes"> <!-- | limitTo:totalDisplayed-->
                      {{class.label}}
                 </div>
               </div>
@@ -166,7 +173,7 @@
               <div class="menu">
                 <div class="item"
                     ng-click="selectClassDatatypeProperty(classDatatypeProperty);"
-                    ng-repeat="classDatatypeProperty in classDatatypeProperties | limitTo:totalDisplayed">
+                    ng-repeat="classDatatypeProperty in classDatatypeProperties">
                     {{classDatatypeProperty.label}}
                 </div>
                 <div ng-show="classDatatypeProperties.length>totalDisplayed" class="ui center aligned segment">
@@ -242,7 +249,7 @@
               <div class="menu">
                 <div class="item"
                     ng-click="selectObjDatatypeProperty(prop)"
-                    ng-repeat="prop in objDatatypeProperties | limitTo:totalDisplayed">
+                    ng-repeat="prop in objDatatypeProperties">
                     {{prop.label}}
                 </div>
                 <div ng-show="objDatatypeProperties.length!=0" class="ui center aligned segment">
@@ -267,7 +274,7 @@
               <div class="menu">
                 <div class="item"
                     ng-click="selectObjObjectProperty(prop)"
-                    ng-repeat="prop in objObjectProperties | limitTo:totalDisplayed">
+                    ng-repeat="prop in objObjectProperties">
                     {{prop.label}}
                 </div>
                 <div ng-show="objObjectProperties.length>totalDisplayed"
@@ -414,10 +421,7 @@
       $('.ui.left.sidebar').sidebar('attach events', '#left-sidebar-toggle', 'toggle');
       $('.ui.right.sidebar').sidebar('attach events', '#toggleRightSidebar', 'toggle');
 
-
-          $('.ui.dropdown').dropdown({'fullTextSearch': 'exact'});
-          $('.ui.dropdown').dropdown({forceSelection: false});
-
+      $('.ui.dropdown').dropdown({'fullTextSearch': 'exact', 'forceSelection': false});
 
       $('.data-content')
         .popup({

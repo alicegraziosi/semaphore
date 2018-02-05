@@ -40,7 +40,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
       if($rootScope.dataInfo == undefined){
         // INFORMAZIONI TBox
-        $rootScope.dataInfo = {
+
+        $scope.dataInfoInit = {
           classe : {
             uri : 'http://dbpedia.org/ontology/Band',
             label : 'Band',
@@ -83,7 +84,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
           }
         };
 
-        $scope.dataInfo = $rootScope.dataInfo;
+        $rootScope.dataInfo = $scope.dataInfoInit;
       };
 
     $scope.selectedEndpointUrl = "https://dbpedia.org/sparql";
@@ -119,16 +120,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       }
     });
 
-    $rootScope.$watch('dataInfo', function(){
-
-      $scope.dataInfo = $rootScope.dataInfo;
-
-      $scope.clusterClasse = $rootScope.dataInfo.classe;
-      $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
-      $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
-      $scope.litPropObj = $rootScope.dataInfo.litPropObj;
-      $scope.objPropObj = $rootScope.dataInfo.objPropObj;
-    });
 
     $rootScope.$watch('graph', function(graph) {
       if($rootScope.graph == undefined){
@@ -183,7 +174,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $scope.graph = angular.copy($rootScope.graph);
         // photo
 
-        $scope.graph.nodes.forEach(function(node){
+        var temp = angular.copy($rootScope.graph);
+        temp.nodes.forEach(function(node){
           var promise = queryDatasetService.queryPhotoFromDB($scope.selectedEndpointUrl, $scope.selectedGraph, node.id);
           promise.then(function(response) {
             var photoUrl = "";
@@ -193,6 +185,8 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
             node.customProperties[0].value = photoUrl;
           });
         });
+
+        //$scope.graph = temp;
 
         $rootScope.nodeLabels = [];
         if($scope.graph != undefined){
@@ -211,11 +205,21 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       $scope.toggleSelectionClusterOption($scope.c, $scope.litPropClasse);
     }, true);
 
+      $rootScope.$watch('dataInfo', function(dataInfo, dataInfoOld) {
 
-    $rootScope.$watch('dataInfo', function(dataInfo, dataInfoOld) {
-      $scope.dataInfo = angular.copy($rootScope.dataInfo);
-      $scope.graph.dataInfo =  $rootScope.dataInfo;
-    }, true);
+        $scope.dataInfo = $rootScope.dataInfo;
+        //$scope.dataInfo = angular.copy($rootScope.dataInfo);
+
+        $scope.clusterClasse = $rootScope.dataInfo.classe;
+        $scope.litPropClasse = $rootScope.dataInfo.litPropClasse;
+        $scope.clusterObj = $rootScope.dataInfo.objPropClasse;
+        $scope.litPropObj = $rootScope.dataInfo.litPropObj;
+        $scope.objPropObj = $rootScope.dataInfo.objPropObj;
+
+
+        $scope.graph.dataInfo =  $rootScope.dataInfo;
+        console.log("I see a dataaaaaaaa change!1");
+      }, true);
 
     $scope.selected = " ";
 

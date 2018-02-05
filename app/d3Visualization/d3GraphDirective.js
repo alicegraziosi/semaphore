@@ -92,6 +92,7 @@ myAppd3view.directive('d3Graphvisualization',
           /* svg > gzoom */
           var gzoom = svg.append("g");
 
+    
           function zoomed() {
             gzoom.attr("transform", d3.event.transform);
           }
@@ -99,23 +100,24 @@ myAppd3view.directive('d3Graphvisualization',
           d3.select('#zoom_in').on('click',  function() { _zoom.scaleBy(svg, 2); });
           d3.select('#zoom_out').on('click',  function() { _zoom.scaleBy(svg, 0.5); })
 
+
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
-                clearAll();
-                update();
+              clearAll();
+              update();
+
 
                 scope.$watch('checkboxModel', function(checkboxModel) {
-
-                if(checkboxModel.value1==false)
-                  checkboxModel.value2=false;
-                if(checkboxModel.value3==false) {
-                  checkboxModel.value4=false;
-                  checkboxModel.value4=false;
-                };
-                clearAll();
-                update();
-              }, true); // anche i value1, value2...
+                  if(checkboxModel.value1==false)
+                    checkboxModel.value2=false;
+                  if(checkboxModel.value3==false) {
+                    checkboxModel.value4=false;
+                    checkboxModel.value5=false;
+                  };
+                  clearAll();
+                  update();
+                }, true); // anche i value1, value2...
 
                 function update(){
                   var links = [];
@@ -631,6 +633,7 @@ myAppd3view.directive('d3Graphvisualization',
                   //scope.showLoader = true;
                   d3.selectAll(".links").remove();
                   d3.selectAll(".nodes").remove();
+                  d3.selectAll(".node").remove();
                   d3.selectAll(".nodesLabel").remove();
                   d3.selectAll(".label").remove();
                   d3.selectAll(".image").remove();
@@ -647,7 +650,7 @@ myAppd3view.directive('d3Graphvisualization',
                   if(group==5) return graph.dataInfo.objPropObj.color;
               };
             } // if(graph)
-          }, true); // scope.$watch('graph', function (graph) { con  deep dirty checking
+          }, false); // scope.$watch('graph', function (graph) { con  deep dirty checking
         }); // d3Service.then(function(d3) {
       } // link
     } // return
@@ -655,8 +658,8 @@ myAppd3view.directive('d3Graphvisualization',
     controller.$inject = ['$scope'];
 
   function controller($scope) {
-    $scope.$watch('graph.dataInfo', function(projectIds) {
-      console.log(projectIds);
+    $scope.$watch('graph.dataInfo', function(dataInfo) {
+      console.log(dataInfo);
     });
   }
 

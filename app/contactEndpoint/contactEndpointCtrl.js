@@ -8,6 +8,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
     //
     // DEFAULT
     //
+    $('.ui.dropdown').dropdown({'fullTextSearch': 'exact', 'forceSelection': false});
 
     $scope.datasetsAndGraphs = []; // dati dal file datasetsAndGraphs.json
     $scope.endpointList = [];
@@ -229,6 +230,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
           }
         };
 
+        $('.ui.dropdown').dropdown({'fullTextSearch': 'exact', 'forceSelection': false});
+
         /*
         var content = $scope.classes;
 
@@ -292,7 +295,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
           } else {
             label = response.data.results.bindings[i].propertyUri.value; //uri
           }
-          if(!label.toLowerCase().includes("wiki") || !label.toLowerCase().includes("revision") ){
+          if(!label.toLowerCase().includes("wiki") && !label.toLowerCase().includes("revision") ){
             $scope.classDatatypeProperties.push({
               uri: response.data.results.bindings[i].propertyUri.value,
               label: label
@@ -496,16 +499,6 @@ contactEndpointModule.controller('contactEndpointCtrl',
         color : $scope.classeColor
       };
 
-      $scope.selectedClassDatatypeProperties.forEach(function(prop){
-          $rootScope.dataInfo.litPropClasse = {
-              uri : ' ',
-              label : ' ',
-              type : 'lit',
-              group: 2,
-              color : $scope.litPropClasseColor
-          };
-      });
-
       if($scope.selectedClassDatatypeProperties.length != 0){
         var promise = queryDatasetService.queryEndpointForLiteral($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClass.uri, $scope.selectedClassDatatypeProperties);
         promise.then(function(response) {
@@ -540,6 +533,14 @@ contactEndpointModule.controller('contactEndpointCtrl',
               color : $scope.litPropClasseColor
             };
         });
+      } else {
+          $rootScope.dataInfo.litPropClasse = {
+            uri: ' ',
+            label : ' ',
+            type : ' ',
+            group: 2,
+            color : ' '
+          }
       };
 
       if($scope.selectedClassObjectProperties.length != 0){
@@ -574,7 +575,16 @@ contactEndpointModule.controller('contactEndpointCtrl',
             }
           });
         });
-      };
+      } else {
+        console.log("else");
+          $rootScope.dataInfo.objPropClasse = {
+            uri: ' ',
+            label : ' ',
+            type : ' ',
+            group: 3,
+            color : ' '
+          }
+        }
 
       $scope.showSecondSection = true;
 
@@ -586,6 +596,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
           color : ' ',
           range : ' '
         };
+
       $rootScope.dataInfo.objPropObj = {
           uri : ' ',
           label : ' ',
@@ -598,8 +609,8 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
     // secondo load data
     $scope.queryEndpoint = function(){
-      $rootScope.dataInfo.litPropObj = {};
-      $rootScope.dataInfo.objPropObj = {};
+      //$rootScope.dataInfo.litPropObj = {};
+      //$rootScope.dataInfo.objPropObj = {};
 
       //$rootScope.$digest(); // $apply è già in corso, quindi non si può usare $digest
       if($scope.selectedObjDatatypeProperties.length != 0){

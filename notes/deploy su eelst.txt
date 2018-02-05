@@ -51,13 +51,13 @@ per killare il processo:
 fuser -k 8094/tcp
 fuser -k 8095/tcp
 
-*** start app script nuovo
-cd /var/www/graziosi/garrproject/semaphore
+*** start app script
+cd /var/www/graziosi
 ./startApp.bat
 
 
 *** start app express
-cd /var/www/graziosi/
+cd /var/www/graziosi/garrproject/semaphore
 node startserver.js
 
 

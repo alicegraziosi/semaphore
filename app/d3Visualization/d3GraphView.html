@@ -18,10 +18,12 @@
 
         <div class="ui segment">
 
+          <!--
           <div ng-if="showLoader"
             class="ui active inverted dimmer">
             <div class="ui large text loader">Loading</div>
           </div>
+          -->
           <div class="ui icon buttons">
             <button id="zoom_in" class="ui button">
               <i class="zoom icon"></i>
@@ -30,6 +32,11 @@
               <i class="zoom out icon"></i>
             </button>
           </div>
+          <a ng-if="$root.graph.nodes.length==0">
+            No data found :/
+          </a>
+
+
 
           <d3-graphvisualization graph="$root.graph"
                                  selected-item="selected"
