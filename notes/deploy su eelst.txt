@@ -33,7 +33,8 @@ Run prefix service on eelst in production mode (Linux):
 or
 
 > NODE_ENV=production
-> nohup node express-server.js
+> fuser -k 8095/tcp
+> nohup node express-server.js &
 
 ***
 run blazegraph:
@@ -53,8 +54,14 @@ fuser -k 8095/tcp
 
 *** start app script
 cd /var/www/graziosi
-./startApp.bat
+./startApp.sh
 
+
+cd garrproject/semaphore
+rm nohup.out
+fuser -k 8092/tcp
+nohup http-server -a 130.136.131.42 -p 8092 ./app -s &
+echo "...started app"
 
 *** start app express
 cd /var/www/graziosi/garrproject/semaphore

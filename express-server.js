@@ -14,32 +14,74 @@ body-parser − This is a node.js middleware for handling JSON, Raw, Text and UR
 var express    = require('express');  // call express
 var app        = express();  // define our app using express
 var bodyParser = require('body-parser');  // middleware for handling JSON, Raw, Text and URL encoded form data
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 var http = require('follow-redirects').http;  // follow-redirects npm package
 var https = require('follow-redirects').https;
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var getDirName = require('path').dirname;
+var multer = require('multer');
 
 var port = process.env.NODE_PORT  || 8095;  // set our port, locale: 8095;  su eelst: 8095
 var host = process.env.NODE_HOST || '130.136.131.42';  // set our host, locale: 127.0.0.1; su eelst: 130.136.131.42
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('../client'));
+app.use(bodyParser.json());
 
 // CORS is a node.js package for providing a Connect/Express middleware that
 // can be used to enable CORS with various options.
 const cors = require('cors');
 
-// forse non serve
-//const corsOptions = {
-  //origin: 'http://localhost:8000',
-//}
+// use it before all route definitions
+//app.use(cors({origin: 'http://localhost:8092'}));
+app.use(cors({origin: "http://localhost:8092"}));
 
-app.use(cors());
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:8092");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+/** Serving from the same express Server
+No cors required */
+var storage = multer.diskStorage({ //multers disk storage settings
+    destination: function (req, file, cb) {
+        cb(null, 'app/images/')
+    },
+    filename: function (req, file, cb) {
+        var datetimestamp = Date.now();
+        var path = "images/";
+        var originalname = file.originalname;
+        var newname = file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1];
+        cb(null, file.originalname);
+    }
+});
+
+/*
+var upload = multer({ //multer settings
+    storage: storage
+}).single('file');*/
+
+var upload = multer({ //multer settings
+    storage: storage
+}).any();
+
+
+var router = express.Router();  // get an instance of the express Router
+
+/** API path that will upload the files */
+router.post('/upload', function(req, res) {
+    upload(req,res,function(err){
+        if(err){
+             res.json({error_code:1,err_desc:err});
+             return;
+        }
+        res.json({error_code:0,err_desc:null});
+    })
+});
 
 // ROUTES FOR OUR API
-var router = express.Router();  // get an instance of the express Router
 
 // api/label?label=
 // http://localhost:8080/api/label?label=http://xmlns.com/foaf/0.1/
@@ -123,10 +165,10 @@ router.post('/savetofile', function(request, response) {
 router.get("/download", function (req, res) {
     var filename = req.query.filename;
     var path = __dirname + "/" + filename;
-    var path = __dirname + "\\" + filename;
+    //var path = __dirname + "\\" + filename;
     console.log("file richiesto : " + filename + "...");
     res.download(path, filename, function(err){
-      console.log(path + " " + filename);	
+      console.log(path + " " + filename);
 	  if (err) {
 	    console.log("...errore :(");
 	  } else {
@@ -135,6 +177,15 @@ router.get("/download", function (req, res) {
 	  }
 	});
 });
+
+/*
+router.get("/fileUpload", function (req, res) {
+	var filename = req.body;
+	console.log(filename);
+    var path = __dirname + "/images";
+    console.log(path);
+});
+*/
 
 // in realtà è già host:port/api
 router.get('/', function(request, response) {
@@ -185,6 +236,7 @@ run server in windows:
 
 set NODE_PORT=8095
 set NODE_HOST=127.0.0.1
+fuser -k 8095/tcp
 node express-server.js
 
 set NODE_PORT=8095
@@ -192,7 +244,9 @@ set NODE_HOST=130.136.131.42
 node express-server.js
 
 run server in linux:
-nohup NODE_PORT=8095 NODE_HOST=130.136.131.42 node express-server.js &
+rm nohup.out
+fuser -k 8095/tcp
+nohup NODE_PORT=8095 NODE_HOST=130.136.31.412 node express-server.js &
 nohup node express-server.js &
 
 per killare il processo:

@@ -685,8 +685,8 @@ angular.module('queryDatasetModule', [])
       var endcodedformat = encodeURIComponent(format);
       var defer = $q.defer();
       // Angular $http() and then() both return promises themselves
-      //$http.get(endpoint+"?format=json&query="+encodedquery)
-      $http.post(endpoint+"?format=json&query="+encodedquery)
+      $http.get(endpoint+"?format=json&query="+encodedquery)
+      //$http.post(endpoint+"?format=json&query="+encodedquery)
         .then(function(data) {
           defer.resolve(data);
         });

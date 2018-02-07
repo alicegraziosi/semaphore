@@ -33,6 +33,8 @@
   <script type="text/javascript"  src="https://d3js.org/d3.v4.js"></script>
   <script type="text/javascript" src="d3v4-tips.js"></script>
 
+
+
   <!-- per d3v3
   <script src="node_modules/d3-tip/index.js"></script>-->
   <link rel='stylesheet' href='node_modules/angular-loading-bar/build/loading-bar.min.css' type='text/css' media='all' />
@@ -52,16 +54,14 @@
 
         <a class="title">
           <i class="dropdown icon"></i>
-
-
-          <div class="ui small header">
+          <div>
             <div class="label-overrided label-overrided-red">
             1
             </div>
-          Change current SPARQL endpoint or graph data
+            Change current SPARQL endpoint or graph data
           </div>
-
         </a>
+
         <div class="content menu" id="endpointGraphDropdown">
 
           <div class="ui segment">
@@ -120,7 +120,7 @@
               <div class="header">{{message}}</div>
             </div>
 
-        </div> <!-- chiude <div class="active content" id="endpointandgraph">-->
+      </div> <!-- chiude <div class="active content" id="endpointandgraph">-->
       </div> <!-- chiude <div class="ui item"> -->
 
       <div class="ui fitted divider"></div>
@@ -129,7 +129,7 @@
         <a class="title active">
           <i class="dropdown icon"></i>
 
-          <div class="ui small header">
+          <div>
             <div class="label-overrided label-overrided-red">
             2
             </div>
@@ -209,7 +209,7 @@
             </div>
           </div>
 
-          <div class="ui compact message" ng-show="!isEmpty(objectPropertyRange)">
+          <div class="ui compact message" ng-if="objectPropertyRange.label != ' '">
             There will be displayed also
             <div class="label-overrided">
               {{objectPropertyRange.label}}
@@ -229,14 +229,28 @@
           <div ng-show="showSecondSection && (objDatatypeProperties.length!=0 || objObjectProperties.length!=0)">
           <div class="ui divider"></div>
 
-          <div class="ui small header" ng-if="objDatatypeProperties.length!=0 || objObjectProperties.length!=0"
+          <div class="ui small header" ng-if="(objDatatypeProperties.length!=0 || objObjectProperties.length!=0) && objectPropertyRange.label!=' '"
               ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
               Select properties of {{objectPropertyRange.label}}
           </div>
 
+          <div class="ui small header" ng-if="(objDatatypeProperties.length!=0 || objObjectProperties.length!=0) && objectPropertyRange.label==' '"
+              ng-repeat="selectedClassObjectProperty in selectedClassObjectProperties">
+              Select properties of {{selectedClassObjectProperty.label}}
+          </div>
+
           <div ng-show="objDatatypeProperties.length!=0">
-            <div class="ui small header" >
+
+            <div class="ui small header" ng-if="objectPropertyRange.label!=' '">
               Select a datatype property of {{objectPropertyRange.label}}
+              <div class="label-overrided">
+                {{numObjDatatypeProperties}}
+              </div>
+              <div class="ui inline mini loader"></div>
+            </div>
+
+            <div class="ui small header" ng-if="objectPropertyRange.label==' '">
+              Select a datatype property of {{selectedClassObjectProperty.label}}
               <div class="label-overrided">
                 {{numObjDatatypeProperties}}
               </div>
@@ -260,13 +274,23 @@
           </div>
 
           <div ng-show="objObjectProperties.length!=0">
-            <div class="ui small header">
+
+            <div class="ui small header" ng-if="objectPropertyRange.label != ' '">
               Select an object property of {{objectPropertyRange.label}}
               <div class="label-overrided">
                 {{numObjObjectProperties}}
               </div>
               <div class="ui inline mini loader"></div>
             </div>
+
+            <div class="ui small header" ng-if="objectPropertyRange.label == ' '">
+              Select an object property of {{selectedClassObjectProperty.label}}
+              <div class="label-overrided">
+                {{numObjObjectProperties}}
+              </div>
+              <div class="ui inline mini loader"></div>
+            </div>
+
 
             <div class="ui fluid search selection dropdown">
               <i class="dropdown icon"></i>
@@ -287,7 +311,7 @@
           </div>
           </div>
 
-          <div class="ui compact message" ng-show="!isEmpty(objObjectPropertyRange)">objObjectPropertyRange.label!=undefined">
+          <div class="ui compact message" ng-if="objObjectPropertyRange.label!=' '">
             There will be displayed also
             <div class="label-overrided">
               {{objObjectPropertyRange.label}}
@@ -474,6 +498,10 @@
   <script src="node_modules/angularjs-color-picker/dist/angularjs-color-picker.min.js"></script>
   <script src="node_modules/angular-modal-service/dst/angular-modal-service.min.js"></script>
   <script type='text/javascript' src='node_modules/angular-loading-bar/build/loading-bar.min.js'></script>
+
+  <!--file upload-->
+  <script src="node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>
+  <script src="node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
 
   <!-- Global Site Tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88652737-2"></script>

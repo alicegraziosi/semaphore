@@ -35,8 +35,16 @@ contactEndpointModule.controller('contactEndpointCtrl',
     $scope.fetchingMessageToAppear = false;
     $scope.classDatatypePropertiesLoading = false;
     $scope.showSecondSection = false;
-    $scope.objectPropertyRange = {};
-    $scope.objObjectPropertyRange = {};
+    $scope.objectPropertyRange = {
+      'uri': ' ',
+      'label': ' ',
+      'name': ' '
+    };
+    $scope.objObjectPropertyRange = {
+      'uri': ' ',
+      'label': ' ',
+      'name': ' '
+    };
 
     // numeri per label info da cui si può selezionare
     $rootScope.numClasses = 0;
@@ -152,6 +160,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
             $('#datasetInfoRichieste').addClass("active");
             $scope.restoreALLToDefault();
             $scope.message = "SPARQL endpoint succesfully reached! \n You may now query the dataset.";
+            $('#endpointGraphDropdown').removeClass("active");
           })
           .error(function(data, status, headers, config){
             $scope.message = "SPARQL endpoint unreachable :( \n Retry later or choose another one.";
@@ -376,8 +385,17 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.queryDatasetClassDatatypeProperty();
 
       $scope.showSecondSection = false;
-      $scope.objectPropertyRange = {};
-      $scope.objObjectPropertyRange = {};
+      $scope.objectPropertyRange = {
+        'uri': ' ',
+        'label': ' ',
+        'name': ' '
+      };
+
+      $scope.objObjectPropertyRange = {
+        'uri': ' ',
+        'label': ' ',
+        'name': ' '
+      };
 
       $('#allClassPropertiesDropown .ui.dropdown').dropdown('restore defaults');
     };
@@ -415,6 +433,11 @@ contactEndpointModule.controller('contactEndpointCtrl',
 
       // classe range della object property
       var promise = queryDatasetService.queryEndpointForRange($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClassObjectProperties);
+        $scope.objectPropertyRange = {
+          'uri': ' ',
+          'label': ' ',
+          'name': ' '
+        };
         promise.then(function(response) {
           if(response.data.results.bindings.length!=0){
             var uri = response.data.results.bindings[0].rangeUri.value;
@@ -431,6 +454,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
             }
           }
         });
+
     }
 
     $scope.selectObjDatatypeProperty = function(selectedClassProperty){
@@ -442,7 +466,11 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.selectedObjObjectProperties.splice(0, $scope.selectedObjObjectProperties);
       $scope.selectedObjObjectProperties.push(selectedClassProperty);
 
-      $scope.objObjectPropertyRange = {};
+      $scope.objObjectPropertyRange = {
+        'uri': ' ',
+        'label': ' ',
+        'name': ' '
+      };
 
       // classe range della object property
       var promise = queryDatasetService.queryEndpointForRange($rootScope.selectedEndpointUrl, $rootScope.selectedGraph, $scope.selectedClassObjectProperties);
@@ -688,8 +716,17 @@ contactEndpointModule.controller('contactEndpointCtrl',
       $scope.objDatatypeProperties = [];
       $scope.objObjectProperties = [];
 
-      $scope.objectPropertyRange = {};
-      $scope.objObjectPropertyRange = {};
+      $scope.objectPropertyRange = {
+        'uri': ' ',
+        'label': ' ',
+        'name': ' '
+      };
+
+      $scope.objObjectPropertyRange = {
+        'uri': ' ',
+        'label': ' ',
+        'name': ' '
+      };
     };
 
     // INIT DEEFAULT

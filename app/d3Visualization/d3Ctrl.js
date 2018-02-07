@@ -174,7 +174,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $scope.graph = angular.copy($rootScope.graph);
         // photo
 
-        var temp = angular.copy($rootScope.graph);
+        var temp =  angular.copy($scope.graph);
         temp.nodes.forEach(function(node){
           var promise = queryDatasetService.queryPhotoFromDB($scope.selectedEndpointUrl, $scope.selectedGraph, node.id);
           promise.then(function(response) {
@@ -186,7 +186,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
           });
         });
 
-        //$scope.graph = temp;
+        $scope.graph = temp;
 
         $rootScope.nodeLabels = [];
         if($scope.graph != undefined){
