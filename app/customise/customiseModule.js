@@ -123,15 +123,31 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
             console.log('Success ' + file + 'uploaded.');
           });
 
-            //path file uploadato
-            $scope.imageprova = "../images/" + resp.config.data.file[0].name;
+          $scope.showSuccessMessage = true;
+          $scope.showErrorMessage = false;
 
+          //path file uploadato
+          $scope.imageprova = "../images/" + resp.config.data.file[0].name;
+
+          if(resp.config.data.file[0]){
             $scope.image1src = "../images/" + resp.config.data.file[0].name;
+            $scope.localdataInfo.classe.photo = $scope.image2src;
+          };
+
+          if(resp.config.data.file[1]){
             $scope.image2src = "../images/" + resp.config.data.file[1].name;
+            $scope.localdataInfo.objPropClasse.photo = $scope.image2src;
+          };
+
+          if(resp.config.data.file[2]){
             $scope.image3src = "../images/" + resp.config.data.file[2].name;
+            $scope.localdataInfo.objPropObj.photo = $scope.image3src;
+          }
 
         }, function (resp) {
             console.log('Error status: ' + resp.status);
+            $scope.showSuccessMessage = false;
+            $scope.showErrorMessage = true;
         }, function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
@@ -145,12 +161,18 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
     });
 
     var location = window.location.href;
-    var defaultPath = "images/";
+    var defaultPath = "../images/";
     var defaultImageName = "default.png";
     $scope.image1src = defaultPath + defaultImageName;
     $scope.image2src = defaultPath + defaultImageName;
     $scope.image3src = defaultPath + defaultImageName;
     $scope.imageDefault = defaultPath + defaultImageName;
+
+    $rootScope.$watch('dataInfo', function(dataInfo, dataInfoOld) {
+      if(dataInfo){
+        $scope.localdataInfo = angular.copy($rootScope.dataInfo);
+      }
+    });
 
     $scope.showSuccessMessage = false;
     $scope.showErrorMessage = false;
@@ -163,35 +185,12 @@ customiseModule.controller('customiseCtrl', ['$scope', '$rootScope', '$http', 'f
 
     // close all modal (si sovrappongono in semantic ui)
     $scope.closeModal = function(){
+      $scope.showSuccessMessage = false;
+      $scope.showErrorMessage = false;
       $('.ui.modal').modal('hide all');
     };
 
     $scope.restoreDefault = function(){
       $scope.localdataInfo = angular.copy($rootScope.dataInfo);
     };
-
-    $scope.uploadFile1 = function(){
-       $scope.showSuccessMessage = false;
-       $scope.showErrorMessage = false;
-       // file e route
-       var file = document.getElementById('file1').files[0];
-
-    };
-
-    $scope.uploadFile2 = function(){
-       $scope.showSuccessMessage = false;
-       $scope.showErrorMessage = false;
-       // file e route
-       var file = document.getElementById('file2').files[0];
-
-    };
-
-    $scope.uploadFile3 = function(){
-       $scope.showSuccessMessage = false;
-       $scope.showErrorMessage = false;
-       // file e route
-       var file = document.getElementById('file3').files[0];
-
-    };
-
 }]);

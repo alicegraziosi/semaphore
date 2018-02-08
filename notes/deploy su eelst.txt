@@ -32,9 +32,9 @@ Run prefix service on eelst in production mode (Linux):
 
 or
 
-> NODE_ENV=production
-> fuser -k 8095/tcp
-> nohup node express-server.js &
+NODE_ENV=production
+fuser -k 8095/tcp
+nohup node express-server.js &
 
 ***
 run blazegraph:

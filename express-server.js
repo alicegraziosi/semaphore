@@ -34,11 +34,13 @@ app.use(bodyParser.json());
 const cors = require('cors');
 
 // use it before all route definitions
-//app.use(cors({origin: 'http://localhost:8092'}));
-app.use(cors({origin: "http://localhost:8092"}));
+//app.use(cors({origin: "http://localhost:8092"}));
+app.use(cors({origin: "http://eelst.cs.unibo.it:8092"}));
+
 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:8092");
+    //res.header("Access-Control-Allow-Origin", "http://localhost:8092");
+    res.header("Access-Control-Allow-Origin", "http://eelst.cs.unibo.it:8092");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
