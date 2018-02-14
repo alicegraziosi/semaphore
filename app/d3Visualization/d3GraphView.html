@@ -207,8 +207,24 @@
                         <button ngf-select ng-model="files" ngf-multiple="true">Select images</button>
                         <button type="submit" ng-click="submit()">Upload</button>
                       </form>
+                      <div ng-if="files" ng-repeat="file in files">{{file.name}} selected.</div>
                     </td>
                     <td>
+                      <div class="ui success message" ng-if="showSuccessMessage">
+                        <i class="close icon"></i>
+                        <div class="header">
+                          <div class="header" ng-if="files" ng-repeat="file in files">{{file.name}}</div>
+                          uploaded successfully.
+                        </div>
+                      </div>
+                      <div class="ui negative message" ng-if="showErrorMessage">
+                        <i class="close icon"></i>
+                        <div class="header">
+                          Error while uploading
+                          <div class="header" ng-if="files" ng-repeat="file in files">{{file.name}}</div>
+                          .
+                        </div>
+                      </div>
                     </td>
                     <td>
                     </td>
@@ -302,29 +318,15 @@
                   </tr>
                 </tbody>
               </table>
+
+              <button ng-click="restoreDefault()" class="ui button">
+                Restore default
+              </button>
               <button ng-click="applyAndCloseModal()" class="ui primary button">
                 Apply
               </button>
-              <button ng-click="restoreDefault()" class="ui button">
-                Cancel
-              </button>
-              <div class="ui divider" ng-if="showSuccessMessage || showErrorMessage" ></div>
-              <div class="ui success message" ng-if="showSuccessMessage">
-                <i class="close icon"></i>
-                <div class="header">
-                  Upload successful.
-                </div>
-              </div>
-              <div class="ui negative message" ng-if="showErrorMessage">
-                <i class="close icon"></i>
-                <div class="header">
-                  Error while uploading.
-                </div>
-              </div>
             </div>
           </div>
-
-
       </div>
     </div>
   </div>

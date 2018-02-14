@@ -328,11 +328,13 @@ contactEndpointModule.controller('contactEndpointCtrl',
           } else {
             label = response.data.results.bindings[i].propertyUri.value; //uri
           }
-          $scope.objDatatypeProperties.push({
-            uri: response.data.results.bindings[i].propertyUri.value,
-            label: label
-          });
-          $scope.numObjDatatypeProperties++;
+          if(!label.toLowerCase().includes("wiki") && !label.toLowerCase().includes("revision") ){
+            $scope.objDatatypeProperties.push({
+              uri: response.data.results.bindings[i].propertyUri.value,
+              label: label
+            });
+            $scope.numObjDatatypeProperties++;
+          }
         };
       });
     }
@@ -350,16 +352,17 @@ contactEndpointModule.controller('contactEndpointCtrl',
           } else {
             label = response.data.results.bindings[i].propertyUri.value; //uri
           }
-          $scope.objObjectProperties.push({
-            uri: response.data.results.bindings[i].propertyUri.value,
-            label: label
-          });
-          $scope.numObjObjectProperties++;
+          if(!label.toLowerCase().includes("wiki") && !label.toLowerCase().includes("revision") ){
+            $scope.objObjectProperties.push({
+              uri: response.data.results.bindings[i].propertyUri.value,
+              label: label
+            });
+            $scope.numObjObjectProperties++;
+          }
         };
       });
     }
 
-    //
     $scope.selectClass = function(selectedClass){
 
       $scope.numClassObjectProperties = 0;
@@ -370,8 +373,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
       //nuova classe corrente
       $scope.selectedClass = selectedClass;
 
-      // se lo elimino poi non partono le query
-
+      // se lo elimino poi non partono le query ..cosa??
       //eliminate le proprietà della classe precedente
       $scope.classObjectProperties = [];
       $scope.classDatatypeProperties = [];
@@ -586,6 +588,7 @@ contactEndpointModule.controller('contactEndpointCtrl',
             if(!existsInArray($rootScope.graph.nodes, "id", n.id)){
               //n.group = "3";
               $rootScope.graph.nodes.push(n);
+              console.log(n);
             };
           });
 

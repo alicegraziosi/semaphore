@@ -41,6 +41,7 @@ app.use(cors({origin: "http://eelst.cs.unibo.it:8092"}));
 app.use(function(req, res, next) {
     //res.header("Access-Control-Allow-Origin", "http://localhost:8092");
     res.header("Access-Control-Allow-Origin", "http://eelst.cs.unibo.it:8092");
+
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
@@ -60,6 +61,19 @@ var storage = multer.diskStorage({ //multers disk storage settings
     }
 });
 
+var storageFiles = multer.diskStorage({ //multers disk storage settings
+    destination: function (req, file, cb) {
+        cb(null, 'app/files/')
+    },
+    filename: function (req, file, cb) {
+        var datetimestamp = Date.now();
+        var path = "files/";
+        var originalname = file.originalname;
+        var newname = file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1];
+        cb(null, file.originalname);
+    }
+});
+
 /*
 var upload = multer({ //multer settings
     storage: storage
@@ -69,12 +83,27 @@ var upload = multer({ //multer settings
     storage: storage
 }).any();
 
+var uploadFiles = multer({ //multer settings
+    storage: storageFiles
+}).any();
+
 
 var router = express.Router();  // get an instance of the express Router
 
 /** API path that will upload the files */
 router.post('/upload', function(req, res) {
     upload(req,res,function(err){
+        if(err){
+             res.json({error_code:1,err_desc:err});
+             return;
+        }
+        res.json({error_code:0,err_desc:null});
+    })
+});
+
+/** API path that will upload the files */
+router.post('/uploadFiles', function(req, res) {
+    uploadFiles(req,res,function(err){
         if(err){
              res.json({error_code:1,err_desc:err});
              return;

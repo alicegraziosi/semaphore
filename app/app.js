@@ -47,7 +47,6 @@ $http will not respect default setting for timeout set it in httpProvider
   $rootScope.appName = "GIG";
   $rootScope.subtitle = "generating interfaces for RDF graphs";
 
-  // prefix e file services
-  $rootScope.prefixApiUrl = "http://eelst.cs.unibo.it:8095/api/";
-  $rootScope.jsonFileServiceUrl = "http://eelst.cs.unibo.it:8095/api/";
+  $rootScope.serviceUrl = "http://eelst.cs.unibo.it:8095/api";
+  //$rootScope.serviceUrl = "http://localhost:8095/api";
 });

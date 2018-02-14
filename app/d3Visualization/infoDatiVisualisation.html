@@ -46,6 +46,7 @@
 
   <div class="ui divider"></div>
 
+  <!--
   <label for="embedpollfileinput" class="ui left attached mini basic button">
     Choose file
   </label>
@@ -56,19 +57,25 @@
     Upload
   </div>
   <div>{{fileName}}</div>
+  -->
+  <form name="form" ng-controller="D3viewCtrl">
+    <button ngf-select ng-model="file">Select file</button>
+    <div ng-if="file.name">{{file.name}} selected</div>
+    <button type="submit" ng-click="importJSON()">Upload</button>
 
     <div class="ui success message" ng-if="showSuccessMessage">
       <i class="close icon"></i>
       <div class="header">
-        Upload successful.
+        {{file.name}} uploaded successfully. :)
       </div>
     </div>
     <div class="ui negative message" ng-if="showErrorMessage">
       <i class="close icon"></i>
       <div class="header">
-        Error while uploading.
+        Error while uploading {file.name}}. :(
       </div>
     </div>
+  </form>
 
 </div>
 

@@ -2,7 +2,7 @@
 
 angular.module('getJSONfileModule', ['customiseModule'])
 
-.factory('GetJSONfileService', ['$http', 'fileUpload', function($http, fileUpload){
+.factory('GetJSONfileService', ['$http', '$rootScope', function($http, $rootScope){
    var get = function(filename){
       return $http.get(filename); // this will return a promise to controller
     }
@@ -266,58 +266,25 @@ angular.module('getJSONfileModule', ['customiseModule'])
     // In an HTTP POST request, the parameters are not sent along with the URI.
     $http({
         method: 'POST',
-        //url: $rootScope.jsonFileServiceUrl+"savetofile",
-        url: "http://eelst.cs.unibo.it:8095/api/savetofile",
-        //url: "http://localhost:8095/api/savetofile",
-        // use $.param jQuery function to serialize data from JSON
-        data: $.param(jsonData),
+        url: $rootScope.serviceUrl + '/savetofile',
+        data: $.param(jsonData),  // use $.param jQuery function to serialize data from JSON
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
     }).then(
       function successCallback(response){
-        // success callback
-        var filename = response.data;
-        //window.open($rootScope.jsonFileServiceUrl+"download?filename="+filename);
-        window.open("http://eelst.cs.unibo.it:8095/api/download?filename="+filename);
-        //window.open("http://localhost:8095/api/download?filename="+filename);
+        window.open($rootScope.serviceUrl + "/download?filename=" + response.data);
       },
       function errorCallback(response){
-        // failure callback
-        console.log('ERROR: could not download file');
-        if(response.status == -1){
-          console.log("Prefix api service unreachable.." + response.status + "..request was aborted");
-        } else {
-          console.log("Prefix api service unreachable.." + response.status + ".." + response.statusText);
-        }
+        console.log("Prefix api service unreachable.." + response.status + ".." + response.statusText);
       }
     );
-  }
-
-  var importJSON = function() {
-    var file = document.getElementById('embedpollfileinput').files[0];
-    var uploadUrl = "fileUpload";
-    var promise = fileUpload.uploadFileToUrl(file, uploadUrl);
-    var defaultPath = "files/";
-    promise.then(function(res) {
-      var fileImport = defaultPath + res.data.path;
-      console.log(fileImport);
-      return true;
-      //$scope.showSuccessMessage = true;
-    })
-    .catch(function(res){
-      //$scope.showErrorMessage = true;
-      console.log("no");
-      return false;
-    });
-};
+  };
 
   return {
     get: get,
     createJsonFile: createJsonFile,
     createNodeLiteral: createNodeLiteral,
     createNodeObject: createNodeObject,
-    exportJSON: exportJSON,
-    importJSON: importJSON
+    exportJSON: exportJSON
   };
 }])
 

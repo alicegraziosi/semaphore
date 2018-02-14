@@ -92,7 +92,7 @@ myAppd3view.directive('d3Graphvisualization',
           /* svg > gzoom */
           var gzoom = svg.append("g");
 
-    
+
           function zoomed() {
             gzoom.attr("transform", d3.event.transform);
           }
@@ -104,6 +104,13 @@ myAppd3view.directive('d3Graphvisualization',
           //nota: tenere sempre tutte insieme queste linee di codice che stanno nel watch
           scope.$watch('graph', function (graph) {
             if(graph){ //Checking if the given value is not undefined
+              scope.checkboxModel = {
+                value1 : true,
+                value2 : true,
+                value3 : true,
+                value4 : true,
+                value5 : true
+              };
               clearAll();
               update();
 
@@ -384,7 +391,9 @@ myAppd3view.directive('d3Graphvisualization',
                     }))
                     .enter().append("g")
                       .append("text")
-                      .text(function (d) { return d.label; })  // literal
+                      .text(function (d) { if(d.label != ' ' && d.label != '') { return d.label }
+                        else if (d.url != '' && d.url != ' ' && d.url!=undefined && d.url!="undefined") {return d.url } else {return d.id}; })  // literal
+                      //.text(function (d) { return 'url: ' + d.url + ' id:' + d.id + " label:  " + d.label})
                       .style("font-family", "Arial")
                       .style("font-size", 5)
                       .attr("x", "+2")

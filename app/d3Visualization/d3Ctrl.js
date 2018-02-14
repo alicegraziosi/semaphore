@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'contactEndpointModule', 'angularModalService'])
+angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'contactEndpointModule', 'ngFileUpload', 'angularModalService'])
 
 .config(['$routeProvider', function($routeProvider) {
 
@@ -26,7 +26,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     });
 }])
 .controller('D3viewCtrl',
-  function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, d3Service, ModalService) {
+  function($rootScope, $scope, $http, queryDatasetService, GetJSONfileService, $q, ContactSPARQLendpoint, Upload, d3Service, ModalService) {
 
     $scope.checkboxModel = {
       value1 : true,
@@ -35,8 +35,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
       value4 : true,
       value5 : true
     };
-
-    //$scope.showLoader = true;
 
       if($rootScope.dataInfo == undefined){
         // INFORMAZIONI TBox
@@ -92,7 +90,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     $scope.selectedGraph = "http://dbpedia.org";
 
     $scope.showPhoto = {
-       value: 'true'
+       value: 'false'
     };
 
 
@@ -174,6 +172,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         $scope.graph = angular.copy($rootScope.graph);
         // photo
 
+        /*
         var temp =  angular.copy($scope.graph);
         temp.nodes.forEach(function(node){
           var promise = queryDatasetService.queryPhotoFromDB($scope.selectedEndpointUrl, $scope.selectedGraph, node.id);
@@ -187,6 +186,7 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
         });
 
         $scope.graph = temp;
+       */
 
         $rootScope.nodeLabels = [];
         if($scope.graph != undefined){
@@ -218,7 +218,6 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
 
 
         $scope.graph.dataInfo =  $rootScope.dataInfo;
-        console.log("I see a dataaaaaaaa change!1");
       }, true);
 
     $scope.selected = " ";
@@ -228,12 +227,40 @@ angular.module('myApp.d3view', ['d3Module', 'getJSONfileModule', 'ngRoute', 'con
     });
 
     $scope.exportJSON = function () {
-        GetJSONfileService.exportJSON($rootScope.graph);
+        console.log($scope.graph);
+        GetJSONfileService.exportJSON($scope.graph);
     };
 
-    $scope.importJSON = function () {
-        GetJSONfileService.importJSON();
-        $scope.fileName = document.getElementById('embedpollfileinput').files[0];
+    $scope.importJSON = function() {
+      $scope.upload($scope.file);
+    };
+
+    $scope.setGraphWithFileData = function(filename) {
+      $http.get('../files/'+filename).then(function (response) {
+        console.log(response.data);
+        $rootScope.graph = response.data;
+      });
+    };
+
+    // upload on file select or drop
+    $scope.upload = function (file) {
+        Upload.upload({
+            //url: 'http://eelst.cs.unibo.it:8095/api/uploadFiles',
+            url: 'http://localhost:8095/api/uploadFiles',
+            data: {file: file}
+        }).then(function (resp) {
+          console.log('Success ' + file.name + ' uploaded.');
+          $scope.showSuccessMessage = true;
+          $scope.showErrorMessage = false;
+          $scope.setGraphWithFileData(file.name);
+        }, function (resp) {
+            console.log('Error status: ' + resp.status);
+            $scope.showSuccessMessage = false;
+            $scope.showErrorMessage = true;
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        });
     };
 
     $scope.exportPNG = function(){
